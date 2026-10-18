@@ -8,7 +8,7 @@
 <style>
 /* Layout: a fixed WebGL universe the camera flies through as you scroll. Over it, one design system of glass panels: the world builder, the company directory and the plans. Opening a company plays a warp into its planet and lands in that company's own themed world. */
 :root {
-  --void: #06070a;
+  --void: #020203;
   --panel: rgba(13, 14, 20, 0.7);
   --panel-solid: #0e0f15;
   --text: #f3f3f5;
@@ -32,7 +32,7 @@
 * { box-sizing: border-box; }
 [hidden] { display: none !important; }
 html { background: var(--void); scroll-behavior: smooth; }
-body { background: var(--void) radial-gradient(120% 80% at 80% 90%, rgba(224, 49, 49, 0.12), transparent 60%); color: var(--text); font: 16px/1.6 var(--display); -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+body { background: #020203; color: var(--text); font: 16px/1.6 var(--display); -webkit-font-smoothing: antialiased; overflow-x: hidden; }
 body.in-world { overflow: hidden; }
 a { color: inherit; }
 button { font: inherit; color: inherit; }
@@ -46,21 +46,21 @@ button { font: inherit; color: inherit; }
 .shade { position: fixed; inset: 0; pointer-events: none; background: radial-gradient(140% 100% at 50% 50%, transparent 55%, rgba(0, 0, 0, 0.6)); }
 
 /* ---------- shared components ---------- */
-.eyebrow { display: inline-flex; align-items: center; gap: 11px; font-family: var(--mono); font-size: 11px; font-weight: 500; letter-spacing: 0.22em; text-transform: uppercase; color: var(--dim); }
-.eyebrow::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--red); box-shadow: 0 0 12px var(--red); flex: none; }
+.eyebrow { display: inline-flex; align-items: center; gap: 10px; font-size: 12px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--dim); }
+.eyebrow::before { content: ''; width: 16px; height: 1px; background: var(--faint); flex: none; }
 h1, h2 { font-weight: 800; text-wrap: balance; margin: 0; }
-h1 { font-size: clamp(46px, 7vw, 104px); line-height: 0.95; letter-spacing: -0.052em; margin-block: 22px 24px; }
+h1 { font-size: clamp(44px, 6.2vw, 88px); line-height: 0.98; letter-spacing: -0.045em; margin-block: 20px 22px; }
 h2 { font-size: clamp(40px, 5.6vw, 80px); line-height: 0.96; letter-spacing: -0.05em; margin-block: 16px 18px; }
-h1 em, h2 em { font-family: var(--accent-face); font-style: italic; font-weight: 400; letter-spacing: -0.015em; color: var(--red-soft); padding-right: 0.05em; }
+h1 em, h2 em { font-style: normal; color: rgba(243, 243, 245, 0.42); }
 h3 { font-size: 19px; letter-spacing: -0.02em; font-weight: 700; margin: 0; }
 .lede { font-size: clamp(17px, 1.45vw, 19px); color: var(--dim); max-width: 50ch; margin: 0; text-wrap: pretty; }
 .glass { background: var(--panel); border: 1px solid var(--edge); border-radius: var(--r-lg); backdrop-filter: blur(18px) saturate(1.2); -webkit-backdrop-filter: blur(18px) saturate(1.2); box-shadow: 0 40px 120px -40px rgba(0, 0, 0, 0.9), inset 0 1px 0 rgba(255, 255, 255, 0.06); }
-.btn { display: inline-flex; align-items: center; justify-content: center; gap: 10px; height: 50px; padding: 0 24px; border-radius: 999px; font: 600 12.5px/1 var(--display); letter-spacing: 0.1em; text-transform: uppercase; text-decoration: none; cursor: pointer; white-space: nowrap;
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 10px; height: 48px; padding: 0 22px; border-radius: 999px; font: 600 14.5px/1 var(--display); letter-spacing: -0.005em; text-decoration: none; cursor: pointer; white-space: nowrap;
   border: 1px solid var(--edge); color: var(--text); background: rgba(255, 255, 255, 0.04); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); transition: background 0.25s, border-color 0.25s, box-shadow 0.25s, transform 0.25s; }
 .btn:hover { background: rgba(255, 255, 255, 0.09); border-color: var(--edge-hi); }
-.btn.primary { background: var(--red); border-color: var(--red); color: #fff; box-shadow: 0 14px 44px -12px rgba(224, 49, 49, 0.85); }
-.btn.primary:hover { background: #ea3a3a; transform: translateY(-1px); }
-.btn.small { height: 40px; padding: 0 16px; font-size: 11.5px; }
+.btn.primary { background: var(--text); border-color: var(--text); color: #0a0a0c; }
+.btn.primary:hover { background: #fff; }
+.btn.small { height: 40px; padding: 0 16px; font-size: 13.5px; }
 .btn:disabled { opacity: 0.45; cursor: not-allowed; transform: none; }
 .chip { display: inline-flex; align-items: center; gap: 8px; height: 36px; padding: 0 14px; border-radius: 999px; border: 1px solid var(--edge); background: transparent; color: var(--dim); font: 500 13px var(--display); cursor: pointer; transition: all 0.2s; white-space: nowrap; }
 .chip:hover { color: var(--text); border-color: var(--edge-hi); }
@@ -94,7 +94,7 @@ select { appearance: none; background-image: linear-gradient(45deg, transparent 
 .top nav a.link:hover { color: var(--text); }
 .pill { display: inline-flex; align-items: center; height: 38px; padding: 0 18px; border-radius: 999px; text-decoration: none; font-size: 13px; font-weight: 600; border: 1px solid var(--edge); background: rgba(6, 7, 10, 0.35); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
 .pill:hover { border-color: var(--edge-hi); }
-.pill.hot { background: var(--red); border-color: var(--red); color: #fff; }
+.pill.hot { background: var(--text); border-color: var(--text); color: #0a0a0c; }
 .rail { position: fixed; z-index: 5; right: var(--gutter-r); top: 50%; transform: translateY(-50%); display: flex; flex-direction: column; gap: 16px; }
 .rail a { display: flex; align-items: center; justify-content: flex-end; gap: 12px; text-decoration: none; font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--faint); transition: color 0.4s; }
 .rail a::after { content: ''; width: 18px; height: 1px; background: currentColor; transition: width 0.4s, background 0.4s; }
@@ -117,12 +117,14 @@ main { position: relative; z-index: 2; }
 .head { display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: 20px 40px; margin-bottom: 34px; }
 .head .copy { max-width: 640px; }
 .actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 32px; }
-.featured { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 34px; }
-.featured button { display: inline-flex; align-items: center; gap: 12px; padding: 8px 16px 8px 8px; border-radius: 999px; border: 1px solid var(--edge); background: rgba(8, 9, 13, 0.55); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); cursor: pointer; text-align: left; transition: border-color 0.2s; }
-.featured button:hover { border-color: var(--edge-hi); }
-.featured .orb { width: 30px; height: 30px; }
-.featured b { display: block; font-size: 13.5px; }
-.featured small { display: block; font-family: var(--mono); font-size: 10px; letter-spacing: 0.12em; color: var(--faint); text-transform: uppercase; }
+.launched { margin-top: 56px; max-width: 440px; }
+.launched-head { display: flex; justify-content: space-between; gap: 12px; padding-bottom: 10px; border-bottom: 1px solid var(--edge); font-size: 12px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--faint); }
+#featured button { width: 100%; display: grid; grid-template-columns: 36px minmax(0, 1fr) auto; gap: 14px; align-items: center; padding: 11px 0; border: 0; border-bottom: 1px solid var(--edge); background: transparent; cursor: pointer; text-align: left; }
+#featured button:hover b { text-decoration: underline; text-underline-offset: 3px; }
+#featured b { display: block; font-size: 15px; font-weight: 600; }
+#featured small { display: block; font-size: 12.5px; color: var(--faint); }
+#featured .go { font-size: 13px; color: var(--dim); white-space: nowrap; }
+.thumb { display: block; flex: none; }
 
 /* builder */
 .builder { display: grid; grid-template-rows: auto minmax(0, 1fr) auto; max-width: 600px; margin-top: 26px; overflow: hidden; }
@@ -374,14 +376,17 @@ dialog.sheet::backdrop { background: rgba(3, 3, 6, 0.75); backdrop-filter: blur(
 <main>
   <section class="stop" id="start" aria-labelledby="t0">
     <div class="inner"><div class="copy">
-      <span class="eyebrow">Klickode Orbit · A universe of companies</span>
-      <h1 id="t0">Give your company <em>a world.</em></h1>
-      <p class="lede">Claim a planet in the Orbit universe and build your company’s world inside it: your story, services, numbers and contacts, in your colours and style. Visitors don’t open a page. They fly in.</p>
+      <span class="eyebrow">Klickode Orbit</span>
+      <h1 id="t0">Give your company<br><em>a world.</em></h1>
+      <p class="lede">Claim a planet, build your company’s world inside it, and get found by people exploring the galaxy. Ready in about ten minutes.</p>
       <div class="actions">
         <a class="btn primary" href="#build">Build your world</a>
         <a class="btn" href="#explore">Explore companies</a>
       </div>
-      <div class="featured" id="featured" aria-label="Featured worlds"></div>
+      <div class="launched" aria-label="Recently launched worlds">
+        <div class="launched-head"><span>Recently launched</span><span id="liveCount"></span></div>
+        <div id="featured"></div>
+      </div>
     </div></div>
   </section>
 
@@ -420,7 +425,6 @@ dialog.sheet::backdrop { background: rgba(3, 3, 6, 0.75); backdrop-filter: blur(
             <div class="opts">
               <button type="button" class="chip" id="tRing" aria-pressed="true"><i></i>Ring</button>
               <button type="button" class="chip" id="tMoon" aria-pressed="true"><i></i>Moon</button>
-              <button type="button" class="chip" id="tCrystals" aria-pressed="false"><i></i>Crystal field</button>
             </div>
           </div>
           <p class="hintline">Your planet sits in the Genesis galaxy at a fixed position set by its number. Pick the number in Launch.</p>
@@ -727,7 +731,7 @@ dialog.sheet::backdrop { background: rgba(3, 3, 6, 0.75); backdrop-filter: blur(
   PRESETS.forEach(([name, hex]) => { const b = el('button', 'swatch'); b.type = 'button'; b.setAttribute('role', 'radio'); b.setAttribute('aria-label', name); b.style.setProperty('--c', hex); b.dataset.v = hex; b.addEventListener('click', () => { look.accent = hex; changed(); }); sw.appendChild(b); });
   const cc = el('label', 'custom-color'); const ci = el('input'); ci.type = 'color'; ci.value = '#ff7a3d'; ci.setAttribute('aria-label', 'Custom brand colour'); cc.append(ci, document.createTextNode('Custom')); sw.appendChild(cc);
   ci.addEventListener('input', () => { look.accent = ci.value; changed(); });
-  [['tRing', 'ring'], ['tMoon', 'moon'], ['tCrystals', 'crystals']].forEach(([id, k]) => { F(id).addEventListener('click', () => { look[k] = !look[k]; changed(); }); listeners.push(() => F(id).setAttribute('aria-pressed', String(look[k]))); });
+  [['tRing', 'ring'], ['tMoon', 'moon']].forEach(([id, k]) => { F(id).addEventListener('click', () => { look[k] = !look[k]; changed(); }); listeners.push(() => F(id).setAttribute('aria-pressed', String(look[k]))); });
 
   const svcBox = F('svcList'), statBox = F('statList');
   const svcIn = [0, 1, 2, 3].map((i) => { const r = el('div', 'svc'); const t = el('input'); t.type = 'text'; t.maxLength = 40; t.placeholder = 'Service ' + (i + 1); t.setAttribute('aria-label', 'Service ' + (i + 1) + ' name'); const d = el('input'); d.type = 'text'; d.maxLength = 110; d.placeholder = 'One line about it'; d.setAttribute('aria-label', 'Service ' + (i + 1) + ' description'); r.append(t, d); svcBox.appendChild(r); return [t, d]; });
@@ -1087,7 +1091,25 @@ dialog.sheet::backdrop { background: rgba(3, 3, 6, 0.75); backdrop-filter: blur(
   const filt = F('filters');
   ['All', 'Mine', ...INDUSTRIES].forEach((name) => { const b = el('button', 'chip'); b.type = 'button'; b.dataset.f = name; b.append(el('i'), document.createTextNode(name)); b.addEventListener('click', () => { industry = name; renderCards(); }); filt.appendChild(b); });
   F('search').addEventListener('input', renderCards); F('sortSel').addEventListener('change', renderCards);
-  function orbFor(c) { const o = el('span', 'orb' + (c.ring ? ' ringed' : '')); o.style.setProperty('--c', c.accent); return o; }
+  // small painted planets: banded clouds, one sun from the upper left, a thin ring
+  function planetThumb(c, size) {
+    const cv = document.createElement('canvas'), dpr = 2; cv.width = cv.height = size * dpr; cv.style.width = cv.style.height = size + 'px'; cv.className = 'thumb'; cv.setAttribute('aria-hidden', 'true');
+    const x = cv.getContext('2d'); x.scale(dpr, dpr);
+    const cx = size / 2, cy = size / 2, r = size * (c.ring ? 0.3 : 0.42), tint = hexRgb(c.accent), rand = rng(c.n * 17 + 5);
+    const zone = mixc([0.9, 0.85, 0.76], tint.map((v) => v * 0.9 + 0.1), 0.32), belt = mixc([0.52, 0.4, 0.3], tint.map((v) => v * 0.55), 0.5);
+    const css = (a, k) => 'rgb(' + a.map((v) => Math.round(Math.min(1, v * k) * 255)).join(',') + ')';
+    const ringPath = (from, to, alpha) => { x.save(); x.translate(cx, cy); x.rotate(-0.36); x.scale(1, 0.24); x.strokeStyle = 'rgba(222,208,188,' + alpha + ')'; x.lineWidth = size * 0.2; x.beginPath(); x.arc(0, 0, r * 1.72, from, to); x.stroke(); x.strokeStyle = 'rgba(6,6,8,0.9)'; x.lineWidth = size * 0.02; x.beginPath(); x.arc(0, 0, r * 1.66, from, to); x.stroke(); x.restore(); };
+    if (c.ring) ringPath(Math.PI, 2 * Math.PI, 0.55);
+    x.save(); x.beginPath(); x.arc(cx, cy, r, 0, 6.283); x.clip();
+    const n = 14; for (let i = 0; i < n; i++) { const t = i / n, mix = 0.5 + 0.5 * Math.sin(t * 9 + rand() * 1.5); x.fillStyle = css(mixc(belt, zone, mix), 0.9 + rand() * 0.2); x.fillRect(cx - r, cy - r + t * 2 * r - 1, 2 * r, (2 * r) / n + 2); }
+    const sh = x.createRadialGradient(cx - r * 0.55, cy - r * 0.5, r * 0.1, cx - r * 0.2, cy - r * 0.15, r * 1.9);
+    sh.addColorStop(0, 'rgba(0,0,0,0)'); sh.addColorStop(0.42, 'rgba(0,0,0,0.12)'); sh.addColorStop(0.62, 'rgba(0,0,0,0.82)'); sh.addColorStop(1, 'rgba(0,0,0,0.97)');
+    x.fillStyle = sh; x.fillRect(cx - r, cy - r, 2 * r, 2 * r); x.restore();
+    x.strokeStyle = 'rgba(170,200,255,0.35)'; x.lineWidth = 1; x.beginPath(); x.arc(cx, cy, r - 0.5, 3.1, 4.9); x.stroke();
+    if (c.ring) ringPath(0, Math.PI, 0.7);
+    return cv;
+  }
+  function orbFor(c) { return planetThumb(c, 44); }
   function renderCards() {
     [...filt.children].forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.f === industry)));
     const q = F('search').value.trim().toLowerCase();
@@ -1118,7 +1140,8 @@ dialog.sheet::backdrop { background: rgba(3, 3, 6, 0.75); backdrop-filter: blur(
   function renderFeatured() {
     const box = F('featured'); box.textContent = '';
     const list = [...companies.values()].sort((a, b) => (b.at - a.at) || (a.n - b.n)).slice(0, 4);
-    list.forEach((c) => { const b = el('button'); b.type = 'button'; const t = el('span'); t.append(el('b', '', c.name), el('small', '', 'No. ' + pad(c.n) + ' · ' + c.industry)); b.append(orbFor(c), t); b.addEventListener('click', () => openWorld(c)); box.appendChild(b); });
+    list.forEach((c) => { const b = el('button'); b.type = 'button'; const t = el('span'); t.append(el('b', '', c.name), el('small', '', [c.industry, c.city].filter(Boolean).join(' · '))); b.append(planetThumb(c, 36), t, el('span', 'go', 'No. ' + pad(c.n) + ' →')); b.addEventListener('click', () => openWorld(c)); box.appendChild(b); });
+    F('liveCount').textContent = companies.size + (companies.size === 1 ? ' world' : ' worlds') + ' in orbit';
   }
 
   let hashDone = false;
@@ -1160,22 +1183,18 @@ dialog.sheet::backdrop { background: rgba(3, 3, 6, 0.75); backdrop-filter: blur(
     return;
   }
   const small = innerWidth < 760;
-  renderer.setPixelRatio(Math.min(devicePixelRatio || 1, small ? 1.5 : 1.75));
-  renderer.setClearColor(0x06070a, 1);
+  renderer.setPixelRatio(Math.min(devicePixelRatio || 1, small ? 1.5 : 2));
+  renderer.setClearColor(0x020203, 1);
 
   const scene = new THREE.Scene();
-  scene.fog = new THREE.FogExp2(0x06070a, 0.0065);
-  const camera = new THREE.PerspectiveCamera(50, innerWidth / innerHeight, 0.1, 900);
-
-  const RED = new THREE.Color('#e03131');
-  const LIGHT = new THREE.Vector3(-0.55, 0.45, 0.7).normalize();
+  const camera = new THREE.PerspectiveCamera(42, innerWidth / innerHeight, 0.1, 2000);
+  // One sun for everything, high and to the left, slightly behind the camera.
+  const SUN = new THREE.Vector3(-0.86, 0.32, 0.2).normalize();
   const uTime = { value: 0 };
-  // Live world colours; the builder eases these toward the chosen world every frame.
-  const W = PAL();
-  const uDeep = { value: new THREE.Vector3(...W.deep) }, uDusk = { value: new THREE.Vector3(...W.dusk) }, uMain = { value: new THREE.Vector3(...W.main) },
-    uEmber = { value: new THREE.Vector3(...W.ember) }, uGlow = { value: new THREE.Vector3(...W.glow) };
+  const P0 = PAL();
+  const uTint = { value: new THREE.Vector3(...P0.main) };
 
-  // ---------- shared shader bits ----------
+  // ---------- shared noise ----------
   const NOISE = `
   vec3 mod289(vec3 x){return x-floor(x*(1.0/289.0))*289.0;}
   vec4 mod289(vec4 x){return x-floor(x*(1.0/289.0))*289.0;}
@@ -1200,320 +1219,212 @@ dialog.sheet::backdrop { background: rgba(3, 3, 6, 0.75); backdrop-filter: blur(
     vec4 m=max(0.6-vec4(dot(x0,x0),dot(x1,x1),dot(x2,x2),dot(x3,x3)),0.0); m=m*m;
     return 42.0*dot(m*m,vec4(dot(p0,x0),dot(p1,x1),dot(p2,x2),dot(p3,x3)));
   }
-  float fbm(vec3 p){ float f=0.0, a=0.5; for(int i=0;i<5;i++){ f+=a*snoise(p); p*=2.03; a*=0.5; } return f; }`;
+  float fbm(vec3 p){ float f=0.0, a=0.5; for(int i=0;i<6;i++){ f+=a*snoise(p); p*=2.02; a*=0.5; } return f; }
+  vec3 filmic(vec3 c){ c=max(vec3(0.0),c); return (c*(2.51*c+0.03))/(c*(2.43*c+0.59)+0.14); }`;
 
-  // Soft round points that twinkle; used for stars, dust and the planet's ring.
-  function pointsMaterial({ scale = 300, twinkle = 1, opacity = 1 }) {
-    return new THREE.ShaderMaterial({
-      uniforms: { uTime, uScale: { value: scale * renderer.getPixelRatio() }, uTwinkle: { value: reduce ? 0 : twinkle }, uOpacity: { value: opacity } },
-      vertexShader: `
-        attribute float aSize; attribute float aPhase; attribute vec3 aColor;
-        uniform float uTime; uniform float uScale; uniform float uTwinkle;
-        varying vec3 vColor; varying float vAlpha;
-        void main(){
-          vec4 mv = modelViewMatrix * vec4(position, 1.0);
-          gl_Position = projectionMatrix * mv;
-          gl_PointSize = aSize * uScale / max(0.1, -mv.z);
-          float tw = 1.0 - uTwinkle * 0.45 * (0.5 + 0.5 * sin(uTime * (0.6 + aPhase * 1.7) + aPhase * 6.283));
-          vAlpha = tw * smoothstep(0.0, 6.0, -mv.z);   // fade dust that gets too close to the lens
-          vColor = aColor;
-        }`,
-      fragmentShader: `
-        uniform float uOpacity; varying vec3 vColor; varying float vAlpha;
-        void main(){
-          float d = length(gl_PointCoord - 0.5);
-          float a = smoothstep(0.5, 0.0, d); a = a * a;
-          float core = smoothstep(0.12, 0.0, d);
-          gl_FragColor = vec4(vColor * (0.65 + core), (a + core * 0.6) * vAlpha * uOpacity);
-        }`,
-      transparent: true, depthWrite: false, blending: THREE.AdditiveBlending,
-    });
-  }
-
-  function pointCloud(count, place, opts) {
-    const pos = new Float32Array(count * 3), size = new Float32Array(count), phase = new Float32Array(count), color = new Float32Array(count * 3);
-    const c = new THREE.Color();
+  // ---------- stars: tiny, mostly white, a few bright ones, real colour temperatures ----------
+  function starField(count, rMin, rMax) {
+    const pos = new Float32Array(count * 3), col = new Float32Array(count * 3), size = new Float32Array(count);
+    const temps = [[0.66, 0.75, 1.0], [0.82, 0.87, 1.0], [1.0, 1.0, 1.0], [1.0, 1.0, 1.0], [1.0, 0.95, 0.86], [1.0, 0.86, 0.7], [1.0, 0.76, 0.6]];
+    const band = new THREE.Vector3(0.25, 0.9, -0.35).normalize();
     for (let i = 0; i < count; i++) {
-      const p = place(i, c);
-      pos.set([p.x, p.y, p.z], i * 3);
-      size[i] = p.size; phase[i] = Math.random();
-      color.set([c.r, c.g, c.b], i * 3);
+      let v;
+      do { v = new THREE.Vector3(Math.random() * 2 - 1, Math.random() * 2 - 1, Math.random() * 2 - 1); } while (v.lengthSq() > 1 || v.lengthSq() < 0.01);
+      v.normalize();
+      if (Math.random() < 0.45) { v.addScaledVector(band, -v.dot(band) * (0.85 + Math.random() * 0.12)).normalize(); } // crowd toward the galactic plane
+      const r = rMin + Math.random() * (rMax - rMin);
+      pos.set([v.x * r, v.y * r, v.z * r], i * 3);
+      const t = temps[(Math.random() * temps.length) | 0], m = Math.pow(Math.random(), 7);
+      const b = 0.35 + m * 2.2;
+      col.set([t[0] * b, t[1] * b, t[2] * b], i * 3);
+      size[i] = 0.8 + m * 3.2;
     }
     const g = new THREE.BufferGeometry();
     g.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+    g.setAttribute('aColor', new THREE.BufferAttribute(col, 3));
     g.setAttribute('aSize', new THREE.BufferAttribute(size, 1));
-    g.setAttribute('aPhase', new THREE.BufferAttribute(phase, 1));
-    g.setAttribute('aColor', new THREE.BufferAttribute(color, 3));
-    return new THREE.Points(g, pointsMaterial(opts));
+    return new THREE.Points(g, new THREE.ShaderMaterial({
+      uniforms: { uPx: { value: renderer.getPixelRatio() } },
+      vertexShader: `attribute vec3 aColor; attribute float aSize; uniform float uPx; varying vec3 vC;
+        void main(){ vC = aColor; vec4 mv = modelViewMatrix * vec4(position,1.0); gl_Position = projectionMatrix * mv; gl_PointSize = aSize * uPx; }`,
+      fragmentShader: `varying vec3 vC; void main(){ float d = length(gl_PointCoord - 0.5); float a = exp(-d*d*28.0); gl_FragColor = vec4(vC * a, a); }`,
+      transparent: true, depthWrite: false, blending: THREE.AdditiveBlending,
+    }));
   }
-
-  // ---------- deep starfield: a big shell of stars far away ----------
-  const STAR_TINTS = ['#ffffff', '#ffffff', '#ffffff', '#ffe9e4', '#dfe6ff', '#ffb3b3', '#cbbcff'];
-  const stars = pointCloud(small ? 2600 : 5200, (i, c) => {
-    const r = 260 + Math.random() * 380;
-    const th = Math.random() * Math.PI * 2, ph = Math.acos(2 * Math.random() - 1);
-    c.set(STAR_TINTS[(Math.random() * STAR_TINTS.length) | 0]);
-    const bright = Math.random() < 0.04;
-    return { x: r * Math.sin(ph) * Math.cos(th), y: r * Math.sin(ph) * Math.sin(th) * 0.8, z: r * Math.cos(ph) - 60, size: bright ? 3.2 + Math.random() * 2.5 : 0.7 + Math.random() * 1.6 };
-  }, { scale: 120, twinkle: 1 });
+  const stars = starField(small ? 5000 : 11000, 700, 900);
   scene.add(stars);
 
-  // ---------- dust along the flight path, for depth and parallax ----------
-  const dust = pointCloud(small ? 700 : 1400, (i, c) => {
-    c.set(Math.random() < 0.15 ? '#ff8d8d' : '#cfd3ff');
-    return { x: (Math.random() - 0.5) * 70, y: (Math.random() - 0.5) * 44, z: 24 - Math.random() * 150, size: 0.25 + Math.random() * 0.6 };
-  }, { scale: 260, twinkle: 0.4, opacity: 0.7 });
-  scene.add(dust);
+  // ---------- the Milky Way: a faint band of unresolved stars with dark dust lanes ----------
+  const sky = new THREE.Mesh(new THREE.SphereGeometry(950, 48, 32), new THREE.ShaderMaterial({
+    uniforms: { uBand: { value: new THREE.Vector3(0.25, 0.9, -0.35).normalize() } },
+    vertexShader: `varying vec3 vD; void main(){ vD = normalize(position); gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0); }`,
+    fragmentShader: NOISE + `
+      uniform vec3 uBand; varying vec3 vD;
+      void main(){
+        float lat = dot(vD, uBand);
+        float band = exp(-lat*lat/0.025);
+        float cloud = fbm(vD*3.0) * 0.5 + 0.5;
+        float dust = smoothstep(0.1, 0.65, fbm(vD*6.0 + 4.0) * 0.5 + 0.5) * exp(-lat*lat/0.004);
+        float glow = band * (0.35 + 0.65*cloud) * (1.0 - dust*0.85);
+        vec3 col = mix(vec3(0.55,0.6,0.75), vec3(0.95,0.85,0.72), cloud) * glow * 0.075;
+        gl_FragColor = vec4(col, 1.0);
+      }`,
+    side: THREE.BackSide, depthWrite: false,
+  }));
+  scene.add(sky);
 
-  // ---------- nebula: big soft additive clouds far behind ----------
-  function glowTexture(stops) {
-    const cv = document.createElement('canvas'); cv.width = cv.height = 256;
-    const x = cv.getContext('2d'); const g = x.createRadialGradient(128, 128, 0, 128, 128, 128);
-    stops.forEach(([o, col]) => g.addColorStop(o, col));
-    x.fillStyle = g; x.fillRect(0, 0, 256, 256);
-    return new THREE.CanvasTexture(cv);
-  }
-  const softTex = glowTexture([[0, 'rgba(255,255,255,1)'], [0.25, 'rgba(255,255,255,0.45)'], [0.6, 'rgba(255,255,255,0.08)'], [1, 'rgba(255,255,255,0)']]);
-  const nebulae = [];
-  [['#e03131', -90, 40, -240, 260, 0.34], ['#7b5cff', 110, -50, -260, 300, 0.26], ['#ff6b5b', 40, 70, -330, 220, 0.18], ['#3a2bd6', -40, -90, -200, 240, 0.2], ['#e03131', 30, -10, -150, 160, 0.16]].forEach(([col, x, y, z, s, o]) => {
-    const m = new THREE.SpriteMaterial({ map: softTex, color: new THREE.Color(col), transparent: true, opacity: o, blending: THREE.AdditiveBlending, depthWrite: false, fog: false });
-    const sp = new THREE.Sprite(m); sp.position.set(x, y, z); sp.scale.set(s, s * 0.7, 1);
-    sp.userData.spin = (Math.random() - 0.5) * 0.02;
-    scene.add(sp); nebulae.push(sp);
-  });
-
-  // ---------- the planet ----------
+  // ---------- the planet: a banded gas giant lit by one sun ----------
   const PLANET_R = 7;
   const planetGroup = new THREE.Group();
   planetGroup.position.set(10, -5.5, -12);
+  planetGroup.rotation.z = -0.32; // axial tilt
   scene.add(planetGroup);
+  const center = planetGroup.position;
+  const RING_IN = PLANET_R * 1.32, RING_OUT = PLANET_R * 2.25;
+  const uRingN = { value: new THREE.Vector3(0, 1, 0) };
+  const uRingOn = { value: 1 };
 
   const planet = new THREE.Mesh(
-    new THREE.SphereGeometry(PLANET_R, small ? 64 : 128, small ? 48 : 96),
+    new THREE.SphereGeometry(PLANET_R, small ? 96 : 160, small ? 64 : 120),
     new THREE.ShaderMaterial({
-      uniforms: { uTime, uLight: { value: LIGHT }, uDeep, uDusk, uMain, uEmber, uGlow },
-      vertexShader: `
-        varying vec3 vPos; varying vec3 vN; varying vec3 vView;
-        void main(){
-          vPos = position;
-          vec4 wp = modelMatrix * vec4(position, 1.0);
-          vN = normalize(mat3(modelMatrix) * normal);
-          vView = normalize(cameraPosition - wp.xyz);
-          gl_Position = projectionMatrix * viewMatrix * wp;
-        }`,
+      uniforms: { uTime, uSun: { value: SUN }, uTint, uCenter: { value: center }, uRingN, uRingOn, uIn: { value: RING_IN }, uOut: { value: RING_OUT } },
+      vertexShader: `varying vec3 vP; varying vec3 vN; varying vec3 vW;
+        void main(){ vP = position; vec4 w = modelMatrix * vec4(position,1.0); vW = w.xyz; vN = normalize(mat3(modelMatrix) * normal); gl_Position = projectionMatrix * viewMatrix * w; }`,
       fragmentShader: NOISE + `
-        uniform float uTime; uniform vec3 uLight;
-        uniform vec3 uDeep; uniform vec3 uDusk; uniform vec3 uMain; uniform vec3 uEmber; uniform vec3 uGlow;
-        varying vec3 vPos; varying vec3 vN; varying vec3 vView;
+        uniform float uTime; uniform vec3 uSun; uniform vec3 uTint; uniform vec3 uCenter; uniform vec3 uRingN; uniform float uRingOn; uniform float uIn; uniform float uOut;
+        varying vec3 vP; varying vec3 vN; varying vec3 vW;
+        float ringDensity(float r){
+          float t = (r - uIn) / (uOut - uIn);
+          if (t < 0.0 || t > 1.0) return 0.0;
+          float d = mix(0.25, 0.95, smoothstep(0.18, 0.3, t));
+          d *= 1.0 - 0.94 * (smoothstep(0.58, 0.6, t) - smoothstep(0.65, 0.67, t));
+          d *= mix(1.0, 0.7, smoothstep(0.67, 0.7, t));
+          d *= 1.0 - 0.8 * (smoothstep(0.86, 0.865, t) - smoothstep(0.875, 0.88, t));
+          return d * smoothstep(0.0, 0.03, t) * (1.0 - smoothstep(0.96, 1.0, t));
+        }
         void main(){
-          vec3 p = normalize(vPos);
-          float warp = fbm(p * 1.6 + vec3(uTime * 0.015, 0.0, 0.0));
-          float bands = sin(p.y * 9.0 + warp * 3.4);
-          float storms = fbm(p * 3.2 - vec3(0.0, uTime * 0.01, 0.0));
-          vec3 col = mix(uDeep, uDusk, smoothstep(-1.0, 0.6, bands));
-          col = mix(col, uMain, smoothstep(0.15, 0.95, bands * 0.45 + storms * 0.75));
-          col = mix(col, uEmber, smoothstep(0.62, 1.05, storms + bands * 0.18) * 0.55);
-          vec3 n = normalize(vN); vec3 v = normalize(vView);
-          float ndl = dot(n, normalize(uLight));
-          float lit = smoothstep(-0.2, 0.55, ndl);
-          vec3 c = col * (0.03 + 1.15 * lit);
-          float fres = pow(1.0 - max(dot(n, v), 0.0), 3.2);
-          c += uGlow * fres * (0.18 + 1.1 * smoothstep(-0.4, 0.6, ndl));
-          // faint glow on the night side so it never reads as a hole
-          c += uDusk * 0.7 * (1.0 - lit) * fres * 0.6;
-          gl_FragColor = vec4(c, 1.0);
+          vec3 p = normalize(vP);
+          float lat = p.y;
+          float swirl = fbm(vec3(p.x*1.6, lat*2.2, p.z*1.6) + vec3(uTime*0.004, 0.0, 0.0));
+          float b = lat*5.5 + swirl*0.45 + fbm(vec3(lat*14.0, p.x, p.z))*0.12;
+          float bands = 0.5 + 0.5*sin(b*3.14159);
+          float fine = fbm(vec3(lat*80.0, p.x*4.0 + swirl*2.0, p.z*4.0)) * 0.5 + 0.5;
+          float streak = fbm(vec3(lat*160.0, p.x*1.5, p.z*1.5)) * 0.5 + 0.5;
+          vec3 light = vec3(0.86, 0.81, 0.72), dark = vec3(0.58, 0.47, 0.37);
+          vec3 tint = uTint;
+          vec3 zoneC = mix(light, tint * 0.9 + 0.1, 0.18);
+          vec3 beltC = mix(dark, tint * 0.6, 0.32);
+          vec3 col = mix(beltC, zoneC, smoothstep(0.1, 0.9, bands));
+          col *= 0.86 + 0.18 * fine + 0.08 * streak;
+          float storm = smoothstep(0.62, 0.78, fbm(p*4.5 + 11.0) * 0.5 + 0.5) * smoothstep(0.7, 0.2, abs(lat));
+          col = mix(col, mix(tint, vec3(0.95,0.9,0.85), 0.65), storm * 0.16);
+          col = mix(col, vec3(dot(col, vec3(0.3,0.59,0.11))), smoothstep(0.75, 1.0, abs(lat)) * 0.5); // paler, hazier poles
+
+          vec3 n = normalize(vN); vec3 v = normalize(cameraPosition - vW); vec3 L = normalize(uSun);
+          float ndl = dot(n, L);
+          float diff = smoothstep(-0.04, 0.35, ndl) * (0.25 + 0.75 * max(ndl, 0.0));
+          float mu = max(dot(n, v), 0.0);
+          float limb = pow(mu, 0.32);
+          // shadow of the ring on the clouds
+          float sh = 1.0;
+          float den = dot(L, uRingN);
+          if (abs(den) > 0.001) { float t = dot(uCenter - vW, uRingN) / den; if (t > 0.0) { float r = length(vW + L*t - uCenter); sh = 1.0 - 0.7 * ringDensity(r) * uRingOn; } }
+          vec3 c = col * diff * limb * sh * 1.25;
+          // thin atmosphere: only where sunlight grazes the limb
+          float rim = pow(1.0 - mu, 6.0) * smoothstep(-0.1, 0.5, ndl);
+          c += mix(vec3(0.55,0.68,0.95), tint, 0.25) * rim * 0.55;
+          c += col * 0.006; // faint skyglow on the night side
+          gl_FragColor = vec4(filmic(c), 1.0);
         }`,
     }),
   );
   planetGroup.add(planet);
 
-  const atmosphere = new THREE.Mesh(
-    new THREE.SphereGeometry(PLANET_R * 1.16, 64, 48),
-    new THREE.ShaderMaterial({
-      uniforms: { uLight: { value: LIGHT }, uGlow },
-      vertexShader: `
-        varying vec3 vN; varying vec3 vWN;
-        void main(){ vN = normalize(normalMatrix * normal); vWN = normalize(mat3(modelMatrix) * normal); gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }`,
-      fragmentShader: `
-        uniform vec3 uLight; uniform vec3 uGlow; varying vec3 vN; varying vec3 vWN;
-        void main(){
-          float i = pow(max(0.0, 0.72 - dot(vN, vec3(0.0, 0.0, 1.0))), 3.0);
-          float side = 0.35 + 0.65 * smoothstep(-0.6, 0.7, dot(-vWN, normalize(uLight)));
-          gl_FragColor = vec4(uGlow * 0.9 * i * 2.4 * side, i * side);
-        }`,
-      side: THREE.BackSide, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending,
-    }),
-  );
-  planetGroup.add(atmosphere);
 
-  // The ring: a thin disc of dust with gaps, tilted, that you fly through.
-  const ringHolder = new THREE.Group();
-  ringHolder.rotation.set(1.26, 0.0, 0.34);
-  planetGroup.add(ringHolder);
-  const RING_IN = PLANET_R * 1.45, RING_OUT = PLANET_R * 2.4;
-  const ring = pointCloud(small ? 8000 : 18000, (i, c) => {
-    let t;
-    do { t = Math.pow(Math.random(), 0.9); } while (Math.abs(t - 0.42) < 0.025 || Math.abs(t - 0.8) < 0.012);
-    const r = RING_IN + t * (RING_OUT - RING_IN);
-    const a = Math.random() * Math.PI * 2;
-    c.set(Math.random() < 0.2 ? '#ff8a8a' : t > 0.6 ? '#e4dcff' : '#fff0ea');
-    return { x: Math.cos(a) * r, y: (Math.random() - 0.5) * 0.08, z: Math.sin(a) * r, size: 0.16 + Math.random() * 0.36 };
-  }, { scale: 300, twinkle: 0.25, opacity: 1 });
-  ringHolder.add(ring);
-  // A translucent banded disc under the dust gives the ring its shape and its gaps.
-  const ringBand = new THREE.Mesh(
-    new THREE.RingGeometry(RING_IN, RING_OUT, 256, 1),
-    new THREE.ShaderMaterial({
-      uniforms: { uIn: { value: RING_IN }, uOut: { value: RING_OUT }, uGlow, uOpacity: { value: 1 } },
-      vertexShader: `varying vec3 vP; void main(){ vP = position; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }`,
-      fragmentShader: `
-        uniform float uIn; uniform float uOut; uniform vec3 uGlow; uniform float uOpacity; varying vec3 vP;
-        void main(){
-          float t = (length(vP.xy) - uIn) / (uOut - uIn);
-          float bands = 0.55 + 0.45 * sin(t * 64.0) * sin(t * 21.0 + 1.3);
-          float gaps = smoothstep(0.0, 0.03, abs(t - 0.42)) * smoothstep(0.0, 0.014, abs(t - 0.8));
-          float edge = smoothstep(0.0, 0.05, t) * smoothstep(1.0, 0.82, t);
-          vec3 col = mix(vec3(1.0, 0.9, 0.86), uGlow, smoothstep(0.2, 1.0, t));
-          float a = bands * gaps * edge * 0.3 * uOpacity;
-          gl_FragColor = vec4(col * a * 1.8, a);
-        }`,
-      transparent: true, depthWrite: false, side: THREE.DoubleSide, blending: THREE.AdditiveBlending,
-    }),
-  );
-  ringBand.rotation.x = -Math.PI / 2;   // RingGeometry is built flat in XY; lay it in the dust's plane
-  ringHolder.add(ringBand);
-
-  // A small moon that circles the planet.
-  const moonPivot = new THREE.Group(); moonPivot.rotation.set(0.5, 0, -0.25); planetGroup.add(moonPivot);
-  const moon = new THREE.Mesh(new THREE.SphereGeometry(0.7, 48, 32), new THREE.ShaderMaterial({
-    uniforms: { uLight: { value: LIGHT }, uGlow },
-    vertexShader: `varying vec3 vN; varying vec3 vView; void main(){ vec4 wp = modelMatrix * vec4(position,1.0); vN = normalize(mat3(modelMatrix)*normal); vView = normalize(cameraPosition - wp.xyz); gl_Position = projectionMatrix*viewMatrix*wp; }`,
-    fragmentShader: `uniform vec3 uLight; uniform vec3 uGlow; varying vec3 vN; varying vec3 vView; void main(){ vec3 n=normalize(vN); float l=smoothstep(-0.1,0.7,dot(n,normalize(uLight))); float f=pow(1.0-max(dot(n,normalize(vView)),0.0),2.5); gl_FragColor=vec4(vec3(0.82,0.8,0.9)*(0.04+0.9*l)+mix(vec3(0.6,0.5,1.0),uGlow,0.5)*f*0.5,1.0); }`,
+  // ---------- rings: many fine ringlets, a Cassini-style gap, lit and shadowed by the planet ----------
+  const ringGeo = new THREE.RingGeometry(RING_IN, RING_OUT, 512, 1);
+  const ring = new THREE.Mesh(ringGeo, new THREE.ShaderMaterial({
+    uniforms: { uSun: { value: SUN }, uTint, uCenter: { value: center }, uR: { value: PLANET_R }, uIn: { value: RING_IN }, uOut: { value: RING_OUT }, uRingN, uOn: uRingOn },
+    vertexShader: `varying vec3 vL; varying vec3 vW; void main(){ vL = position; vec4 w = modelMatrix * vec4(position,1.0); vW = w.xyz; gl_Position = projectionMatrix * viewMatrix * w; }`,
+    fragmentShader: `
+      uniform vec3 uSun; uniform vec3 uTint; uniform vec3 uCenter; uniform float uR; uniform float uIn; uniform float uOut; uniform vec3 uRingN; uniform float uOn;
+      varying vec3 vL; varying vec3 vW;
+      float hash(float x){ return fract(sin(x*127.1)*43758.5453); }
+      void main(){
+        float r = length(vL.xy);
+        float t = (r - uIn) / (uOut - uIn);
+        float d = mix(0.25, 0.95, smoothstep(0.18, 0.3, t));
+        d *= 1.0 - 0.94 * (smoothstep(0.58, 0.6, t) - smoothstep(0.65, 0.67, t));
+        d *= mix(1.0, 0.7, smoothstep(0.67, 0.7, t));
+        d *= 1.0 - 0.8 * (smoothstep(0.86, 0.865, t) - smoothstep(0.875, 0.88, t));
+        d *= smoothstep(0.0, 0.03, t) * (1.0 - smoothstep(0.96, 1.0, t));
+        float k = floor(t * 420.0);
+        float ringlet = 0.72 + 0.28 * mix(hash(k), hash(k + 1.0), fract(t * 420.0));
+        float coarse = 0.8 + 0.2 * sin(t * 60.0 + hash(floor(t * 30.0)) * 6.0);
+        d *= ringlet * coarse;
+        vec3 L = normalize(uSun);
+        // the planet's shadow across the ring
+        vec3 oc = vW - uCenter; float b = dot(oc, L); float c = dot(oc, oc) - uR*uR; float h = b*b - c;
+        float shadow = (h > 0.0 && -b - sqrt(h) > 0.0) ? 0.06 : 1.0;
+        vec3 v = normalize(cameraPosition - vW);
+        float sunSide = sign(dot(uRingN, L)), eyeSide = sign(dot(uRingN, v));
+        float lit = sunSide == eyeSide ? (0.35 + 0.65 * abs(dot(uRingN, L))) : 0.22 * (1.0 - d * 0.6); // the unlit face only glows through thin parts
+        vec3 col = mix(vec3(0.86, 0.79, 0.68), uTint, 0.18) * (0.75 + 0.35 * hash(floor(t * 90.0)));
+        vec3 outc = col * lit * shadow * 1.15;
+        float a = d * 0.92 * uOn;
+        outc = (outc*(2.51*outc+0.03))/(outc*(2.43*outc+0.59)+0.14);
+        gl_FragColor = vec4(outc, a);
+      }`,
+    transparent: true, depthWrite: false, side: THREE.DoubleSide,
   }));
-  moon.position.set(PLANET_R * 2.9, 0, 0);
+  ring.rotation.x = -Math.PI / 2;
+  planetGroup.add(ring);
+  scene.updateMatrixWorld(true);
+  uRingN.value.set(0, 0, 1).transformDirection(ring.matrixWorld);
+
+  // ---------- a cratered moon ----------
+  const moonPivot = new THREE.Group(); moonPivot.rotation.set(0.12, 0, -0.32); planetGroup.add(moonPivot);
+  const moon = new THREE.Mesh(new THREE.SphereGeometry(0.62, 96, 64), new THREE.ShaderMaterial({
+    uniforms: { uSun: { value: SUN } },
+    vertexShader: `varying vec3 vP; varying vec3 vN; varying vec3 vW; void main(){ vP = position; vec4 w = modelMatrix * vec4(position,1.0); vW = w.xyz; vN = normalize(mat3(modelMatrix)*normal); gl_Position = projectionMatrix * viewMatrix * w; }`,
+    fragmentShader: NOISE + `
+      uniform vec3 uSun; varying vec3 vP; varying vec3 vN; varying vec3 vW;
+      void main(){
+        vec3 p = normalize(vP);
+        float maria = smoothstep(0.1, 0.35, fbm(p*1.6) * 0.5 + 0.5);
+        float craters = pow(abs(snoise(p*9.0)), 0.5) * 0.15 + pow(abs(snoise(p*22.0)), 0.6) * 0.1;
+        vec3 col = mix(vec3(0.42,0.41,0.40), vec3(0.62,0.6,0.57), maria) * (0.85 + craters);
+        float ndl = dot(normalize(vN), normalize(uSun));
+        vec3 c = col * smoothstep(-0.02, 0.15, ndl) * (0.2 + 0.8*max(ndl,0.0)) * 1.3;
+        gl_FragColor = vec4(filmic(c), 1.0);
+      }`,
+  }));
+  moon.position.set(PLANET_R * 3.1, 0, 0);
   moonPivot.add(moon);
 
-  // The brand name, written on a glowing tag that hangs above the planet.
-  const tagCv = document.createElement('canvas'); tagCv.width = 1024; tagCv.height = 256;
-  const tagTex = new THREE.CanvasTexture(tagCv);
-  const tag = new THREE.Sprite(new THREE.SpriteMaterial({ map: tagTex, transparent: true, depthWrite: false, fog: false, opacity: 0.95 }));
-  tag.position.set(-1.5, PLANET_R * 1.08, 5); tag.scale.set(8, 2, 1);
-  planetGroup.add(tag);
-  function drawTag() {
-    const x = tagCv.getContext('2d'); const w = PAL();
-    x.clearRect(0, 0, 1024, 256);
-    x.textAlign = 'center'; x.textBaseline = 'middle';
-    x.font = '500 30px "JetBrains Mono", monospace'; x.fillStyle = 'rgba(255,255,255,0.55)';
-    x.fillText('NO. ' + pad(look.n) + '  ·  ' + (look.industry || 'ORBIT').toUpperCase(), 512, 66);
-    x.font = '800 112px Inter, system-ui, sans-serif'; x.shadowColor = w.css; x.shadowBlur = 40; x.fillStyle = '#ffffff';
-    let size = 112;
-    while (x.measureText(look.name).width > 960 && size > 40) { size -= 6; x.font = '800 ' + size + 'px Inter, system-ui, sans-serif'; }
-    x.fillText(look.name, 512, 160);
-    x.shadowBlur = 0;
-    tagTex.needsUpdate = true;
-  }
-  drawTag();
-  if (document.fonts) document.fonts.ready.then(drawTag);
-
-  // ---------- floating crystals: dark glossy forms with a coloured rim ----------
-  const crystalMat = (rim) => new THREE.ShaderMaterial({
-    uniforms: { uLight: { value: LIGHT }, uRim: { value: new THREE.Color(rim) } },
-    vertexShader: `varying vec3 vN; varying vec3 vView; void main(){ vec4 wp = modelMatrix*vec4(position,1.0); vN = normalize(mat3(modelMatrix)*normal); vView = normalize(cameraPosition - wp.xyz); gl_Position = projectionMatrix*viewMatrix*wp; }`,
-    fragmentShader: `
-      uniform vec3 uLight; uniform vec3 uRim; varying vec3 vN; varying vec3 vView;
-      void main(){
-        vec3 n = normalize(vN); vec3 v = normalize(vView); vec3 l = normalize(uLight);
-        float fr = pow(1.0 - max(dot(n, v), 0.0), 2.2);
-        float diff = max(dot(n, l), 0.0);
-        float spec = pow(max(dot(n, normalize(l + v)), 0.0), 80.0);
-        vec3 c = vec3(0.05, 0.05, 0.07) * (0.4 + diff) + uRim * fr * 1.5 + vec3(1.0) * spec * 0.9;
-        gl_FragColor = vec4(c, 1.0);
-      }`,
-  });
-  const faceted = (g) => { const ng = g.index ? g.toNonIndexed() : g; ng.computeVertexNormals(); return ng; };
-  // `brand` crystals take the chosen world's colour; the rest keep a violet counterpoint.
-  const crystalDefs = [
-    [faceted(new THREE.IcosahedronGeometry(1, 0)), true, [4.5, 6.8, -3], 0.9, true],
-    [new THREE.TorusGeometry(1, 0.32, 32, 96), false, [6.5, 4.2, -2], 0.95, false],
-    [faceted(new THREE.OctahedronGeometry(1.1, 0)), true, [-3.5, -8.5, -9], 1.2, true],
-    [new THREE.TorusKnotGeometry(0.85, 0.24, 160, 24), true, [-15, 8.5, -24], 1.15, false],
-    [faceted(new THREE.DodecahedronGeometry(1, 0)), false, [9.5, 4, -33], 1.1, true],
-    [faceted(new THREE.IcosahedronGeometry(1, 0)), true, [-6, -4.5, -45], 1.3, true],
-    [new THREE.TorusGeometry(1.1, 0.3, 32, 96), true, [7, -3.5, -54], 1.1, false],
-    [faceted(new THREE.OctahedronGeometry(1, 0)), false, [-5, 3.5, -66], 1.0, true],
-  ];
-  const crystals = crystalDefs.map(([geo, brand, p, s, edged]) => {
-    const g = new THREE.Group();
-    const mat = crystalMat(brand ? '#ff5050' : '#9d8cff');
-    g.add(new THREE.Mesh(geo, mat));
-    if (edged) g.add(new THREE.LineSegments(new THREE.EdgesGeometry(geo, 1), new THREE.LineBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.16 })));
-    g.position.set(...p); g.scale.setScalar(s);
-    g.userData = { base: new THREE.Vector3(...p), spin: new THREE.Vector3(Math.random() * 0.3 + 0.1, Math.random() * 0.4 + 0.15, Math.random() * 0.2), phase: Math.random() * 6.28, brand, mat, size: s, show: 1 };
-    g.rotation.set(Math.random() * 3, Math.random() * 3, 0);
-    scene.add(g);
-    return g;
-  });
-
-  // ---------- the Klickode mark at the end of the flight ----------
-  const logoTex = new THREE.Texture();
-  const logoImg = new Image();
-  logoImg.onload = () => {
-    const cv = document.createElement('canvas'); cv.width = cv.height = 512;
-    cv.getContext('2d').drawImage(logoImg, 0, 0, 512, 512);
-    logoTex.image = cv; logoTex.needsUpdate = true;
-  };
-  logoImg.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(document.querySelector('.brand svg').outerHTML.replace('<svg ', '<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" '));
-  const logo = new THREE.Sprite(new THREE.SpriteMaterial({ map: logoTex, transparent: true, fog: false }));
-  logo.position.set(0, 7.2, -112); logo.scale.set(4.6, 4.6, 1);
-  scene.add(logo);
-  const logoGlow = new THREE.Sprite(new THREE.SpriteMaterial({ map: softTex, color: RED, transparent: true, opacity: 0.8, blending: THREE.AdditiveBlending, depthWrite: false, fog: false }));
-  logoGlow.position.set(0, 7.2, -113); logoGlow.scale.set(20, 20, 1);
-  scene.add(logoGlow);
-  const halo = pointCloud(small ? 900 : 1800, (i, c) => {
-    const a = Math.random() * Math.PI * 2; const r = 8 + Math.pow(Math.random(), 2) * 9;
-    c.set(Math.random() < 0.5 ? '#ff8080' : '#ffffff');
-    return { x: Math.cos(a) * r, y: Math.sin(a) * r * 0.9, z: (Math.random() - 0.5) * 3, size: 0.15 + Math.random() * 0.35 };
-  }, { scale: 300, twinkle: 0.8 });
-  halo.position.set(0, 7.2, -114); halo.scale.setScalar(0.55);
-  scene.add(halo);
-
-  // ---------- shooting stars ----------
-  const streakCv = document.createElement('canvas'); streakCv.width = 256; streakCv.height = 8;
-  { const x = streakCv.getContext('2d'); const g = x.createLinearGradient(0, 0, 256, 0); g.addColorStop(0, 'rgba(255,255,255,0)'); g.addColorStop(0.85, 'rgba(255,230,230,0.8)'); g.addColorStop(1, 'rgba(255,255,255,1)'); x.fillStyle = g; x.fillRect(0, 2, 256, 4); }
-  const streak = new THREE.Sprite(new THREE.SpriteMaterial({ map: new THREE.CanvasTexture(streakCv), transparent: true, opacity: 0, blending: THREE.AdditiveBlending, depthWrite: false, fog: false }));
-  streak.scale.set(26, 0.5, 1);
-  scene.add(streak);
-  let shot = null, nextShot = 4;
-
   // ---------- builder → scene ----------
-  const target = { deep: new THREE.Vector3(), dusk: new THREE.Vector3(), main: new THREE.Vector3(), ember: new THREE.Vector3(), glow: new THREE.Vector3(), rim: new THREE.Color() };
-  let ringShow = 1, moonShow = 1, pulse = 0;
-  function applyLook() {
-    const w = PAL();
-    target.deep.set(...w.deep); target.dusk.set(...w.dusk); target.main.set(...w.main); target.ember.set(...w.ember); target.glow.set(...w.glow);
-    target.rim.setRGB(...w.glow);
-    drawTag();
-    pulse = 1;
-  }
+  const target = new THREE.Vector3(...P0.main);
+  let ringShow = 1, moonShow = 1;
+  function applyLook() { target.set(...PAL().main); }
   applyLook();
   listeners.push(applyLook);
 
   // ---------- the flight path ----------
   const path = new THREE.CatmullRomCurve3([
-    new THREE.Vector3(0, 0.3, 16),
-    new THREE.Vector3(-3.5, 1.8, 6),
-    new THREE.Vector3(-5.5, 0.6, -13),
-    new THREE.Vector3(-1, -0.6, -32),
-    new THREE.Vector3(1, 0.2, -56),
-    new THREE.Vector3(0, 0.3, -82),
+    new THREE.Vector3(0, 0.6, 18),
+    new THREE.Vector3(-3, 1.6, 6),
+    new THREE.Vector3(-6, 0.8, -12),
+    new THREE.Vector3(-2, -0.4, -34),
+    new THREE.Vector3(2, 0.4, -60),
+    new THREE.Vector3(0, 0.6, -90),
   ], false, 'centripetal');
   const lookPath = new THREE.CatmullRomCurve3([
-    new THREE.Vector3(1.5, -0.8, 0),
-    new THREE.Vector3(7, -3.5, -12),
-    new THREE.Vector3(3, -2.5, -28),
-    new THREE.Vector3(-1, 0, -50),
-    new THREE.Vector3(0, 0.2, -80),
-    new THREE.Vector3(0, 0.3, -104),
+    new THREE.Vector3(1.2, -1.6, 0),
+    new THREE.Vector3(6, -3.8, -12),
+    new THREE.Vector3(4, -3, -26),
+    new THREE.Vector3(-2, -0.5, -55),
+    new THREE.Vector3(0, 0.2, -90),
+    new THREE.Vector3(0, 0.3, -130),
   ], false, 'centripetal');
   const camPos = new THREE.Vector3(), camLook = new THREE.Vector3();
 
@@ -1521,7 +1432,7 @@ dialog.sheet::backdrop { background: rgba(3, 3, 6, 0.75); backdrop-filter: blur(
     const w = innerWidth, h = innerHeight;
     renderer.setSize(w, h, false);
     camera.aspect = w / h;
-    camera.fov = w / h < 0.8 ? 68 : 50;
+    camera.fov = w / h < 0.8 ? 62 : 42;
     camera.updateProjectionMatrix();
   }
   resize();
@@ -1535,72 +1446,30 @@ dialog.sheet::backdrop { background: rgba(3, 3, 6, 0.75); backdrop-filter: blur(
     if (!running) return;
     const dt = Math.min(0.05, (now - last) / 1000); last = now;
     if (!reduce) uTime.value += dt;
-    // Ease toward the scroll position so the camera glides instead of jumping.
     const k = reduce ? 1 : 1 - Math.pow(0.0012, dt);
     state.p += (state.target - state.p) * k;
     const touch = !fine.matches;
-    const mx = reduce ? 0 : touch ? Math.sin(uTime.value * 0.25) * 0.4 : state.mx;
-    const my = reduce ? 0 : touch ? Math.cos(uTime.value * 0.2) * 0.3 : state.my;
-    state.sx += (mx - state.sx) * (1 - Math.pow(0.02, dt));
-    state.sy += (my - state.sy) * (1 - Math.pow(0.02, dt));
+    const mx = reduce ? 0 : touch ? 0 : state.mx;
+    const my = reduce ? 0 : touch ? 0 : state.my;
+    state.sx += (mx - state.sx) * (1 - Math.pow(0.05, dt));
+    state.sy += (my - state.sy) * (1 - Math.pow(0.05, dt));
 
     path.getPoint(state.p, camPos);
     lookPath.getPoint(Math.min(1, state.p + 0.02), camLook);
-    camera.position.set(camPos.x + state.sx * 1.1, camPos.y - state.sy * 0.7, camPos.z);
+    camera.position.set(camPos.x + state.sx * 0.45, camPos.y - state.sy * 0.3, camPos.z);
     camera.lookAt(camLook);
-    camera.rotation.z += state.sx * -0.02;
 
-    // Blend world colours toward the builder's choice.
-    const kc = reduce ? 1 : 1 - Math.pow(0.04, dt);
-    uDeep.value.lerp(target.deep, kc); uDusk.value.lerp(target.dusk, kc); uMain.value.lerp(target.main, kc); uEmber.value.lerp(target.ember, kc); uGlow.value.lerp(target.glow, kc);
+    const kc = reduce ? 1 : 1 - Math.pow(0.05, dt);
+    uTint.value.lerp(target, kc);
     ringShow += ((look.ring ? 1 : 0) - ringShow) * kc;
     moonShow += ((look.moon ? 1 : 0) - moonShow) * kc;
-    ring.material.uniforms.uOpacity.value = ringShow; ringBand.material.uniforms.uOpacity.value = ringShow;
-    ringHolder.visible = ringShow > 0.01;
+    uRingOn.value = ringShow; ring.visible = ringShow > 0.01;
     moon.scale.setScalar(Math.max(0.001, moonShow)); moon.visible = moonShow > 0.01;
-    pulse = Math.max(0, pulse - dt * 1.4);
-    planetGroup.scale.setScalar(1 + Math.sin(pulse * Math.PI) * 0.025);
 
     const t = uTime.value;
-    planet.rotation.y = t * 0.035;
-    ring.rotation.y = t * 0.02;
-    moonPivot.rotation.y = t * 0.11;
-    stars.rotation.y = t * 0.002;
-    for (const n of nebulae) n.material.rotation += n.userData.spin * dt;
-    crystals.forEach((c) => {
-      const u = c.userData;
-      if (u.brand) u.mat.uniforms.uRim.value.lerp(target.rim, kc);
-      u.show += ((look.crystals ? 1 : 0) - u.show) * kc;
-      c.visible = u.show > 0.01; c.scale.setScalar(u.size * Math.max(0.001, u.show));
-      c.rotation.x += u.spin.x * dt; c.rotation.y += u.spin.y * dt; c.rotation.z += u.spin.z * dt;
-      c.position.y = u.base.y + Math.sin(t * 0.6 + u.phase) * 0.35;
-      c.position.x = u.base.x + Math.cos(t * 0.4 + u.phase) * 0.2;
-    });
-    // The brand tag shows while the planet is the subject, and bows out as you fly past.
-    tag.material.opacity = 0.95 * (1 - Math.min(1, Math.max(0, (state.p - 0.3) / 0.14)));
-    tag.position.y = PLANET_R * 1.08 + Math.sin(t * 0.8) * 0.15;
-    halo.rotation.z = t * 0.05;
-    // The mark only appears as you near the end of the flight.
-    const arrive = Math.min(1, Math.max(0, (state.p - 0.72) / 0.24));
-    const ease = arrive * arrive * (3 - 2 * arrive);
-    logo.material.opacity = ease;
-    logoGlow.material.opacity = ease * (0.7 + Math.sin(t * 1.2) * 0.12);
-    halo.material.uniforms.uOpacity.value = ease;
-
-    if (!reduce) {
-      nextShot -= dt;
-      if (!shot && nextShot <= 0) {
-        const dir = Math.random() < 0.5 ? -1 : 1;
-        shot = { life: 0, x: camLook.x - dir * 60, y: camLook.y + 18 + Math.random() * 18, z: camLook.z - 70, vx: dir * 90, vy: -30 - Math.random() * 20 };
-        streak.material.rotation = Math.atan2(shot.vy, shot.vx);
-      }
-      if (shot) {
-        shot.life += dt; shot.x += shot.vx * dt; shot.y += shot.vy * dt;
-        streak.position.set(shot.x, shot.y, shot.z);
-        streak.material.opacity = Math.sin(Math.min(1, shot.life / 1.2) * Math.PI) * 0.9;
-        if (shot.life > 1.2) { shot = null; streak.material.opacity = 0; nextShot = 5 + Math.random() * 7; }
-      }
-    }
+    planet.rotation.y = t * 0.012;
+    moonPivot.rotation.y = 0.9 + t * 0.02;
+    stars.rotation.y = sky.rotation.y = t * 0.0006;
 
     depthEl.textContent = 'Depth ' + (state.p * 384.4).toFixed(1).padStart(5, '0') + ' Mm';
     renderer.render(scene, camera);
