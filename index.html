@@ -1,20 +1,22 @@
 <title>Klickode Orbit</title>
 <meta name="claude:viewport-fit-sides" content="cover">
-<meta name="description" content="Klickode Orbit: cinematic 3D websites people scroll through like a flight. Templates, done-for-you launches and monthly care, made in Bangkok.">
+<meta name="description" content="Klickode Orbit: design your own planet, claim its number, write a world inside it and get a certificate of ownership. Search every planet in the universe.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <style>
-/* Layout: a fixed WebGL world the camera flies through as you scroll; real HTML chapters float over it, with glass panels only where you act (build, buy). */
+/* Layout: a fixed WebGL universe the camera flies through as you scroll. Over it: a planet designer, a searchable star map of every claimed planet, and the certificate. Glass panels only where you act. */
 :root {
   --void: #06070a;
-  --panel: rgba(12, 13, 19, 0.62);
+  --panel: rgba(12, 13, 19, 0.66);
+  --panel-solid: #0e0f15;
   --text: #f3f3f5;
   --dim: #a7a7b6;
-  --faint: #686876;
+  --faint: #6c6c7a;
   --red: #e03131;
   --red-soft: #ff7070;
+  --gold: #e8c27a;
   --edge: rgba(255, 255, 255, 0.12);
   --edge-hi: rgba(255, 255, 255, 0.28);
   --display: 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
@@ -25,12 +27,14 @@
   color-scheme: dark;
 }
 * { box-sizing: border-box; }
+[hidden] { display: none !important; }
 html { background: var(--void); scroll-behavior: smooth; }
 body {
   background: var(--void) radial-gradient(120% 80% at 80% 90%, rgba(224, 49, 49, 0.14), transparent 60%);
   color: var(--text); font: 16px/1.6 var(--display); -webkit-font-smoothing: antialiased; overflow-x: hidden;
 }
 a { color: inherit; }
+button { font: inherit; }
 :focus-visible { outline: 2px solid var(--red-soft); outline-offset: 3px; border-radius: 8px; }
 ::selection { background: var(--red); color: #fff; }
 
@@ -42,9 +46,8 @@ a { color: inherit; }
 
 /* ---------- chrome ---------- */
 .top { position: fixed; z-index: 6; top: 0; left: 0; right: 0; display: flex; align-items: center; justify-content: space-between; gap: 16px;
-  padding-block: calc(18px + env(safe-area-inset-top, 0px)) 18px; padding-left: var(--gutter-l); padding-right: var(--gutter-r);
-  transition: background 0.4s, backdrop-filter 0.4s; }
-.top.scrolled { background: linear-gradient(rgba(6, 7, 10, 0.78), rgba(6, 7, 10, 0)); }
+  padding-block: calc(18px + env(safe-area-inset-top, 0px)) 18px; padding-left: var(--gutter-l); padding-right: var(--gutter-r); transition: background 0.4s; }
+.top.scrolled { background: linear-gradient(rgba(6, 7, 10, 0.85), rgba(6, 7, 10, 0)); }
 .brand { display: flex; align-items: center; gap: 11px; text-decoration: none; }
 .brand svg { width: 34px; height: 34px; border-radius: 9px; flex: none; }
 .brand b { display: block; font-weight: 800; letter-spacing: -0.03em; font-size: 16px; line-height: 1; }
@@ -57,9 +60,11 @@ a { color: inherit; }
 .pill:hover { border-color: var(--edge-hi); background: rgba(255, 255, 255, 0.06); }
 .pill.hot { background: var(--red); border-color: var(--red); }
 .pill.hot:hover { background: #ea3a3a; }
+.counter { font-family: var(--mono); font-size: 11px; letter-spacing: 0.12em; color: var(--dim); padding: 0 8px; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.counter b { color: var(--text); font-weight: 500; }
 
 .rail { position: fixed; z-index: 5; right: var(--gutter-r); top: 50%; transform: translateY(-50%); display: flex; flex-direction: column; gap: 16px; }
-.rail a { position: relative; display: flex; align-items: center; justify-content: flex-end; gap: 12px; text-decoration: none; font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--faint); transition: color 0.4s; }
+.rail a { display: flex; align-items: center; justify-content: flex-end; gap: 12px; text-decoration: none; font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--faint); transition: color 0.4s; }
 .rail a::after { content: ''; width: 18px; height: 1px; background: currentColor; transition: width 0.4s cubic-bezier(.2, .7, .2, 1), background 0.4s; }
 .rail a span { opacity: 0; transform: translateX(6px); transition: opacity 0.4s, transform 0.4s; }
 .rail a:hover span, .rail a.on span { opacity: 1; transform: none; }
@@ -79,156 +84,197 @@ a { color: inherit; }
 main { position: relative; z-index: 2; }
 .stop { min-height: 110vh; display: flex; align-items: center; padding-block: 120px; padding-left: var(--gutter-l); padding-right: var(--gutter-r); overflow-x: clip; }
 .stop:first-child { min-height: 100vh; padding-block: 140px 110px; }
-.stop.tall { min-height: auto; padding-block: 160px; }
+.stop.tall { min-height: auto; padding-block: 150px; }
 .stop > div { width: min(100%, 1200px); margin: 0 auto; }
-.copy { max-width: 580px; position: relative; }
-/* A soft pool of shadow behind each block of copy so it stays readable over bright stars. */
+.copy { max-width: 600px; position: relative; }
 .copy::before { content: ''; position: absolute; z-index: -1; inset: -22% -30% -22% -26%; background: radial-gradient(closest-side, rgba(6, 7, 10, 0.74), transparent); pointer-events: none; }
-.stop.right .copy { margin-left: auto; text-align: right; }
-.stop.center { align-items: flex-end; padding-bottom: 96px; }
-.stop.center .copy { margin: 0 auto; text-align: center; max-width: 920px; }
+.center-head { text-align: center; max-width: 760px; margin: 0 auto 44px; }
+.center-head .lede { margin-inline: auto; }
 .eyebrow { display: inline-flex; align-items: center; gap: 11px; font-family: var(--mono); font-size: 11px; font-weight: 500; letter-spacing: 0.24em; text-transform: uppercase; color: var(--dim); }
 .eyebrow::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--red); box-shadow: 0 0 12px var(--red); flex: none; }
-.stop.right .eyebrow { flex-direction: row-reverse; }
-
-/* One type scale shared by every chapter, so the hero and the chapters read as one family. */
 h1, h2 { font-weight: 800; text-wrap: balance; margin: 0; }
 h1 { font-size: clamp(46px, 7.2vw, 108px); line-height: 0.95; letter-spacing: -0.052em; margin-block: 22px 26px; }
-h2 { font-size: clamp(44px, 6.4vw, 96px); line-height: 0.95; letter-spacing: -0.05em; margin-block: 16px 20px; }
+h2 { font-size: clamp(42px, 6vw, 88px); line-height: 0.95; letter-spacing: -0.05em; margin-block: 16px 20px; }
 h1 em, h2 em { font-family: var(--accent-face); font-style: italic; font-weight: 400; letter-spacing: -0.015em; color: var(--red-soft); padding-right: 0.05em; }
 h3 { font-size: 20px; letter-spacing: -0.02em; font-weight: 700; margin: 0; }
-.lede { font-size: clamp(17px, 1.45vw, 19px); color: var(--dim); max-width: 46ch; margin: 0; text-wrap: pretty; }
-.stop.right .lede { margin-left: auto; }
-.stop.center .lede { margin-inline: auto; }
+.lede { font-size: clamp(17px, 1.45vw, 19px); color: var(--dim); max-width: 48ch; margin: 0; text-wrap: pretty; }
 .actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 34px; }
-.stop.center .actions { justify-content: center; }
-.btn { display: inline-flex; align-items: center; gap: 10px; height: 52px; padding: 0 26px; border-radius: 999px; font: 600 13px/1 var(--display); letter-spacing: 0.1em; text-transform: uppercase; text-decoration: none; cursor: pointer;
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 10px; height: 52px; padding: 0 26px; border-radius: 999px; font: 600 13px/1 var(--display); letter-spacing: 0.1em; text-transform: uppercase; text-decoration: none; cursor: pointer;
   border: 1px solid var(--edge); color: var(--text); background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); transition: background 0.3s, border-color 0.3s, box-shadow 0.3s, transform 0.3s; }
 .btn:hover { background: rgba(255, 255, 255, 0.08); border-color: var(--edge-hi); }
 .btn.primary { background: var(--red); border-color: var(--red); box-shadow: 0 14px 44px -12px rgba(224, 49, 49, 0.85); }
 .btn.primary:hover { background: #ea3a3a; box-shadow: 0 18px 54px -10px rgba(224, 49, 49, 1); transform: translateY(-1px); }
-.meta { margin-top: 26px; font-family: var(--mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--faint); }
+.btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+.btn.small { height: 40px; padding: 0 16px; font-size: 11.5px; }
 .ticker { display: flex; flex-wrap: wrap; gap: 8px 22px; margin-top: 40px; font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--faint); }
 .ticker b { color: var(--text); font-weight: 500; }
-.stop.right .ticker { justify-content: flex-end; }
-.days { display: inline-block; margin-top: 22px; font-family: var(--mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--red-soft); border: 1px solid rgba(255, 112, 112, 0.35); padding: 6px 12px; border-radius: 999px; }
-
-/* Copy settles in as it arrives; it is fully visible at rest. */
 .copy > * { transition: transform 1.1s cubic-bezier(.2, .7, .2, 1), opacity 1.1s; }
 .stop.away .copy > * { transform: translateY(26px); opacity: 0.25; }
 
-/* ---------- glass panels (builder, plans) ---------- */
 .glass { background: var(--panel); border: 1px solid var(--edge); border-radius: 22px; backdrop-filter: blur(18px) saturate(1.2); -webkit-backdrop-filter: blur(18px) saturate(1.2);
   box-shadow: 0 40px 120px -40px rgba(0, 0, 0, 0.9), inset 0 1px 0 rgba(255, 255, 255, 0.06); }
 
-.builder { display: grid; gap: 22px; max-width: 440px; padding: 26px; margin-top: 30px; }
-.field { display: grid; gap: 10px; }
-.field > label, .field > span { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--faint); }
-.builder input[type=text] { width: 100%; height: 48px; padding: 0 16px; border-radius: 12px; border: 1px solid var(--edge); background: rgba(0, 0, 0, 0.35); color: var(--text);
-  font: 600 17px var(--display); letter-spacing: -0.01em; transition: border-color 0.25s; }
-.builder input[type=text]:focus { outline: none; border-color: var(--red-soft); }
+/* ---------- designer ---------- */
+.designer { display: grid; gap: 20px; max-width: 520px; padding: 26px; margin-top: 28px; }
+.field { display: grid; gap: 9px; min-width: 0; }
+.field > label, .field > .lbl { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--faint); display: flex; justify-content: space-between; gap: 10px; }
+.field .lbl em, .field > label em { font-style: normal; color: var(--dim); letter-spacing: 0.06em; text-transform: none; }
+input[type=text], input[type=number], textarea, input[type=search] { width: 100%; padding: 12px 14px; border-radius: 12px; border: 1px solid var(--edge); background: rgba(0, 0, 0, 0.35); color: var(--text); font: 500 15px var(--display); transition: border-color 0.25s; }
+input:focus, textarea:focus { outline: none; border-color: var(--red-soft); }
+textarea { resize: vertical; min-height: 64px; line-height: 1.5; }
+#pName { font-size: 19px; font-weight: 700; letter-spacing: -0.01em; height: 52px; }
+.row2 { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 14px; }
 .swatches { display: flex; flex-wrap: wrap; gap: 10px; }
-.swatch { position: relative; width: 44px; height: 44px; border-radius: 50%; border: 0; padding: 0; cursor: pointer; background: var(--c); box-shadow: inset -6px -8px 14px rgba(0, 0, 0, 0.55), inset 4px 5px 10px rgba(255, 255, 255, 0.28); transition: transform 0.25s; }
+.swatch { position: relative; width: 42px; height: 42px; border-radius: 50%; border: 0; padding: 0; cursor: pointer; background: var(--c); box-shadow: inset -6px -8px 14px rgba(0, 0, 0, 0.55), inset 4px 5px 10px rgba(255, 255, 255, 0.28); transition: transform 0.25s; }
 .swatch:hover { transform: scale(1.08); }
 .swatch[aria-checked=true]::after { content: ''; position: absolute; inset: -5px; border-radius: 50%; border: 1.5px solid var(--text); }
-.swatch-name { font-size: 14px; color: var(--dim); }
+.swatch-name { font-size: 13.5px; color: var(--dim); }
 .swatch-name b { color: var(--text); font-weight: 600; }
 .toggles { display: flex; flex-wrap: wrap; gap: 8px; }
 .chip { display: inline-flex; align-items: center; gap: 8px; height: 36px; padding: 0 14px; border-radius: 999px; border: 1px solid var(--edge); background: transparent; color: var(--dim); font: 500 13px var(--display); cursor: pointer; transition: all 0.25s; }
 .chip::before { content: ''; width: 8px; height: 8px; border-radius: 50%; border: 1.5px solid currentColor; }
+.chip small { font-family: var(--mono); font-size: 11px; color: var(--faint); }
 .chip[aria-pressed=true] { color: var(--text); border-color: var(--edge-hi); background: rgba(255, 255, 255, 0.06); }
 .chip[aria-pressed=true]::before { background: var(--red-soft); border-color: var(--red-soft); box-shadow: 0 0 8px var(--red-soft); }
-.builder .row { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; padding-top: 18px; border-top: 1px solid var(--edge); }
-.builder .row small { font-family: var(--mono); font-size: 11px; letter-spacing: 0.1em; color: var(--faint); }
-.builder .btn { height: 44px; padding: 0 20px; font-size: 12px; }
+.numrow { display: flex; gap: 8px; align-items: stretch; }
+.numrow input { font-family: var(--mono); font-size: 17px; letter-spacing: 0.08em; }
+.numrow button { flex: none; padding: 0 14px; border-radius: 12px; border: 1px solid var(--edge); background: rgba(255, 255, 255, 0.04); color: var(--text); font: 600 12px var(--display); letter-spacing: 0.06em; cursor: pointer; }
+.numrow button:hover { border-color: var(--edge-hi); }
+.numnote { font-size: 13px; color: var(--dim); min-height: 1.4em; }
+.numnote.taken { color: var(--red-soft); }
+.numnote.lucky { color: var(--gold); }
+details.inside { border: 1px solid var(--edge); border-radius: 14px; padding: 0 14px; }
+details.inside summary { cursor: pointer; padding: 13px 0; font-size: 14px; color: var(--text); font-weight: 600; list-style: none; display: flex; justify-content: space-between; gap: 10px; }
+details.inside summary::-webkit-details-marker { display: none; }
+details.inside summary::after { content: '+'; color: var(--faint); font-weight: 400; }
+details.inside[open] summary::after { content: '–'; }
+details.inside .stack { display: grid; gap: 10px; padding-bottom: 14px; }
+.check { display: flex; gap: 10px; align-items: flex-start; font-size: 14px; color: var(--dim); cursor: pointer; }
+.check input { width: 18px; height: 18px; margin: 2px 0 0; accent-color: var(--red); flex: none; }
+.check b { color: var(--text); font-weight: 600; }
+.checkout { display: grid; gap: 14px; padding-top: 18px; border-top: 1px solid var(--edge); }
+.receipt { display: grid; gap: 4px; font-size: 13.5px; color: var(--dim); font-variant-numeric: tabular-nums; }
+.receipt div { display: flex; justify-content: space-between; gap: 12px; }
+.total { display: flex; align-items: end; justify-content: space-between; gap: 14px; flex-wrap: wrap; }
+.total strong { font-size: 40px; font-weight: 800; letter-spacing: -0.04em; line-height: 1; font-variant-numeric: tabular-nums; }
+.total span { display: block; font-family: var(--mono); font-size: 11px; letter-spacing: 0.12em; color: var(--faint); margin-top: 6px; }
+.beta { font-size: 12.5px; color: var(--faint); }
+.status { font-size: 13.5px; min-height: 1.3em; color: var(--dim); }
+.status.err { color: var(--red-soft); }
 
-.plans-head { text-align: center; max-width: 720px; margin: 0 auto 54px; position: relative; }
-.plans-head .lede { margin-inline: auto; }
-.plans { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; align-items: stretch; }
-.plan { display: flex; flex-direction: column; gap: 18px; padding: 30px 28px; min-width: 0; }
-.plan.featured { border-color: rgba(255, 112, 112, 0.5); box-shadow: 0 40px 120px -40px rgba(224, 49, 49, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.08); }
-.plan .tag { align-self: flex-start; font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--faint); }
-.plan.featured .tag { color: var(--red-soft); }
-.plan .price { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
-.plan .price strong { font-size: 44px; font-weight: 800; letter-spacing: -0.04em; line-height: 1; font-variant-numeric: tabular-nums; }
-.plan .price span { color: var(--dim); font-size: 14px; }
-.plan p { margin: 0; color: var(--dim); font-size: 15px; }
-.plan ul { list-style: none; margin: 0; padding: 18px 0 0; border-top: 1px solid var(--edge); display: grid; gap: 10px; font-size: 14.5px; }
-.plan li { display: grid; grid-template-columns: 16px 1fr; gap: 10px; align-items: baseline; }
-.plan li::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--red-soft); transform: translateY(-2px); }
-.plan .btn { margin-top: auto; justify-content: center; height: 48px; }
-.fineprint { margin-top: 26px; text-align: center; font-size: 13px; color: var(--faint); position: relative; }
+/* ---------- universe ---------- */
+.universe { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr); gap: 18px; align-items: stretch; }
+.mapbox { position: relative; padding: 0; overflow: hidden; min-height: 460px; }
+#galaxy { position: absolute; inset: 0; width: 100%; height: 100%; display: block; cursor: crosshair; }
+.maptip { position: absolute; pointer-events: none; z-index: 2; padding: 8px 12px; border-radius: 10px; background: rgba(10, 11, 16, 0.92); border: 1px solid var(--edge-hi); font-size: 13px; white-space: nowrap; transform: translate(-50%, calc(-100% - 14px)); }
+.maptip small { display: block; font-family: var(--mono); font-size: 10.5px; color: var(--faint); letter-spacing: 0.1em; }
+.maplegend { position: absolute; left: 18px; bottom: 16px; display: flex; gap: 16px; flex-wrap: wrap; font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--faint); pointer-events: none; }
+.maplegend i { display: inline-block; width: 7px; height: 7px; border-radius: 50%; margin-right: 7px; vertical-align: 1px; }
+.mapstat { position: absolute; left: 18px; top: 16px; pointer-events: none; }
+.mapstat b { display: block; font-size: 30px; font-weight: 800; letter-spacing: -0.04em; font-variant-numeric: tabular-nums; line-height: 1; }
+.mapstat span { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--faint); }
+.finder { display: grid; grid-template-rows: auto auto minmax(0, 1fr); gap: 14px; padding: 20px; min-height: 460px; max-height: 620px; }
+.finder input[type=search] { height: 48px; }
+.filters { display: flex; flex-wrap: wrap; gap: 6px; }
+.filters button { height: 32px; padding: 0 12px; border-radius: 999px; border: 1px solid var(--edge); background: transparent; color: var(--dim); font: 500 12.5px var(--display); cursor: pointer; }
+.filters button[aria-pressed=true] { color: var(--text); background: rgba(255, 255, 255, 0.07); border-color: var(--edge-hi); }
+.results { overflow-y: auto; display: grid; gap: 8px; align-content: start; margin-inline: -6px; padding-inline: 6px; }
+.result { display: grid; grid-template-columns: 40px minmax(0, 1fr) auto; gap: 12px; align-items: center; padding: 10px 12px; border-radius: 14px; border: 1px solid var(--edge); background: rgba(0, 0, 0, 0.25); cursor: pointer; text-align: left; color: var(--text); width: 100%; transition: border-color 0.2s, background 0.2s; }
+.result:hover { border-color: var(--edge-hi); background: rgba(255, 255, 255, 0.04); }
+.orb { width: 40px; height: 40px; border-radius: 50%; position: relative; background: radial-gradient(circle at 34% 30%, rgba(255, 255, 255, 0.65), var(--c) 42%, rgba(0, 0, 0, 0.9) 100%); box-shadow: 0 0 22px -4px var(--c); }
+.orb.ringed::after { content: ''; position: absolute; left: -22%; right: -22%; top: 42%; height: 16%; border-radius: 50%; border: 1.5px solid rgba(255, 255, 255, 0.55); transform: rotate(-16deg); }
+.result .t b { display: block; font-weight: 700; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.result .t small { display: block; font-size: 12.5px; color: var(--faint); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.result .no { font-family: var(--mono); font-size: 12px; color: var(--dim); letter-spacing: 0.06em; }
+.result .no.lucky { color: var(--gold); }
+.empty { padding: 26px 8px; text-align: center; color: var(--dim); font-size: 14.5px; display: grid; gap: 12px; justify-items: center; }
+.empty b { color: var(--text); }
 
-.specs { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0; margin-top: 70px; border-top: 1px solid var(--edge); position: relative; }
-.specs div { padding: 22px 20px 0 0; min-width: 0; }
-.specs dt { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--red-soft); margin-bottom: 8px; }
-.specs dd { margin: 0; color: var(--dim); font-size: 14.5px; }
-.specs::before { content: ''; position: absolute; z-index: -1; inset: -40px -60px; background: radial-gradient(closest-side, rgba(6, 7, 10, 0.75), transparent); pointer-events: none; }
+/* ---------- certificate showcase ---------- */
+.certwrap { display: grid; grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr); gap: 40px; align-items: center; }
+.certcanvas { width: 100%; height: auto; display: block; border-radius: 10px; box-shadow: 0 50px 120px -40px rgba(0, 0, 0, 0.95), 0 0 0 1px rgba(232, 194, 122, 0.25); background: #0b0b10; }
+.points { list-style: none; margin: 26px 0 0; padding: 0; display: grid; gap: 14px; }
+.points li { display: grid; grid-template-columns: 26px minmax(0, 1fr); gap: 12px; color: var(--dim); font-size: 15.5px; }
+.points li::before { content: ''; width: 10px; height: 10px; margin-top: 7px; border-radius: 50%; border: 1.5px solid var(--gold); box-shadow: 0 0 10px rgba(232, 194, 122, 0.5); }
+.points b { color: var(--text); font-weight: 600; }
 
-.mail { display: inline-flex; align-items: center; gap: 12px; margin-top: 26px; padding: 6px 6px 6px 18px; border-radius: 999px; border: 1px solid var(--edge); background: rgba(6, 7, 10, 0.4);
-  font-family: var(--mono); font-size: 13px; letter-spacing: 0.06em; color: var(--dim); user-select: all; }
-.mail button { height: 32px; padding: 0 14px; border-radius: 999px; border: 0; background: rgba(255, 255, 255, 0.08); color: var(--text); font: 600 11px var(--display); letter-spacing: 0.12em; text-transform: uppercase; cursor: pointer; user-select: none; }
-.mail button:hover { background: rgba(255, 255, 255, 0.14); }
+/* ---------- how / pricing ---------- */
+.steps { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
+.step { padding: 26px; display: grid; gap: 12px; align-content: start; min-width: 0; }
+.step .n { font-family: var(--mono); font-size: 11px; letter-spacing: 0.2em; color: var(--red-soft); }
+.step p { margin: 0; color: var(--dim); font-size: 15px; }
+.prices { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0; margin-top: 18px; overflow: hidden; }
+.prices div { padding: 22px; display: grid; gap: 6px; align-content: start; min-width: 0; }
+.prices div + div { border-left: 1px solid var(--edge); }
+.prices .k { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--faint); }
+.prices strong { font-size: 28px; font-weight: 800; letter-spacing: -0.03em; font-variant-numeric: tabular-nums; }
+.prices p { margin: 0; font-size: 14px; color: var(--dim); }
+.faq { display: grid; gap: 10px; margin-top: 40px; max-width: 820px; margin-inline: auto; }
+.faq details { padding: 4px 22px; border-radius: 16px; }
+.faq summary { cursor: pointer; padding: 16px 0; font-weight: 600; list-style: none; display: flex; justify-content: space-between; gap: 12px; }
+.faq summary::-webkit-details-marker { display: none; }
+.faq summary::after { content: '+'; color: var(--faint); font-weight: 400; }
+.faq details[open] summary::after { content: '–'; }
+.faq p { margin: 0 0 18px; color: var(--dim); font-size: 15px; max-width: 70ch; }
 
+.brands { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 30px; align-items: center; padding: 34px; }
+.brands p { color: var(--dim); margin: 0; }
 .legal { position: relative; z-index: 2; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 10px 24px; padding-block: 22px 80px;
-  padding-left: var(--gutter-l); padding-right: var(--gutter-r); border-top: 1px solid var(--edge); font-size: 12.5px; color: var(--dim);
-  background: linear-gradient(transparent, rgba(6, 7, 10, 0.9) 40%); }
+  padding-left: var(--gutter-l); padding-right: var(--gutter-r); border-top: 1px solid var(--edge); font-size: 12.5px; color: var(--dim); background: linear-gradient(transparent, rgba(6, 7, 10, 0.9) 40%); }
 .legal nav { display: flex; flex-wrap: wrap; gap: 4px 18px; }
 .legal a { color: var(--dim); text-decoration: none; }
 .legal a:hover { color: var(--text); }
 
-/* ---------- missions (concept portfolio) ---------- */
-.missions-head { max-width: 640px; position: relative; margin-bottom: 40px; }
-.missions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
-.mission { display: grid; gap: 14px; padding: 26px; min-width: 0; align-content: start; }
-.mission .mhead { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
-.mission .code { font-family: var(--mono); font-size: 11px; letter-spacing: 0.18em; color: var(--faint); }
-.mission .orb { width: 46px; height: 46px; border-radius: 50%; flex: none; background: radial-gradient(circle at 34% 30%, rgba(255,255,255,0.6), var(--c) 40%, rgba(0,0,0,0.85) 100%); box-shadow: 0 0 34px -4px var(--c); }
-.mission h3 { font-size: 26px; letter-spacing: -0.03em; }
-.mission .kind { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--red-soft); }
-.mission p { margin: 0; color: var(--dim); font-size: 15px; }
-.mission p b { color: var(--text); font-weight: 600; }
-.mission .chapters { display: flex; flex-wrap: wrap; gap: 6px; }
-.mission .chapters span { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.12em; text-transform: uppercase; padding: 5px 10px; border-radius: 999px; border: 1px solid var(--edge); color: var(--dim); }
-.mission .btn { justify-self: start; height: 42px; padding: 0 18px; font-size: 11.5px; }
-.mission.next { border-style: dashed; background: rgba(12, 13, 19, 0.35); }
-.mission.next .orb { background: transparent; border: 1.5px dashed var(--red-soft); box-shadow: none; }
+/* ---------- planet sheet (world + certificate) ---------- */
+dialog.sheet { width: min(980px, calc(100% - 32px)); max-height: calc(100% - 48px); padding: 0; border: 1px solid var(--edge-hi); border-radius: 24px; background: var(--panel-solid); color: var(--text); overflow: hidden; }
+dialog.sheet::backdrop { background: rgba(3, 3, 6, 0.72); backdrop-filter: blur(6px); }
+.sheet-in { display: grid; grid-template-rows: auto minmax(0, 1fr); max-height: calc(100vh - 48px); }
+.sheet-head { display: flex; align-items: center; justify-content: space-between; gap: 14px; padding: 16px 20px; border-bottom: 1px solid var(--edge); }
+.sheet-head .tabs { display: flex; gap: 6px; }
+.sheet-head .tabs button { height: 34px; padding: 0 14px; border-radius: 999px; border: 1px solid var(--edge); background: transparent; color: var(--dim); font: 600 12.5px var(--display); cursor: pointer; }
+.sheet-head .tabs button[aria-selected=true] { background: var(--text); color: var(--void); border-color: var(--text); }
+.xbtn { width: 36px; height: 36px; border-radius: 50%; border: 1px solid var(--edge); background: transparent; color: var(--text); cursor: pointer; font-size: 18px; line-height: 1; }
+.sheet-body { overflow-y: auto; padding: 26px; }
+.world { display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 30px; align-items: start; }
+.world .big-orb { width: 200px; height: 200px; position: relative; justify-self: center; }
+.world .big-orb .orb { width: 100%; height: 100%; box-shadow: 0 0 70px -6px var(--c); }
+.world .big-orb .orb.ringed::after { border-width: 2px; }
+.world .big-orb .moonlet { position: absolute; width: 22px; height: 22px; border-radius: 50%; right: -6px; top: 8%; background: radial-gradient(circle at 35% 30%, #fff, #b9b6c8 50%, #2a2833); }
+.world h3.wname { font-size: clamp(30px, 4vw, 46px); letter-spacing: -0.045em; font-weight: 800; line-height: 1; }
+.world .meta { font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--faint); margin-top: 10px; display: flex; flex-wrap: wrap; gap: 6px 16px; }
+.world .meta .lucky { color: var(--gold); }
+.world blockquote { margin: 22px 0 0; padding: 0 0 0 18px; border-left: 2px solid var(--c, var(--red)); font-family: var(--accent-face); font-style: italic; font-size: 24px; line-height: 1.3; color: var(--text); }
+.world .to { margin-top: 10px; color: var(--dim); font-size: 14px; }
+.chapters { display: grid; gap: 12px; margin-top: 26px; }
+.chapter { display: grid; grid-template-columns: 44px minmax(0, 1fr); gap: 12px; padding: 14px 16px; border: 1px solid var(--edge); border-radius: 14px; background: rgba(255, 255, 255, 0.02); }
+.chapter span { font-family: var(--mono); font-size: 11px; color: var(--red-soft); letter-spacing: 0.1em; padding-top: 3px; }
+.chapter p { margin: 0; color: var(--text); }
+.sheet-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 24px; }
+.sheet .certcanvas { max-width: 860px; margin: 0 auto; }
+.sheet .fine { margin-top: 14px; text-align: center; font-size: 12.5px; color: var(--faint); }
+.toast { position: fixed; z-index: 30; left: 50%; bottom: calc(26px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); padding: 12px 18px; border-radius: 999px; background: var(--text); color: var(--void); font-weight: 600; font-size: 14px; box-shadow: 0 20px 50px -20px rgba(0, 0, 0, 0.8); }
 
-/* ---------- mission brief composer ---------- */
-.brief { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 0; margin-top: 40px; text-align: left; overflow: hidden; }
-.brief .inputs { display: grid; gap: 18px; padding: 26px; border-right: 1px solid var(--edge); }
-.brief select, .brief textarea, .brief input[type=text] { width: 100%; padding: 12px 14px; border-radius: 12px; border: 1px solid var(--edge); background: rgba(0, 0, 0, 0.35); color: var(--text); font: 500 15px var(--display); }
-.brief textarea { resize: vertical; min-height: 76px; line-height: 1.5; }
-.brief select:focus, .brief textarea:focus, .brief input[type=text]:focus { outline: none; border-color: var(--red-soft); }
-.windows { display: flex; flex-wrap: wrap; gap: 8px; }
-.windows button { height: 36px; padding: 0 13px; border-radius: 999px; border: 1px solid var(--edge); background: transparent; color: var(--dim); font: 500 12.5px var(--mono); letter-spacing: 0.04em; cursor: pointer; transition: all 0.2s; }
-.windows button:hover { border-color: var(--edge-hi); color: var(--text); }
-.windows button[aria-checked=true] { background: var(--red); border-color: var(--red); color: #fff; }
-.brief .note { font-size: 12.5px; color: var(--faint); }
-.brief .output { display: grid; gap: 16px; padding: 26px; background: rgba(0, 0, 0, 0.28); align-content: start; }
-.brief pre { margin: 0; white-space: pre-wrap; word-break: break-word; font: 13px/1.75 var(--mono); color: var(--dim); }
-.brief pre b { color: var(--text); font-weight: 500; }
-.brief .output .actions { margin-top: 0; justify-content: flex-start; }
-.brief .output .btn { height: 46px; font-size: 12px; }
-
-@media (max-width: 980px) {
-  .missions { grid-template-columns: minmax(0, 1fr); }
-  .brief { grid-template-columns: minmax(0, 1fr); }
-  .brief .inputs { border-right: 0; border-bottom: 1px solid var(--edge); }
-  .plans { grid-template-columns: minmax(0, 1fr); max-width: 520px; margin: 0 auto; }
-  .specs { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 10px; }
+@media (max-width: 1000px) {
+  .universe, .certwrap, .brands { grid-template-columns: minmax(0, 1fr); }
+  .steps { grid-template-columns: minmax(0, 1fr); }
+  .prices { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .prices div:nth-child(3) { border-left: 0; }
+  .prices div:nth-child(n+3) { border-top: 1px solid var(--edge); }
   .top nav a.link { display: none; }
+  .finder { max-height: 520px; }
 }
 @media (max-width: 760px) {
-  :root { --gutter-l: max(18px, env(safe-area-inset-left, 0px)); --gutter-r: max(18px, env(safe-area-inset-right, 0px)); }
-  .rail, .hud .coords { display: none; }
-  .stop.right .copy { text-align: left; margin-left: 0; }
-  .stop.right .eyebrow { flex-direction: row; }
-  .stop.right .lede { margin-left: 0; }
-  .stop.right .ticker { justify-content: flex-start; }
+  :root { --gutter-l: max(16px, env(safe-area-inset-left, 0px)); --gutter-r: max(16px, env(safe-area-inset-right, 0px)); }
+  .rail, .hud .coords, .counter { display: none; }
   .top .pill:not(.hot) { display: none; }
-  .builder { padding: 20px; }
-  .specs { grid-template-columns: minmax(0, 1fr); }
+  .designer { padding: 18px; }
+  .row2 { grid-template-columns: minmax(0, 1fr); }
+  .mapbox { min-height: 360px; }
+  .world { grid-template-columns: minmax(0, 1fr); }
+  .world .big-orb { width: 150px; height: 150px; }
+  .sheet-body { padding: 18px; }
+  .prices { grid-template-columns: minmax(0, 1fr); }
+  .prices div + div { border-left: 0; border-top: 1px solid var(--edge); }
 }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
@@ -248,342 +294,658 @@ h3 { font-size: 20px; letter-spacing: -0.02em; font-weight: 700; margin: 0; }
     <span><b>KLICKODE</b><small>ORBIT</small></span>
   </a>
   <nav aria-label="Main">
-    <a class="link" href="#build">Build a world</a>
-    <a class="link" href="#missions">Missions</a>
-    <a class="link" href="#plans">Pricing</a>
-    <a class="link" href="plan.html">The plan</a>
-    <a class="pill" href="https://www.klickode.com/">Klickode Studio ↗</a>
-    <a class="pill hot" href="#contact">Start a launch</a>
+    <span class="counter" aria-live="polite"><b id="topCount">0</b> / 9,999 claimed</span>
+    <a class="link" href="#universe">Search planets</a>
+    <a class="link" href="#certificate">Certificate</a>
+    <a class="link" href="#how">How it works</a>
+    <a class="pill" href="plan.html">Strategy</a>
+    <a class="pill hot" href="#design">Design a planet</a>
   </nav>
 </header>
 
 <nav class="rail" aria-label="Chapters">
   <a href="#start" class="on"><span>Start</span></a>
-  <a href="#build"><span>Build</span></a>
-  <a href="#missions"><span>Missions</span></a>
-  <a href="#drift"><span>Drift</span></a>
-  <a href="#shape"><span>Shape</span></a>
-  <a href="#launch"><span>Launch</span></a>
-  <a href="#plans"><span>Pricing</span></a>
-  <a href="#contact"><span>Contact</span></a>
+  <a href="#design"><span>Design</span></a>
+  <a href="#universe"><span>Universe</span></a>
+  <a href="#certificate"><span>Certificate</span></a>
+  <a href="#how"><span>How it works</span></a>
+  <a href="#brands"><span>Brands</span></a>
 </nav>
 
 <main>
   <section class="stop" id="start" aria-labelledby="t0">
     <div><div class="copy">
-      <span class="eyebrow">Klickode Orbit · The cinematic line by Klickode Studio</span>
-      <h1 id="t0">Websites people <em>fly through.</em></h1>
-      <p class="lede">Orbit turns a homepage into a short flight through your brand’s own world. Visitors scroll, the camera moves, and your product arrives like a landing. Every launch we fly becomes a mission, and every client stays in orbit.</p>
+      <span class="eyebrow">Klickode Orbit · Genesis edition · 9,999 planets</span>
+      <h1 id="t0">Own a planet. <em>Build a world inside.</em></h1>
+      <p class="lede">Design a planet in your colours, claim its number in the Orbit universe, and write a small world inside it: a message, a story, a memory. You get a certificate of ownership, and anyone can find your planet by name.</p>
       <div class="actions">
-        <a class="btn primary" href="#build">Build your planet ↓</a>
-        <a class="btn" href="#plans">See pricing</a>
+        <a class="btn primary" href="#design">Design my planet ↓</a>
+        <a class="btn" href="#universe">Search the universe</a>
       </div>
-      <div class="ticker" aria-label="What you are looking at">
-        <span><b>Real-time 3D</b> in the browser</span>
-        <span><b>Real HTML</b> copy, readable by Google</span>
-        <span><b>Phone-ready</b> by default</span>
+      <div class="ticker">
+        <span><b>From ฿390</b> per planet</span>
+        <span><b>One number</b>, one owner</span>
+        <span><b>No crypto</b> wallet needed</span>
       </div>
     </div></div>
   </section>
 
-  <section class="stop" id="build" aria-labelledby="t-build" data-still>
+  <section class="stop" id="design" aria-labelledby="t-design" data-still>
     <div><div class="copy">
-      <span class="eyebrow">Try it · Live in this page</span>
-      <h2 id="t-build">Build <em>your</em> world.</h2>
-      <p class="lede">Every Orbit starts from a planet in your brand colours. Change it here and watch the scene behind this text follow.</p>
-      <form class="builder glass" id="builder" autocomplete="off">
+      <span class="eyebrow">Step 1 · Design</span>
+      <h2 id="t-design">Make it <em>yours.</em></h2>
+      <p class="lede">The planet behind this panel changes as you design. Every choice is saved to your registry entry.</p>
+      <form class="designer glass" id="designer" autocomplete="off">
         <div class="field">
-          <label for="brandName">Brand name</label>
-          <input type="text" id="brandName" maxlength="18" value="Your Brand" spellcheck="false">
+          <label for="pName">Planet name <em id="nameLeft">24 left</em></label>
+          <input type="text" id="pName" maxlength="24" value="" placeholder="Name your planet">
         </div>
         <div class="field">
-          <span id="worldLabel">Planet</span>
+          <span class="lbl" id="worldLabel">World colours</span>
           <div class="swatches" role="radiogroup" aria-labelledby="worldLabel" id="swatches"></div>
           <div class="swatch-name" id="swatchName" aria-live="polite"></div>
         </div>
         <div class="field">
-          <span>Orbiting it</span>
+          <span class="lbl">Add to your planet</span>
           <div class="toggles">
-            <button type="button" class="chip" id="tRing" aria-pressed="true">Ring</button>
-            <button type="button" class="chip" id="tMoon" aria-pressed="true">Moon</button>
-            <button type="button" class="chip" id="tCrystals" aria-pressed="true">Crystals</button>
+            <button type="button" class="chip" id="tRing" aria-pressed="true">Ring <small>+฿300</small></button>
+            <button type="button" class="chip" id="tMoon" aria-pressed="true">Moon <small>+฿200</small></button>
+            <button type="button" class="chip" id="tCrystals" aria-pressed="false">Crystal field <small>+฿400</small></button>
           </div>
         </div>
-        <div class="row">
-          <small id="worldCode">ORB-005 · KR-111</small>
-          <a class="btn primary" href="#plans">Get this world →</a>
+        <div class="row2">
+          <div class="field">
+            <label for="pNum">Planet number</label>
+            <div class="numrow"><input type="number" id="pNum" min="1" max="9999" step="1" inputmode="numeric"><button type="button" id="randNum">Random</button></div>
+          </div>
+          <div class="field">
+            <label for="pTo">Registered to</label>
+            <input type="text" id="pTo" maxlength="40" placeholder="Your name, or theirs">
+          </div>
+        </div>
+        <div class="numnote" id="numNote" aria-live="polite"></div>
+        <details class="inside">
+          <summary>Write the world inside</summary>
+          <div class="stack">
+            <div class="field"><label for="pNote">Dedication <em>shown on the certificate</em></label><textarea id="pNote" maxlength="140" placeholder="For Mali, who always looks up."></textarea></div>
+            <div class="field"><label for="pC1">Chapter 1</label><input type="text" id="pC1" maxlength="90" placeholder="Where it began"></div>
+            <div class="field"><label for="pC2">Chapter 2</label><input type="text" id="pC2" maxlength="90" placeholder="What it means"></div>
+            <div class="field"><label for="pC3">Chapter 3</label><input type="text" id="pC3" maxlength="90" placeholder="What comes next"></div>
+          </div>
+        </details>
+        <label class="check"><input type="checkbox" id="pPrint"><span><b>Printed certificate</b>, A4 on heavy paper with a gold seal, shipped in Thailand. +฿490</span></label>
+        <div class="checkout">
+          <div class="receipt" id="receipt"></div>
+          <div class="total"><div><strong id="total">฿0</strong><span id="totalUsd">≈ $0</span></div><button type="submit" class="btn primary" id="claimBtn">Claim planet</button></div>
+          <div class="status" id="status" role="status"></div>
+          <p class="beta" id="betaNote">Preview: claiming is free while Orbit is in beta. Prices show what launch will cost.</p>
         </div>
       </form>
     </div></div>
   </section>
 
-  <section class="stop tall" id="missions" aria-labelledby="t-missions" data-still>
+  <section class="stop tall" id="universe" aria-labelledby="t-uni" data-still>
     <div>
-      <div class="missions-head"><div class="copy" style="max-width:none">
-        <span class="eyebrow">Mission log · Concept studies</span>
-        <h2 id="t-missions">Four worlds, <em>four launches.</em></h2>
-        <p class="lede">Self-initiated studies by Klickode Studio, one per kind of business we build for. Pick one to fly it in the scene above. Your launch becomes mission ORB-005.</p>
+      <div class="center-head"><div class="copy" style="max-width:none">
+        <span class="eyebrow">Step 2 · Explore</span>
+        <h2 id="t-uni">Search the <em>universe.</em></h2>
+        <p class="lede">Every planet has a fixed place in the Genesis galaxy. Search by planet name, number or owner, or tap a light on the map.</p>
       </div></div>
-      <div class="missions" id="missionList"></div>
-    </div>
-  </section>
-
-  <section class="stop right" id="drift" aria-labelledby="t1">
-    <div><div class="copy">
-      <span class="eyebrow">01 · Gather</span>
-      <h2 id="t1"><em>Drift</em></h2>
-      <p class="lede">A launch starts as scattered pieces: a logo, a product photo, a line of copy, a colour nobody wrote down. We collect them and pick the world they belong in.</p>
-      <span class="days">Days 1–3 · Brief, moodboard, planet</span>
-    </div></div>
-  </section>
-
-  <section class="stop" id="shape" aria-labelledby="t2">
-    <div><div class="copy">
-      <span class="eyebrow">02 · Refine</span>
-      <h2 id="t2">Shape</h2>
-      <p class="lede">Then we model your product or mark in 3D, write the chapters in Thai and English, and tune the flight path until every stop lands on a point you want to make.</p>
-      <span class="days">Days 4–10 · Scene, copy, flight path</span>
-    </div></div>
-  </section>
-
-  <section class="stop right" id="launch" aria-labelledby="t3">
-    <div><div class="copy">
-      <span class="eyebrow">03 · Release</span>
-      <h2 id="t3">Launch</h2>
-      <p class="lede">It ships fast and finished: tested on cheap phones, measured with analytics, and ready to share as a fly-through video for social.</p>
-      <span class="days">Days 11–14 · Test, film, go live</span>
-    </div></div>
-  </section>
-
-  <section class="stop tall" id="plans" aria-labelledby="t-plans" data-still>
-    <div>
-      <div class="plans-head">
-        <div class="copy" style="max-width:none">
-          <span class="eyebrow">Pricing</span>
-          <h2 id="t-plans">Pick your <em>orbit.</em></h2>
-          <p class="lede">The further out, the more you do yourself. The closer in, the more Klickode does for you. Most clients start in the inner orbit and stay.</p>
+      <div class="universe">
+        <div class="mapbox glass">
+          <canvas id="galaxy" aria-label="Map of the Genesis galaxy. Claimed planets glow in their owners’ colours." role="img"></canvas>
+          <div class="mapstat"><b id="mapCount">0</b><span>of 9,999 claimed</span></div>
+          <div class="maplegend"><span><i style="background:#ff7070"></i>Claimed</span><span><i style="background:#e8c27a"></i>Lucky number</span><span><i style="background:#4b4b5c"></i>Free</span></div>
+          <div class="maptip" id="mapTip" hidden></div>
         </div>
-      </div>
-      <div class="plans">
-        <article class="plan glass">
-          <span class="tag">Outer orbit · Do it yourself</span>
-          <h3>Orbit Kit</h3>
-          <div class="price"><strong>$69</strong><span>personal · $199 commercial</span></div>
-          <p>The scene you are scrolling right now, as clean source code. Change colours, logo and chapters in one settings file.</p>
-          <ul>
-            <li>Complete HTML and three.js source</li>
-            <li>5 planet worlds, ring, moon and crystals</li>
-            <li>Phone, reduced-motion and no-WebGL fallbacks</li>
-            <li>Setup guide and 12 months of updates</li>
-          </ul>
-          <a class="btn" href="#contact">Join the kit waitlist</a>
-        </article>
-        <article class="plan glass featured">
-          <span class="tag">Inner orbit · Done for you</span>
-          <h3>Orbit Launch</h3>
-          <div class="price"><strong>฿79,000</strong><span>about $2,400 · one time</span></div>
-          <p>We build a world around your product: custom 3D object, your story in chapters, live in 14 days.</p>
-          <ul>
-            <li>Custom planet, scene and 3D product or logo</li>
-            <li>Up to 7 chapters, written in Thai and English</li>
-            <li>Analytics, SEO and share images set up</li>
-            <li>A 20-second fly-through video for social</li>
-          </ul>
-          <a class="btn primary" href="#contact">Reserve a lift-off date</a>
-        </article>
-        <article class="plan glass">
-          <span class="tag">Stay in orbit · Monthly</span>
-          <h3>Orbit Care</h3>
-          <div class="price"><strong>฿3,900</strong><span>per month</span></div>
-          <p>Hosting, small edits and a new look for the moments your customers shop.</p>
-          <ul>
-            <li>Fast hosting and uptime checks</li>
-            <li>Up to 2 hours of edits each month</li>
-            <li>Seasonal worlds: Songkran, Loy Krathong, 11.11</li>
-            <li>Monthly visitor report</li>
-          </ul>
-          <a class="btn" href="#contact">Add Care</a>
-        </article>
-      </div>
-      <p class="fineprint">We fly three launches a month, lifting off on the 1st, 10th and 20th. Prices before VAT; Launch is paid 50% to start and 50% on lift-off.</p>
-      <dl class="specs">
-        <div><dt>Loads light</dt><dd>One small 3D library and no video files. Copy shows before the scene finishes loading.</dd></div>
-        <div><dt>Readable</dt><dd>Every word is real HTML text, so search engines and screen readers get the full story.</dd></div>
-        <div><dt>Kind to phones</dt><dd>Fewer particles and lower resolution on small screens, so mid-range phones keep up.</dd></div>
-        <div><dt>Calm mode</dt><dd>Visitors who turn off motion get a still scene with all the same content.</dd></div>
-      </dl>
-    </div>
-  </section>
-
-  <section class="stop center" id="contact" aria-labelledby="t4">
-    <div><div class="copy">
-      <span class="eyebrow">Your turn</span>
-      <h2 id="t4">Let’s put <em>you</em> in orbit.</h2>
-      <p class="lede">Write your mission brief here, copy it, and send it to Klickode. We reply within one working day, in Thai or English.</p>
-      <form class="brief glass" id="briefForm" autocomplete="off">
-        <div class="inputs">
-          <div class="field"><label for="bBrand">Brand</label><input type="text" id="bBrand" maxlength="40" value="Your Brand"></div>
-          <div class="field"><label for="bKind">What are you launching?</label>
-            <select id="bKind"><option>A new product</option><option>A shop, café or venue</option><option>An event or festival</option><option>A company or startup</option><option>A rebrand</option></select></div>
-          <div class="field"><span id="winLabel">Lift-off date</span><div class="windows" id="windows" role="radiogroup" aria-labelledby="winLabel"></div>
-            <span class="note">Three windows a month. We start building 14 days before lift-off.</span></div>
-          <div class="field"><label for="bNotes">One line about it</label><textarea id="bNotes" maxlength="280">We want people to remember the first time they open our site.</textarea></div>
-        </div>
-        <div class="output">
-          <span class="eyebrow">Your brief</span>
-          <pre id="briefOut" aria-live="polite"></pre>
-          <div class="actions">
-            <button type="button" class="btn primary" id="copyBrief">Copy brief</button>
-            <a class="btn" href="https://www.klickode.com/contact">Contact page ↗</a>
+        <div class="finder glass">
+          <input type="search" id="search" placeholder="Planet name, number or owner" aria-label="Search planets">
+          <div class="filters" id="filters">
+            <button type="button" data-f="all" aria-pressed="true">All</button>
+            <button type="button" data-f="new" aria-pressed="false">Newest</button>
+            <button type="button" data-f="lucky" aria-pressed="false">Lucky numbers</button>
+            <button type="button" data-f="mine" aria-pressed="false">Mine</button>
           </div>
+          <div class="results" id="results" aria-live="polite"></div>
         </div>
-      </form>
-      <div class="mail"><span id="mailText">klickode@gmail.com</span><button type="button" id="copyMail">Copy</button></div>
-    </div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="stop tall" id="certificate" aria-labelledby="t-cert" data-still>
+    <div class="certwrap">
+      <div class="copy">
+        <span class="eyebrow">Step 3 · Keep</span>
+        <h2 id="t-cert">Proof it’s <em>yours.</em></h2>
+        <p class="lede">Every planet comes with a numbered certificate of ownership. This one is drawn live from the planet you are designing.</p>
+        <ul class="points">
+          <li><span><b>One number, one owner.</b> The registry refuses a number that is already taken, so your planet can never be sold twice.</span></li>
+          <li><span><b>A fingerprint, like an NFT.</b> Each certificate carries a code made from the planet’s details. Change one detail and the code changes.</span></li>
+          <li><span><b>A seal no one else has.</b> The pattern on the seal is drawn from that fingerprint, so every certificate looks different.</span></li>
+          <li><span><b>Easy to check.</b> Anyone can search the number and see the same planet, name and owner.</span></li>
+        </ul>
+      </div>
+      <canvas class="certcanvas" id="certPreview" width="1600" height="1130" role="img" aria-label="Certificate preview for the planet you are designing"></canvas>
+    </div>
+  </section>
+
+  <section class="stop tall" id="how" aria-labelledby="t-how" data-still>
+    <div>
+      <div class="center-head"><div class="copy" style="max-width:none">
+        <span class="eyebrow">How it works</span>
+        <h2 id="t-how">A gift that <em>stays up there.</em></h2>
+        <p class="lede">For birthdays, anniversaries, a new baby, a memorial, a team, or just yourself. It takes two minutes and lasts as long as the universe does.</p>
+      </div></div>
+      <div class="steps">
+        <article class="step glass"><span class="n">01 · Design</span><h3>Pick the look</h3><p>Name it, choose its colours, add a ring, a moon or a crystal field. Choose a number, or let the universe choose.</p></article>
+        <article class="step glass"><span class="n">02 · Write</span><h3>Fill the world</h3><p>A dedication and three short chapters live inside the planet. Visitors who open it read your story.</p></article>
+        <article class="step glass"><span class="n">03 · Claim</span><h3>Keep the proof</h3><p>The number is locked to you. Download the certificate, order the print, and share a link straight to your planet.</p></article>
+      </div>
+      <div class="prices glass" aria-label="Price list">
+        <div><span class="k">Planet</span><strong>฿390</strong><p>Name, colours, number, world and digital certificate.</p></div>
+        <div><span class="k">Add-ons</span><strong>+฿200–400</strong><p>Moon ฿200, ring ฿300, crystal field ฿400.</p></div>
+        <div><span class="k">Lucky numbers</span><strong>+฿190–9,900</strong><p>Founders 1–99, repeating digits like 888, and numbers ending in 8 or 9.</p></div>
+        <div><span class="k">Printed certificate</span><strong>+฿490</strong><p>A4, heavy paper, gold seal, shipped in Thailand.</p></div>
+      </div>
+      <div class="faq">
+        <details class="glass"><summary>Is this a real planet?</summary><p>No. It is a planet in the Klickode Orbit universe, a digital world made by Klickode Studio. You own its registry entry, its design and the world inside it. It is a keepsake, not an astronomical body or an investment.</p></details>
+        <details class="glass"><summary>Is it an NFT?</summary><p>It works like one, without the hard parts. Every planet has a unique number, a single owner and a fingerprint code. You do not need a crypto wallet, and you pay in baht.</p></details>
+        <details class="glass"><summary>Can I give it as a gift?</summary><p>Yes. Put their name in “Registered to”, write the dedication, and send them the link or the printed certificate.</p></details>
+        <details class="glass"><summary>What are lucky numbers?</summary><p>Some numbers are special: the first 99 planets, repeating digits like 888 or 9999, and numbers ending in 9 or 8. They cost a little more and show in gold on the map.</p></details>
+        <details class="glass"><summary>Can I change my planet later?</summary><p>The name, number and owner are fixed once claimed, so the certificate stays true. Changing the world inside will be a paid edit at launch.</p></details>
+      </div>
+    </div>
+  </section>
+
+  <section class="stop tall" id="brands" aria-labelledby="t-brands" data-still>
+    <div>
+      <div class="brands glass">
+        <div>
+          <span class="eyebrow">For brands · Star systems</span>
+          <h2 id="t-brands">Give your brand <em>its own star.</em></h2>
+          <p>A star system is five planets around your brand’s star, each one a product, branch or campaign, plus a full Orbit flight site built by Klickode Studio. Your customers can then claim planets in your system.</p>
+          <div class="actions"><a class="btn primary" href="https://www.klickode.com/contact">Talk to Klickode ↗</a><a class="btn" href="plan.html">Read the strategy</a></div>
+        </div>
+        <div class="prices" style="margin-top:0;grid-template-columns:minmax(0,1fr)">
+          <div><span class="k">Star system</span><strong>from ฿24,900</strong><p>5 planets, brand star, gold certificates and a landing flight.</p></div>
+          <div style="border-left:0;border-top:1px solid var(--edge)"><span class="k">Customer planets</span><strong>Revenue share</strong><p>Your fans claim planets in your system; you keep 30% of each sale.</p></div>
+        </div>
+      </div>
+    </div>
   </section>
 </main>
 
 <footer class="legal">
-  <span>© 2026 Klickode Studio Ltd. All rights reserved.</span>
-  <nav aria-label="Legal"><a href="plan.html">Orbit business plan</a> <a href="https://www.klickode.com/privacy">Privacy</a> <a href="https://www.klickode.com/contact">Contact</a> <a href="https://www.klickode.com/">klickode.com</a></nav>
+  <span>© 2026 Klickode Studio Ltd. Orbit planets are digital keepsakes in the Klickode Orbit universe, not astronomical bodies.</span>
+  <nav aria-label="Legal"><a href="plan.html">Strategy</a> <a href="https://www.klickode.com/privacy">Privacy</a> <a href="https://www.klickode.com/contact">Contact</a> <a href="https://www.klickode.com/">klickode.com</a></nav>
 </footer>
 
 <div class="hud" aria-hidden="true">
-  <div><span class="dot"></span><span class="live" id="depth">Depth 000.0 Mm</span><span class="coords"> &nbsp;·&nbsp; 13.7563° N, 100.5018° E</span></div>
+  <div><span class="dot"></span><span class="live" id="depth">Depth 000.0 Mm</span><span class="coords"> &nbsp;·&nbsp; Genesis galaxy</span></div>
   <div class="hint" id="hint"><i></i>Scroll to fly</div>
 </div>
+
+<dialog class="sheet" id="sheet" aria-labelledby="sheetTitle">
+  <div class="sheet-in">
+    <div class="sheet-head">
+      <div class="tabs" role="tablist">
+        <button type="button" role="tab" id="tabWorld" aria-selected="true">The world inside</button>
+        <button type="button" role="tab" id="tabCert" aria-selected="false">Certificate</button>
+      </div>
+      <button type="button" class="xbtn" id="sheetClose" aria-label="Close">×</button>
+    </div>
+    <div class="sheet-body">
+      <div id="paneWorld"></div>
+      <div id="paneCert" hidden>
+        <canvas class="certcanvas" id="certSheet" width="1600" height="1130" role="img" aria-label="Certificate of ownership"></canvas>
+        <div class="sheet-actions" style="justify-content:center">
+          <button type="button" class="btn primary small" id="dlCert" hidden>Download certificate</button>
+          <button type="button" class="btn small" id="copyLink">Copy planet link</button>
+        </div>
+        <p class="fine">A collectible entry in the Klickode Orbit universe. Not an astronomical body.</p>
+      </div>
+    </div>
+  </div>
+</dialog>
+<div class="toast" id="toast" hidden></div>
 
 <script>
 (() => {
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const $ = (id) => document.getElementById(id);
   const stops = [...document.querySelectorAll('.stop')];
   const railLinks = [...document.querySelectorAll('.rail a')];
-  const hint = document.getElementById('hint');
-  const depthEl = document.getElementById('depth');
-  const topBar = document.getElementById('top');
+  const hint = $('hint'), depthEl = $('depth'), topBar = $('top');
+  const pad = (n) => String(n).padStart(4, '0');
+  const MAX = 9999;
 
-  // ---------- planet worlds the builder can switch between ----------
-  // deep / dusk / main / ember are the planet's band colours; glow is the rim light and atmosphere.
+  // ---------- worlds: planet palettes shared by the 3D scene, the map, the cards and the certificate ----------
   const WORLDS = [
     { id: 'KR', name: 'Klickode Red', note: 'warm, bold, unmistakable', css: '#e03131', deep: [0.07, 0.025, 0.035], dusk: [0.32, 0.06, 0.09], main: [0.86, 0.17, 0.18], ember: [1.0, 0.55, 0.42], glow: [1.0, 0.38, 0.38] },
-    { id: 'NV', name: 'Nebula Violet', note: 'tech, creative, night', css: '#7b5cff', deep: [0.03, 0.02, 0.08], dusk: [0.14, 0.07, 0.34], main: [0.46, 0.34, 1.0], ember: [0.86, 0.78, 1.0], glow: [0.62, 0.5, 1.0] },
-    { id: 'AO', name: 'Andaman Blue', note: 'travel, wellness, water', css: '#1a8fd6', deep: [0.01, 0.04, 0.07], dusk: [0.03, 0.16, 0.3], main: [0.1, 0.55, 0.86], ember: [0.62, 0.95, 1.0], glow: [0.35, 0.75, 1.0] },
-    { id: 'SF', name: 'Saffron Gold', note: 'food, luxury, festivals', css: '#e8a020', deep: [0.07, 0.04, 0.01], dusk: [0.32, 0.16, 0.03], main: [0.9, 0.55, 0.12], ember: [1.0, 0.88, 0.55], glow: [1.0, 0.7, 0.35] },
-    { id: 'JD', name: 'Jade Garden', note: 'beauty, health, green', css: '#1fbf80', deep: [0.01, 0.06, 0.04], dusk: [0.04, 0.25, 0.17], main: [0.15, 0.75, 0.5], ember: [0.72, 1.0, 0.82], glow: [0.4, 1.0, 0.7] },
+    { id: 'NV', name: 'Nebula Violet', note: 'dreamy, night, music', css: '#7b5cff', deep: [0.03, 0.02, 0.08], dusk: [0.14, 0.07, 0.34], main: [0.46, 0.34, 1.0], ember: [0.86, 0.78, 1.0], glow: [0.62, 0.5, 1.0] },
+    { id: 'AO', name: 'Andaman Blue', note: 'calm, sea, travel', css: '#1a8fd6', deep: [0.01, 0.04, 0.07], dusk: [0.03, 0.16, 0.3], main: [0.1, 0.55, 0.86], ember: [0.62, 0.95, 1.0], glow: [0.35, 0.75, 1.0] },
+    { id: 'SF', name: 'Saffron Gold', note: 'luck, warmth, celebration', css: '#e8a020', deep: [0.07, 0.04, 0.01], dusk: [0.32, 0.16, 0.03], main: [0.9, 0.55, 0.12], ember: [1.0, 0.88, 0.55], glow: [1.0, 0.7, 0.35] },
+    { id: 'JD', name: 'Jade Garden', note: 'growth, health, new life', css: '#1fbf80', deep: [0.01, 0.06, 0.04], dusk: [0.04, 0.25, 0.17], main: [0.15, 0.75, 0.5], ember: [0.72, 1.0, 0.82], glow: [0.4, 1.0, 0.7] },
+    { id: 'RS', name: 'Sakura Rose', note: 'love, couples, soft', css: '#ff6fa8', deep: [0.08, 0.02, 0.05], dusk: [0.34, 0.07, 0.2], main: [1.0, 0.42, 0.66], ember: [1.0, 0.85, 0.9], glow: [1.0, 0.55, 0.75] },
   ];
-  const look = { world: 0, ring: true, moon: true, crystals: true, name: 'Your Brand' };
-  const listeners = [];
-  const changed = () => { updateBuilderUI(); listeners.forEach((f) => f()); };
+  const PRICE = { base: 390, ring: 300, moon: 200, crystals: 400, print: 490 };
+  const FX = 33;
 
-  // ---------- builder UI ----------
-  const sw = document.getElementById('swatches');
-  const swName = document.getElementById('swatchName');
-  const code = document.getElementById('worldCode');
+  // ---------- lucky numbers and fixed coordinates: pure functions of the planet number ----------
+  function lucky(n) {
+    const s = String(n);
+    if (n <= 9) return { fee: 9900, label: 'Founders single digit' };
+    if (n <= 99) return { fee: 2900, label: 'Founders 10–99' };
+    if (/^(\d)\1+$/.test(s)) return { fee: 1900, label: 'Repeating digits' };
+    if (/[89]$/.test(s)) return { fee: 190, label: 'Ends in ' + s.slice(-1) };
+    return null;
+  }
+  function rng(seed) { return () => { seed |= 0; seed = (seed + 0x6d2b79f5) | 0; let t = Math.imul(seed ^ (seed >>> 15), 1 | seed); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; }
+  const POS = new Array(MAX + 1);
+  for (let n = 1; n <= MAX; n++) {
+    const r = rng(n * 2654435761), arm = n % 4, d = Math.pow(r(), 0.75) * 0.94 + 0.04;
+    const theta = arm * (Math.PI / 2) + d * 4.6 + (r() - 0.5) * (0.55 - d * 0.25);
+    const rr = d + (r() - 0.5) * 0.05;
+    POS[n] = { x: Math.cos(theta) * rr, y: Math.sin(theta) * rr, arm, ly: rr * 50, deg: ((theta * 180 / Math.PI) % 360 + 360) % 360 };
+  }
+  const coords = (n) => { const p = POS[n]; return 'Arm ' + ['I', 'II', 'III', 'IV'][p.arm] + ' · ' + p.ly.toFixed(1) + ' ly · ' + p.deg.toFixed(1) + '°'; };
+  const thb = (v) => '฿' + v.toLocaleString('en-US');
+
+  // ---------- design state ----------
+  const look = { world: 0, ring: true, moon: true, crystals: false, name: 'Your Planet', n: 1 };
+  const listeners = [];
+  const changed = () => { listeners.forEach((f) => f()); };
+
+  // ---------- registry: shared db when the viewer has it, this browser's storage otherwise ----------
+  const planets = new Map(); // n -> planet record
+  let claimsMap = {}; // n -> owner id
+  const reg = { mode: 'local', db: null, uid: 'me', canWrite: true };
+  const LOCAL_KEY = 'orbit-registry-v1';
+  function loadLocal() {
+    try { const o = JSON.parse(localStorage.getItem(LOCAL_KEY) || '{}'); for (const p of Object.values(o)) planets.set(p.n, { ...p, owner: 'me' }); } catch (e) {}
+  }
+  function saveLocal() {
+    try { const o = {}; for (const [n, p] of planets) if (p.owner === 'me') o[n] = p; localStorage.setItem(LOCAL_KEY, JSON.stringify(o)); } catch (e) {}
+  }
+  let worldsDocs = {};
+  function rebuild() {
+    if (reg.mode !== 'db') return;
+    planets.clear();
+    for (const [owner, data] of Object.entries(worldsDocs)) {
+      for (const p of Object.values((data && data.planets) || {})) {
+        const n = +p.n; if (!(n >= 1 && n <= MAX)) continue;
+        if (claimsMap[n] && claimsMap[n] !== owner) continue; // the claim lock decides who owns a number
+        const prev = planets.get(n);
+        if (prev && prev.at <= p.at) continue;
+        planets.set(n, { ...sanitize(p), owner });
+      }
+    }
+    onRegistry();
+  }
+  function sanitize(p) {
+    const str = (v, m) => String(v == null ? '' : v).slice(0, m);
+    return { n: +p.n, name: str(p.name, 24), world: Math.min(WORLDS.length - 1, Math.max(0, +p.world || 0)), ring: !!p.ring, moon: !!p.moon, crystals: !!p.crystals,
+      to: str(p.to, 40), note: str(p.note, 140), chapters: Array.isArray(p.chapters) ? p.chapters.slice(0, 3).map((c) => str(c, 90)) : [], print: !!p.print, at: +p.at || 0, fp: str(p.fp, 64) };
+  }
+  async function initRegistry() {
+    loadLocal(); onRegistry();
+    const use = window.claude && window.claude.use;
+    if (!use) return;
+    const db = await window.claude.use('db');
+    if (!db) return;
+    const user = await window.claude.use('user');
+    const uid = user ? await user.id() : null;
+    reg.mode = 'db'; reg.db = db; reg.uid = uid || 'anon';
+    reg.canWrite = !!uid && (user ? (await user.can('data.write')) !== false : false);
+    planets.clear(); onRegistry();
+    db.collection('claims').onSnapshot((snap) => { claimsMap = {}; snap.docs.forEach((d) => { const v = d.data(); if (v && v.owner) claimsMap[+d.id] = v.owner; }); rebuild(); }, () => {});
+    db.collection('worlds').onSnapshot((snap) => { worldsDocs = {}; snap.docs.forEach((d) => { worldsDocs[d.id] = d.data(); }); rebuild(); }, () => {});
+  }
+  const isTaken = (n) => planets.has(n) || (reg.mode === 'db' && !!claimsMap[n] && claimsMap[n] !== reg.uid);
+  async function claim(p) {
+    if (reg.mode !== 'db') {
+      if (planets.has(p.n)) throw new Error('taken');
+      planets.set(p.n, { ...p, owner: 'me' }); saveLocal(); onRegistry(); return;
+    }
+    const ref = reg.db.doc('claims/' + p.n);
+    const lease = await ref.acquire({ holder: reg.uid, ttlMs: 8000 });
+    if (!lease.acquired) throw new Error('taken');
+    const snap = await ref.get();
+    const cur = snap.exists ? snap.data() : null;
+    if (cur && cur.owner && cur.owner !== reg.uid) throw new Error('taken');
+    await ref.set({ owner: reg.uid, at: p.at });
+    const mine = {};
+    const doc = worldsDocs[reg.uid];
+    if (doc && doc.planets) Object.assign(mine, doc.planets);
+    mine[p.n] = p;
+    await reg.db.doc('worlds/' + reg.uid).set({ planets: mine });
+  }
+
+  // ---------- fingerprint (SHA-256 of the planet's fixed details) ----------
+  async function fingerprint(p) {
+    const text = JSON.stringify([p.n, p.name, p.world, p.ring, p.moon, p.crystals, p.to, p.at]);
+    try {
+      const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(text));
+      return [...new Uint8Array(buf)].map((b) => b.toString(16).padStart(2, '0')).join('');
+    } catch (e) {
+      let h = 2166136261; for (const ch of text) { h ^= ch.charCodeAt(0); h = Math.imul(h, 16777619); }
+      return (h >>> 0).toString(16).padStart(8, '0').repeat(8);
+    }
+  }
+
+  // ---------- designer ----------
+  const sw = $('swatches'), swName = $('swatchName');
   WORLDS.forEach((w, i) => {
     const b = document.createElement('button');
-    b.type = 'button'; b.className = 'swatch'; b.style.setProperty('--c', w.css);
-    b.setAttribute('role', 'radio'); b.setAttribute('aria-label', w.name);
+    b.type = 'button'; b.className = 'swatch'; b.style.setProperty('--c', w.css); b.setAttribute('role', 'radio'); b.setAttribute('aria-label', w.name);
     b.addEventListener('click', () => { look.world = i; changed(); });
     sw.appendChild(b);
   });
   sw.addEventListener('keydown', (e) => {
     const d = e.key === 'ArrowRight' || e.key === 'ArrowDown' ? 1 : e.key === 'ArrowLeft' || e.key === 'ArrowUp' ? -1 : 0;
-    if (!d) return;
-    e.preventDefault();
-    look.world = (look.world + d + WORLDS.length) % WORLDS.length; changed();
-    sw.children[look.world].focus();
+    if (!d) return; e.preventDefault();
+    look.world = (look.world + d + WORLDS.length) % WORLDS.length; changed(); sw.children[look.world].focus();
   });
-  [['tRing', 'ring'], ['tMoon', 'moon'], ['tCrystals', 'crystals']].forEach(([id, key]) => {
-    const b = document.getElementById(id);
-    b.addEventListener('click', () => { look[key] = !look[key]; b.setAttribute('aria-pressed', String(look[key])); changed(); });
-  });
-  const nameInput = document.getElementById('brandName');
-  nameInput.addEventListener('input', () => { look.name = nameInput.value.trim() || 'Your Brand'; changed(); });
-  document.getElementById('builder').addEventListener('submit', (e) => e.preventDefault());
-  function updateBuilderUI() {
+  const chips = [['tRing', 'ring'], ['tMoon', 'moon'], ['tCrystals', 'crystals']];
+  chips.forEach(([id, key]) => $(id).addEventListener('click', () => { look[key] = !look[key]; changed(); }));
+  const nameIn = $('pName'), numIn = $('pNum'), toIn = $('pTo'), noteIn = $('pNote'), printIn = $('pPrint');
+  const chIn = [$('pC1'), $('pC2'), $('pC3')];
+  nameIn.addEventListener('input', () => { look.name = nameIn.value.trim() || 'Your Planet'; changed(); });
+  numIn.addEventListener('input', () => { const v = Math.round(+numIn.value); if (v >= 1 && v <= MAX) { look.n = v; changed(); } else renderNumNote(); });
+  [toIn, noteIn, printIn, ...chIn].forEach((el) => el.addEventListener('input', changed));
+  function freeNumber() { for (let i = 0; i < 400; i++) { const n = 100 + Math.floor(Math.random() * (MAX - 100)); if (!isTaken(n)) return n; } for (let n = 1; n <= MAX; n++) if (!isTaken(n)) return n; return 0; }
+  $('randNum').addEventListener('click', () => { const n = freeNumber(); if (n) { look.n = n; numIn.value = n; changed(); } });
+
+  function draftPlanet() {
+    return { n: look.n, name: look.name, world: look.world, ring: look.ring, moon: look.moon, crystals: look.crystals, to: toIn.value.trim() || 'You',
+      note: noteIn.value.trim(), chapters: chIn.map((c) => c.value.trim()).filter(Boolean), print: printIn.checked, at: Date.now(), fp: '' };
+  }
+  function priceOf(p) {
+    const items = [['Planet No. ' + pad(p.n), PRICE.base]];
+    if (p.ring) items.push(['Ring', PRICE.ring]);
+    if (p.moon) items.push(['Moon', PRICE.moon]);
+    if (p.crystals) items.push(['Crystal field', PRICE.crystals]);
+    const l = lucky(p.n); if (l) items.push(['Lucky number: ' + l.label, l.fee]);
+    if (p.print) items.push(['Printed certificate', PRICE.print]);
+    return { items, total: items.reduce((a, [, v]) => a + v, 0) };
+  }
+  function renderNumNote() {
+    const note = $('numNote'), v = Math.round(+numIn.value);
+    note.className = 'numnote';
+    if (!(v >= 1 && v <= MAX)) { note.textContent = 'Choose a number from 1 to 9,999.'; note.classList.add('taken'); return false; }
+    if (isTaken(v)) { const p = planets.get(v); note.textContent = 'No. ' + pad(v) + ' is taken' + (p ? ' by “' + p.name + '”' : '') + '. Try Random.'; note.classList.add('taken'); return false; }
+    const l = lucky(v);
+    if (l) { note.textContent = 'Lucky number · ' + l.label + ' · +' + thb(l.fee) + ' · ' + coords(v); note.classList.add('lucky'); return true; }
+    note.textContent = 'No. ' + pad(v) + ' is free · ' + coords(v); return true;
+  }
+  function updateDesigner() {
     const w = WORLDS[look.world];
     [...sw.children].forEach((b, i) => { b.setAttribute('aria-checked', String(i === look.world)); b.tabIndex = i === look.world ? 0 : -1; });
     swName.innerHTML = '<b>' + w.name + '</b> · ' + w.note;
-    code.textContent = 'ORB-005 · ' + w.id + '-' + (look.ring ? 1 : 0) + (look.moon ? 1 : 0) + (look.crystals ? 1 : 0);
+    chips.forEach(([id, key]) => $(id).setAttribute('aria-pressed', String(look[key])));
+    $('nameLeft').textContent = (24 - nameIn.value.length) + ' left';
+    const ok = renderNumNote();
+    const pr = priceOf(draftPlanet());
+    const rc = $('receipt'); rc.textContent = '';
+    pr.items.forEach(([k, v]) => { const d = document.createElement('div'); const a = document.createElement('span'); a.textContent = k; const b = document.createElement('span'); b.textContent = thb(v); d.append(a, b); rc.appendChild(d); });
+    $('total').textContent = thb(pr.total); $('totalUsd').textContent = '≈ $' + Math.round(pr.total / FX) + ' · one time';
+    $('claimBtn').disabled = !ok || !reg.canWrite;
+    $('claimBtn').textContent = 'Claim No. ' + pad(look.n);
+    drawCertificate($('certPreview'), { ...draftPlanet(), fp: previewFp }, true);
   }
-  updateBuilderUI();
+  let previewFp = '';
+  let fpTimer = 0;
+  listeners.push(updateDesigner);
+  listeners.push(() => { clearTimeout(fpTimer); fpTimer = setTimeout(async () => { previewFp = await fingerprint(draftPlanet()); drawCertificate($('certPreview'), { ...draftPlanet(), fp: previewFp }, true); }, 250); });
 
-  // ---------- mission log: concept studies that drive the scene ----------
-  const MISSIONS = [
-    { code: 'ORB-001', world: 4, brand: 'Bai Toey Skin', kind: 'Skincare launch', brief: 'A pandan skincare brand launching its first serum.', idea: 'Visitors drift through a jade planet where each crystal is one ingredient. The bottle lands at the end of the flight.', chapters: ['Origin', 'Ingredients', 'Ritual', 'Shop'] },
-    { code: 'ORB-002', world: 3, brand: 'Chao Roast', kind: 'Café opening', brief: 'A specialty roaster opening its first café in Ari.', idea: 'A golden planet of coffee dust, with the ring drawn as the roast curve. The flight ends on the café door and a map link.', chapters: ['Bean', 'Roast', 'Space', 'Visit'] },
-    { code: 'ORB-003', world: 2, brand: 'Koh Lom Retreat', kind: 'Island resort', brief: 'A twelve-villa resort reopening after renovation.', idea: 'The camera sinks through ocean-blue cloud bands toward the villas. Each chapter is one hour of a day on the island.', chapters: ['Arrive', 'Sea', 'Table', 'Stay'] },
-    { code: 'ORB-004', world: 1, brand: 'Ratri Sound', kind: 'Night festival', brief: 'A two-night electronic festival announcing its line-up.', idea: 'Each moon is a stage and the line-up appears planet by planet. Ticket tiers wait at the end of the flight.', chapters: ['Line-up', 'Stages', 'Tickets'] },
-  ];
-  const ml = document.getElementById('missionList');
-  ml.innerHTML = MISSIONS.map((m, i) => `
-    <article class="mission glass">
-      <div class="mhead"><span class="code">${m.code} · ${WORLDS[m.world].name}</span><span class="orb" style="--c:${WORLDS[m.world].css}"></span></div>
-      <div><span class="kind">${m.kind} · Concept</span><h3>${m.brand}</h3></div>
-      <p><b>Brief.</b> ${m.brief}</p>
-      <p><b>Idea.</b> ${m.idea}</p>
-      <div class="chapters" aria-label="Chapters">${m.chapters.map((c) => '<span>' + c + '</span>').join('')}</div>
-      <button type="button" class="btn" data-m="${i}">Fly this world ↑</button>
-    </article>`).join('') + `
-    <article class="mission glass next">
-      <div class="mhead"><span class="code">ORB-005 · Open</span><span class="orb"></span></div>
-      <div><span class="kind">Your launch</span><h3>This slot is yours.</h3></div>
-      <p>Build your planet above, write a brief at the bottom of this page, and pick a lift-off date. Every finished mission joins this log with its own fly-through video.</p>
-      <a class="btn primary" href="#contact">Write my brief ↓</a>
-    </article>`;
-  ml.addEventListener('click', (e) => {
-    const b = e.target.closest('[data-m]'); if (!b) return;
-    const m = MISSIONS[+b.dataset.m];
-    look.world = m.world; look.name = m.brand; nameInput.value = m.brand; changed();
-    document.getElementById('build').scrollIntoView({ behavior: reduce ? 'auto' : 'smooth' });
+  $('designer').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const st = $('status'); st.className = 'status';
+    if (!renderNumNote()) return;
+    if (!nameIn.value.trim()) { st.textContent = 'Give your planet a name first.'; st.classList.add('err'); nameIn.focus(); return; }
+    const p = draftPlanet(); p.fp = await fingerprint(p);
+    const btn = $('claimBtn'); btn.disabled = true; st.textContent = 'Locking No. ' + pad(p.n) + ' in the registry…';
+    try {
+      await claim(p);
+      st.textContent = 'No. ' + pad(p.n) + ' is yours.';
+      showToast('Planet No. ' + pad(p.n) + ' claimed');
+      setTimeout(() => openPlanet(p.n, 'cert'), 350);
+      const next = freeNumber(); if (next) { look.n = next; numIn.value = next; }
+      [nameIn, toIn, noteIn, ...chIn].forEach((f) => { f.value = ''; }); printIn.checked = false; look.name = 'Your Planet';
+      changed();
+    } catch (err) {
+      st.classList.add('err');
+      st.textContent = err && err.message === 'taken' ? 'Someone claimed No. ' + pad(p.n) + ' a moment ago. Pick another number.' : 'The registry did not accept that claim. Please try again.';
+      if (err && err.code === 'invalid_argument') { reg.canWrite = false; st.textContent = 'You can look around, but this account cannot claim planets here.'; }
+    } finally { updateDesigner(); }
   });
 
-  // ---------- mission brief: lift-off windows on the 1st, 10th and 20th, at least 14 days out ----------
-  const winBox = document.getElementById('windows');
-  const windows = [];
-  { const d = new Date(); d.setHours(0, 0, 0, 0); const earliest = new Date(d.getTime() + 14 * 864e5);
-    for (let m = 0; windows.length < 6 && m < 6; m++) for (const day of [1, 10, 20]) {
-      const w = new Date(d.getFullYear(), d.getMonth() + m, day);
-      if (w >= earliest && windows.length < 6) windows.push(w);
-    } }
-  const fmt = (d, long) => d.toLocaleDateString('en-GB', long ? { weekday: 'short', day: 'numeric', month: 'long', year: 'numeric' } : { day: 'numeric', month: 'short' });
-  let win = 0;
-  windows.forEach((w, i) => {
-    const b = document.createElement('button'); b.type = 'button'; b.setAttribute('role', 'radio'); b.textContent = fmt(w);
-    b.addEventListener('click', () => { win = i; renderBrief(); });
-    winBox.appendChild(b);
-  });
-  const bBrand = document.getElementById('bBrand'), bKind = document.getElementById('bKind'), bNotes = document.getElementById('bNotes'), out = document.getElementById('briefOut');
-  let briefText = '';
-  const esc = (t) => t.replace(/[&<>]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]));
-  function renderBrief() {
-    [...winBox.children].forEach((b, i) => { b.setAttribute('aria-checked', String(i === win)); b.tabIndex = i === win ? 0 : -1; });
-    const w = WORLDS[look.world], lift = windows[win], start = new Date(lift.getTime() - 14 * 864e5);
-    const rows = [['Mission', 'ORB-005 (proposed)'], ['Brand', bBrand.value.trim() || 'Your Brand'], ['Launching', bKind.value], ['World', w.name + ' · ring ' + (look.ring ? 'on' : 'off') + ', moon ' + (look.moon ? 'on' : 'off')],
-      ['Build starts', fmt(start, true)], ['Lift-off', fmt(lift, true)], ['Orbit', 'Inner orbit (Orbit Launch) + Care'], ['Notes', bNotes.value.trim() || '-']];
-    briefText = 'KLICKODE ORBIT · MISSION BRIEF\n\n' + rows.map(([k, v]) => (k + ':').padEnd(14) + v).join('\n');
-    out.innerHTML = '<b>KLICKODE ORBIT · MISSION BRIEF</b>\n\n' + rows.map(([k, v]) => '<b>' + (k + ':').padEnd(14) + '</b>' + esc(v)).join('\n');
+  // ---------- certificate renderer (one drawing for preview, sheet and download) ----------
+  const markImg = new Image();
+  markImg.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(document.querySelector('.brand svg').outerHTML.replace('<svg ', '<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" '));
+  markImg.onload = () => changed();
+  function drawCertificate(cv, p, preview) {
+    const x = cv.getContext('2d'), W = cv.width, H = cv.height, w = WORLDS[p.world] || WORLDS[0];
+    const gold = '#e8c27a', ink = '#f3f1ea', dim = '#a9a59a';
+    x.save(); x.clearRect(0, 0, W, H);
+    const bg = x.createRadialGradient(W * 0.78, H * 0.3, 40, W * 0.6, H * 0.5, W * 0.9);
+    bg.addColorStop(0, '#1b1517'); bg.addColorStop(1, '#09090d'); x.fillStyle = bg; x.fillRect(0, 0, W, H);
+    const r = rng(p.n * 31 + 7);
+    for (let i = 0; i < 260; i++) { x.fillStyle = 'rgba(255,255,255,' + (0.08 + r() * 0.35) + ')'; x.beginPath(); x.arc(r() * W, r() * H, r() * 1.6 + 0.3, 0, 6.283); x.fill(); }
+    x.strokeStyle = gold; x.lineWidth = 2; x.strokeRect(36, 36, W - 72, H - 72);
+    x.globalAlpha = 0.45; x.lineWidth = 1; x.strokeRect(52, 52, W - 104, H - 104); x.globalAlpha = 1;
+    // corner stars
+    [[52, 52], [W - 52, 52], [52, H - 52], [W - 52, H - 52]].forEach(([cx, cy]) => { x.fillStyle = gold; x.beginPath(); for (let k = 0; k < 8; k++) { const a = k * Math.PI / 4, rr = k % 2 ? 4 : 12; x.lineTo(cx + Math.cos(a) * rr, cy + Math.sin(a) * rr); } x.fill(); });
+    // planet
+    const px = 1190, py = 520, pr = 210;
+    const glow = x.createRadialGradient(px, py, pr * 0.6, px, py, pr * 1.9); glow.addColorStop(0, w.css + '66'); glow.addColorStop(1, 'rgba(0,0,0,0)'); x.fillStyle = glow; x.fillRect(px - pr * 2, py - pr * 2, pr * 4, pr * 4);
+    if (p.ring) { x.save(); x.translate(px, py); x.rotate(-0.28); x.scale(1, 0.26); x.strokeStyle = 'rgba(255,240,230,0.35)'; x.lineWidth = 26; x.beginPath(); x.arc(0, 0, pr * 1.62, Math.PI, 2 * Math.PI); x.stroke(); x.restore(); }
+    const body = x.createRadialGradient(px - pr * 0.35, py - pr * 0.4, pr * 0.1, px, py, pr);
+    body.addColorStop(0, '#ffffff'); body.addColorStop(0.18, w.css); body.addColorStop(0.75, shade(w.css, 0.35)); body.addColorStop(1, '#050507');
+    x.fillStyle = body; x.beginPath(); x.arc(px, py, pr, 0, 6.283); x.fill();
+    x.save(); x.beginPath(); x.arc(px, py, pr, 0, 6.283); x.clip(); x.globalAlpha = 0.18;
+    for (let i = 0; i < 9; i++) { x.fillStyle = i % 2 ? '#000' : '#fff'; x.fillRect(px - pr, py - pr + i * (pr * 2 / 9) + r() * 14, pr * 2, 10 + r() * 18); }
+    x.restore();
+    if (p.ring) { x.save(); x.translate(px, py); x.rotate(-0.28); x.scale(1, 0.26); x.strokeStyle = 'rgba(255,240,230,0.55)'; x.lineWidth = 26; x.beginPath(); x.arc(0, 0, pr * 1.62, 0, Math.PI); x.stroke(); x.restore(); }
+    if (p.moon) { const mg = x.createRadialGradient(px + 250, py - 200, 4, px + 258, py - 192, 34); mg.addColorStop(0, '#fff'); mg.addColorStop(0.5, '#b9b6c8'); mg.addColorStop(1, '#222'); x.fillStyle = mg; x.beginPath(); x.arc(px + 258, py - 192, 34, 0, 6.283); x.fill(); }
+    if (p.crystals) { for (let i = 0; i < 6; i++) { const a = r() * 6.28, d = pr * (1.25 + r() * 0.5), cx = px + Math.cos(a) * d, cy = py + Math.sin(a) * d * 0.8, s = 8 + r() * 10; x.fillStyle = w.css; x.globalAlpha = 0.85; x.beginPath(); x.moveTo(cx, cy - s); x.lineTo(cx + s * 0.6, cy); x.lineTo(cx, cy + s); x.lineTo(cx - s * 0.6, cy); x.fill(); x.globalAlpha = 1; } }
+    // text
+    x.textBaseline = 'alphabetic';
+    if (markImg.complete && markImg.naturalWidth) x.drawImage(markImg, 110, 104, 64, 64);
+    x.fillStyle = ink; x.font = '800 30px Inter, sans-serif'; x.fillText('KLICKODE', 192, 136);
+    x.fillStyle = gold; x.font = '500 17px "JetBrains Mono", monospace'; x.fillText('O R B I T   R E G I S T R Y', 192, 162);
+    x.fillStyle = gold; x.font = 'italic 76px "Instrument Serif", Georgia, serif'; x.fillText('Certificate of Ownership', 110, 290);
+    x.fillStyle = dim; x.font = '400 24px Inter, sans-serif'; x.fillText('This certifies that', 110, 362);
+    x.fillStyle = ink; fitText(x, p.to || 'You', 800, 54, '700', 110, 428);
+    x.fillStyle = dim; x.font = '400 24px Inter, sans-serif'; x.fillText('is the registered keeper of the planet', 110, 488);
+    x.fillStyle = ink; fitText(x, p.name || 'Your Planet', 820, 96, '800', 110, 590);
+    const l = lucky(p.n);
+    x.fillStyle = l ? gold : ink; x.font = '500 30px "JetBrains Mono", monospace'; x.fillText('No. ' + pad(p.n) + (l ? '  ★ ' + l.label.toUpperCase() : ''), 110, 646);
+    if (p.note) { x.fillStyle = ink; x.font = 'italic 34px "Instrument Serif", Georgia, serif'; wrapText(x, '“' + p.note + '”', 110, 712, 860, 42, 2); }
+    // details
+    const feats = ['Planet', p.ring && 'ring', p.moon && 'moon', p.crystals && 'crystal field'].filter(Boolean).join(', ');
+    const when = p.at ? new Date(p.at).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }) : '';
+    const rows = [['COORDINATES', coords(p.n)], ['WORLD', w.name + ' · ' + feats], ['EDITION', 'Genesis · 1 of 9,999'], ['REGISTERED', preview ? 'Not yet claimed' : when]];
+    x.strokeStyle = 'rgba(232,194,122,0.35)'; x.lineWidth = 1; x.beginPath(); x.moveTo(110, 838); x.lineTo(W - 110, 838); x.stroke();
+    rows.forEach(([k, v], i) => { const cx = 110 + (i % 2) * 520, cy = 884 + Math.floor(i / 2) * 64; x.fillStyle = gold; x.font = '500 15px "JetBrains Mono", monospace'; x.fillText(k, cx, cy); x.fillStyle = ink; x.font = '500 22px Inter, sans-serif'; x.fillText(v, cx, cy + 30); });
+    x.fillStyle = gold; x.font = '500 15px "JetBrains Mono", monospace'; x.fillText('FINGERPRINT', 110, 1036);
+    x.fillStyle = dim; x.font = '400 17px "JetBrains Mono", monospace'; x.fillText(p.fp ? p.fp.match(/.{1,8}/g).slice(0, 8).join(' ') : '—', 110, 1064);
+    // seal drawn from the fingerprint
+    const sx = 1300, sy = 960, sr = 92;
+    x.fillStyle = 'rgba(232,194,122,0.08)'; x.beginPath(); x.arc(sx, sy, sr, 0, 6.283); x.fill();
+    x.strokeStyle = gold; x.lineWidth = 2; x.beginPath(); x.arc(sx, sy, sr, 0, 6.283); x.stroke(); x.beginPath(); x.arc(sx, sy, sr - 12, 0, 6.283); x.stroke();
+    const bits = (p.fp || '0'.repeat(64)).split('').map((c) => parseInt(c, 16));
+    const cell = 13, g = 7, ox = sx - (g * cell) / 2, oy = sy - (g * cell) / 2;
+    for (let yy = 0; yy < g; yy++) for (let xx = 0; xx < Math.ceil(g / 2); xx++) {
+      if (bits[(yy * 4 + xx) % 64] % 2) { x.fillStyle = (bits[(yy + xx) % 64] > 9) ? w.css : gold; [xx, g - 1 - xx].forEach((cx2) => x.fillRect(ox + cx2 * cell, oy + yy * cell, cell - 2, cell - 2)); }
+    }
+    x.save(); x.fillStyle = gold; x.font = '500 12px "JetBrains Mono", monospace'; x.textAlign = 'center';
+    const ring = 'KLICKODE ORBIT · GENESIS · NO. ' + pad(p.n) + ' · ';
+    for (let i = 0; i < ring.length; i++) { const a = -Math.PI / 2 + (i / ring.length) * Math.PI * 2; x.save(); x.translate(sx + Math.cos(a) * (sr - 25 + 19), sy + Math.sin(a) * (sr - 25 + 19)); x.rotate(a + Math.PI / 2); x.fillText(ring[i], 0, 0); x.restore(); }
+    x.restore();
+    if (preview) { x.save(); x.translate(W / 2, H / 2); x.rotate(-0.3); x.fillStyle = 'rgba(255,255,255,0.05)'; x.font = '800 150px Inter, sans-serif'; x.textAlign = 'center'; x.fillText('PREVIEW', 0, 50); x.restore(); }
+    x.restore();
   }
-  [bBrand, bKind, bNotes].forEach((el) => el.addEventListener('input', renderBrief));
-  nameInput.addEventListener('input', () => { bBrand.value = look.name; renderBrief(); });
-  listeners.push(() => { if (bBrand.value !== look.name && look.name !== 'Your Brand') bBrand.value = look.name; renderBrief(); });
-  document.getElementById('briefForm').addEventListener('submit', (e) => e.preventDefault());
-  renderBrief();
-  const copyBrief = document.getElementById('copyBrief');
-  copyBrief.addEventListener('click', () => {
-    const done = () => { copyBrief.textContent = 'Copied. Now email it'; setTimeout(() => { copyBrief.textContent = 'Copy brief'; }, 2400); };
-    const select = () => { const r = document.createRange(); r.selectNodeContents(out); const s = getSelection(); s.removeAllRanges(); s.addRange(r); copyBrief.textContent = 'Selected. Press copy'; };
-    try { navigator.clipboard.writeText(briefText).then(done, select); } catch (e) { select(); }
-  });
+  function shade(hex, k) { const n = parseInt(hex.slice(1), 16); const c = [(n >> 16) & 255, (n >> 8) & 255, n & 255].map((v) => Math.round(v * k)); return 'rgb(' + c.join(',') + ')'; }
+  function fitText(x, t, maxW, size, weight, cx, cy) { let s = size; do { x.font = weight + ' ' + s + 'px Inter, sans-serif'; s -= 4; } while (x.measureText(t).width > maxW && s > 20); x.fillText(t, cx, cy); }
+  function wrapText(x, t, cx, cy, maxW, lh, maxLines) {
+    const words = t.split(/\s+/); let line = '', lines = 0;
+    for (let i = 0; i < words.length; i++) {
+      const test = line ? line + ' ' + words[i] : words[i];
+      if (x.measureText(test).width > maxW && line) { if (++lines === maxLines) { x.fillText(line + '…”', cx, cy); return; } x.fillText(line, cx, cy); cy += lh; line = words[i]; } else line = test;
+    }
+    if (line) x.fillText(line, cx, cy);
+  }
 
-  // ---------- copy email ----------
-  const copyBtn = document.getElementById('copyMail');
-  copyBtn.addEventListener('click', () => {
-    const t = document.getElementById('mailText');
-    const done = () => { copyBtn.textContent = 'Copied'; setTimeout(() => { copyBtn.textContent = 'Copy'; }, 1800); };
-    const select = () => { const r = document.createRange(); r.selectNodeContents(t); const s = getSelection(); s.removeAllRanges(); s.addRange(r); copyBtn.textContent = 'Selected'; };
-    try { navigator.clipboard.writeText(t.textContent).then(done, select); } catch (e) { select(); }
+  // ---------- planet sheet ----------
+  const sheet = $('sheet');
+  let sheetN = 0;
+  function el(tag, cls, text) { const e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
+  function orbEl(p, big) {
+    const o = el('div', 'orb' + (p.ring ? ' ringed' : '')); o.style.setProperty('--c', WORLDS[p.world].css);
+    if (!big) return o;
+    const wrap = el('div', 'big-orb'); wrap.style.setProperty('--c', WORLDS[p.world].css); wrap.appendChild(o); if (p.moon) wrap.appendChild(el('div', 'moonlet')); return wrap;
+  }
+  function openPlanet(n, tab) {
+    const p = planets.get(n); if (!p) return;
+    sheetN = n;
+    const pane = $('paneWorld'); pane.textContent = '';
+    const wv = el('div', 'world'); wv.style.setProperty('--c', WORLDS[p.world].css);
+    wv.appendChild(orbEl(p, true));
+    const txt = el('div');
+    txt.appendChild(el('span', 'eyebrow', 'Planet No. ' + pad(p.n)));
+    const h = el('h3', 'wname', p.name); h.id = 'sheetTitle'; txt.appendChild(h);
+    const meta = el('div', 'meta'); const l = lucky(p.n);
+    meta.append(el('span', '', coords(p.n)), el('span', '', WORLDS[p.world].name));
+    if (l) meta.appendChild(el('span', 'lucky', '★ ' + l.label));
+    txt.appendChild(meta);
+    if (p.note) txt.appendChild(el('blockquote', '', p.note));
+    txt.appendChild(el('p', 'to', 'Registered to ' + (p.to || 'its owner') + (p.at ? ' · ' + new Date(p.at).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }) : '')));
+    if (p.chapters && p.chapters.length) {
+      const chs = el('div', 'chapters');
+      p.chapters.forEach((c, i) => { const ch = el('div', 'chapter'); ch.append(el('span', '', '0' + (i + 1)), el('p', '', c)); chs.appendChild(ch); });
+      txt.appendChild(chs);
+    }
+    const acts = el('div', 'sheet-actions');
+    const fly = el('button', 'btn small', 'Fly to this planet'); fly.type = 'button';
+    fly.addEventListener('click', () => { look.world = p.world; look.ring = p.ring; look.moon = p.moon; look.crystals = p.crystals; look.name = p.name; changed(); sheet.close(); $('start').scrollIntoView({ behavior: reduce ? 'auto' : 'smooth' }); });
+    const cert = el('button', 'btn primary small', 'View certificate'); cert.type = 'button'; cert.addEventListener('click', () => setTab('cert'));
+    acts.append(cert, fly); txt.appendChild(acts);
+    wv.appendChild(txt); pane.appendChild(wv);
+    drawCertificate($('certSheet'), p, false);
+    setTab(tab || 'world');
+    if (!sheet.open) { try { sheet.showModal(); } catch (e) { sheet.setAttribute('open', ''); } }
+  }
+  function setTab(t) {
+    $('tabWorld').setAttribute('aria-selected', String(t === 'world')); $('tabCert').setAttribute('aria-selected', String(t === 'cert'));
+    $('paneWorld').hidden = t !== 'world'; $('paneCert').hidden = t !== 'cert';
+  }
+  $('tabWorld').addEventListener('click', () => setTab('world'));
+  $('tabCert').addEventListener('click', () => setTab('cert'));
+  $('sheetClose').addEventListener('click', () => sheet.close());
+  sheet.addEventListener('click', (e) => { if (e.target === sheet) sheet.close(); });
+  $('copyLink').addEventListener('click', () => {
+    const url = location.href.split('#')[0] + '#p' + pad(sheetN);
+    try { navigator.clipboard.writeText(url).then(() => showToast('Link copied'), () => showToast(url)); } catch (e) { showToast(url); }
   });
+  let downloads = null;
+  (async () => { if (window.claude && window.claude.use) { downloads = await window.claude.use('downloads'); $('dlCert').hidden = !downloads; } })();
+  $('dlCert').addEventListener('click', () => {
+    const p = planets.get(sheetN); if (!p || !downloads) return;
+    $('certSheet').toBlob(async (blob) => { try { await downloads.save({ filename: 'orbit-planet-' + pad(p.n) + '-certificate.png', data: blob }); } catch (e) {} }, 'image/png');
+  });
+  let toastTimer = 0;
+  function showToast(t) { const el2 = $('toast'); el2.textContent = t; el2.hidden = false; clearTimeout(toastTimer); toastTimer = setTimeout(() => { el2.hidden = true; }, 2600); }
+
+  // ---------- universe: galaxy map + search ----------
+  const gcv = $('galaxy'), gx = gcv.getContext('2d'), tip = $('mapTip');
+  let gW = 0, gH = 0, gScale = 1, spin = 0, hoverN = 0;
+  function sizeGalaxy() { const r = gcv.getBoundingClientRect(); const dpr = Math.min(devicePixelRatio || 1, 2); gW = r.width; gH = r.height; gcv.width = gW * dpr; gcv.height = gH * dpr; gx.setTransform(dpr, 0, 0, dpr, 0, 0); gScale = Math.min(gW, gH) * 0.46; drawGalaxy(); }
+  function project(n) { const p = POS[n], c = Math.cos(spin), s = Math.sin(spin); const X = p.x * c - p.y * s, Y = p.x * s + p.y * c; return [gW / 2 + X * gScale * 1.12, gH / 2 + 18 + Y * gScale * 0.78]; }
+  function drawGalaxy() {
+    if (!gW) return;
+    gx.clearRect(0, 0, gW, gH);
+    const core = gx.createRadialGradient(gW / 2, gH / 2 + 18, 0, gW / 2, gH / 2 + 18, gScale * 0.5);
+    core.addColorStop(0, 'rgba(255,170,150,0.35)'); core.addColorStop(1, 'rgba(255,120,120,0)'); gx.fillStyle = core; gx.fillRect(0, 0, gW, gH);
+    gx.fillStyle = 'rgba(150,150,180,0.35)';
+    for (let n = 1; n <= MAX; n++) { if (planets.has(n)) continue; const [X, Y] = project(n); gx.fillRect(X, Y, 1.1, 1.1); }
+    for (const p of planets.values()) {
+      const [X, Y] = project(p.n), c = lucky(p.n) ? '#e8c27a' : WORLDS[p.world].css, rr = p.n === hoverN ? 9 : 6;
+      const g = gx.createRadialGradient(X, Y, 0, X, Y, rr * 4); g.addColorStop(0, c); g.addColorStop(1, 'rgba(0,0,0,0)'); gx.fillStyle = g; gx.beginPath(); gx.arc(X, Y, rr * 4, 0, 6.283); gx.fill();
+      gx.fillStyle = '#fff'; gx.beginPath(); gx.arc(X, Y, rr * 0.45, 0, 6.283); gx.fill();
+    }
+  }
+  function nearest(mx, my) {
+    let best = 0, bd = 14 * 14;
+    for (const p of planets.values()) { const [X, Y] = project(p.n), d = (X - mx) ** 2 + (Y - my) ** 2; if (d < bd) { bd = d; best = p.n; } }
+    if (best) return { n: best, claimed: true };
+    let fb = 0, fd = 6 * 6;
+    for (let n = 1; n <= MAX; n++) { const [X, Y] = project(n), d = (X - mx) ** 2 + (Y - my) ** 2; if (d < fd) { fd = d; fb = n; } }
+    return fb ? { n: fb, claimed: false } : null;
+  }
+  gcv.addEventListener('pointermove', (e) => {
+    const r = gcv.getBoundingClientRect(), mx = e.clientX - r.left, my = e.clientY - r.top, hit = nearest(mx, my);
+    hoverN = hit && hit.claimed ? hit.n : 0;
+    if (!hit) { tip.hidden = true; drawGalaxy(); return; }
+    tip.textContent = '';
+    const p = planets.get(hit.n);
+    tip.appendChild(document.createTextNode(p ? p.name : 'Free planet'));
+    tip.appendChild(el('small', '', 'No. ' + pad(hit.n) + (p ? ' · ' + (p.to || '') : ' · tap to claim')));
+    tip.style.left = mx + 'px'; tip.style.top = my + 'px'; tip.hidden = false;
+    if (reduce) drawGalaxy();
+  });
+  gcv.addEventListener('pointerleave', () => { tip.hidden = true; hoverN = 0; drawGalaxy(); });
+  gcv.addEventListener('click', (e) => {
+    const r = gcv.getBoundingClientRect(), hit = nearest(e.clientX - r.left, e.clientY - r.top);
+    if (!hit) return;
+    if (hit.claimed) openPlanet(hit.n);
+    else { look.n = hit.n; numIn.value = hit.n; changed(); $('design').scrollIntoView({ behavior: reduce ? 'auto' : 'smooth' }); showToast('No. ' + pad(hit.n) + ' is free. Design it.'); }
+  });
+  let mapVisible = false;
+  new IntersectionObserver((es) => { mapVisible = es[0].isIntersecting; }).observe(gcv);
+  (function spinLoop() { if (!reduce && mapVisible && !document.hidden) { spin += 0.0009; drawGalaxy(); } requestAnimationFrame(spinLoop); })();
+  addEventListener('resize', sizeGalaxy);
+
+  let filter = 'all';
+  $('filters').addEventListener('click', (e) => { const b = e.target.closest('button'); if (!b) return; filter = b.dataset.f; [...$('filters').children].forEach((x) => x.setAttribute('aria-pressed', String(x === b))); renderResults(); });
+  $('search').addEventListener('input', renderResults);
+  function renderResults() {
+    const q = $('search').value.trim().toLowerCase(), num = q.replace(/^no\.?\s*|^#/, '');
+    let list = [...planets.values()];
+    if (filter === 'lucky') list = list.filter((p) => lucky(p.n));
+    if (filter === 'mine') list = list.filter((p) => p.owner === (reg.mode === 'db' ? reg.uid : 'me'));
+    if (q) list = list.filter((p) => p.name.toLowerCase().includes(q) || (p.to || '').toLowerCase().includes(q) || (/^\d+$/.test(num) && String(p.n).includes(String(+num))));
+    list.sort(filter === 'new' || !q ? (a, b) => b.at - a.at : (a, b) => a.n - b.n);
+    const box = $('results'); box.textContent = '';
+    list.slice(0, 80).forEach((p) => {
+      const b = el('button', 'result'); b.type = 'button';
+      const t = el('span', 't'); t.append(el('b', '', p.name), el('small', '', (p.to ? 'Registered to ' + p.to : '') + ' · ' + WORLDS[p.world].name));
+      b.append(orbEl(p, false), t, el('span', 'no' + (lucky(p.n) ? ' lucky' : ''), 'No. ' + pad(p.n)));
+      b.addEventListener('click', () => openPlanet(p.n));
+      box.appendChild(b);
+    });
+    if (!list.length) {
+      const e = el('div', 'empty');
+      if (/^\d+$/.test(num) && +num >= 1 && +num <= MAX && !planets.has(+num)) {
+        e.append(el('span', '', 'No. ' + pad(+num) + ' is still free.'));
+        const go = el('button', 'btn primary small', 'Claim No. ' + pad(+num)); go.type = 'button';
+        go.addEventListener('click', () => { look.n = +num; numIn.value = +num; changed(); $('design').scrollIntoView({ behavior: reduce ? 'auto' : 'smooth' }); });
+        e.appendChild(go);
+      } else if (!planets.size) {
+        const b = el('b', '', 'The universe is waiting.'); e.append(b, el('span', '', 'No planets have been claimed yet. Planet No. 0001 is still free.'));
+        const go = el('a', 'btn primary small', 'Claim the first planet'); go.href = '#design'; e.appendChild(go);
+      } else e.append(el('span', '', filter === 'mine' ? 'You have not claimed a planet yet.' : 'No planet matches “' + $('search').value + '”.'));
+      box.appendChild(e);
+    }
+  }
+  let hashOpened = false;
+  function onRegistry() {
+    const c = planets.size.toLocaleString('en-US');
+    $('topCount').textContent = c; $('mapCount').textContent = c;
+    renderResults(); drawGalaxy(); updateDesigner();
+    const m = /^#p(\d{4})$/.exec(location.hash);
+    if (m && !hashOpened && planets.has(+m[1])) { hashOpened = true; openPlanet(+m[1]); }
+  }
 
   // ---------- scroll + pointer state (shared with the 3D scene) ----------
   const state = { target: 0, p: 0, mx: 0, my: 0, sx: 0, sy: 0 };
@@ -592,7 +954,6 @@ h3 { font-size: 20px; letter-spacing: -0.02em; font-weight: 700; margin: 0; }
     state.target = Math.min(1, Math.max(0, scrollY / max));
     hint.style.opacity = scrollY > 30 ? '0' : '';
     topBar.classList.toggle('scrolled', scrollY > 40);
-    // Which chapter is closest to the middle of the screen.
     let best = 0, bestD = Infinity;
     stops.forEach((s, i) => {
       const r = s.getBoundingClientRect();
@@ -606,7 +967,13 @@ h3 { font-size: 20px; letter-spacing: -0.02em; font-weight: 700; margin: 0; }
   addEventListener('scroll', readScroll, { passive: true });
   addEventListener('resize', readScroll);
   addEventListener('pointermove', (e) => { state.mx = (e.clientX / innerWidth) * 2 - 1; state.my = (e.clientY / innerHeight) * 2 - 1; }, { passive: true });
-  readScroll();
+
+  // ---------- start ----------
+  look.n = freeNumber() || 1; numIn.value = look.n;
+  nameIn.value = ''; look.name = 'Your Planet';
+  sizeGalaxy(); readScroll(); changed();
+  if (document.fonts) document.fonts.ready.then(() => changed());
+  initRegistry();
 
   if (!window.THREE) return; // No WebGL library: the page still reads fine on its gradient background.
   const canvas = document.getElementById('space');
@@ -861,7 +1228,7 @@ h3 { font-size: 20px; letter-spacing: -0.02em; font-weight: 700; margin: 0; }
     x.clearRect(0, 0, 1024, 256);
     x.textAlign = 'center'; x.textBaseline = 'middle';
     x.font = '500 30px "JetBrains Mono", monospace'; x.fillStyle = 'rgba(255,255,255,0.55)';
-    x.fillText('ORBIT  ·  ' + w.name.toUpperCase(), 512, 66);
+    x.fillText('NO. ' + pad(look.n) + '  ·  ' + w.name.toUpperCase(), 512, 66);
     x.font = '800 112px Inter, system-ui, sans-serif'; x.shadowColor = w.css; x.shadowBlur = 40; x.fillStyle = '#ffffff';
     let size = 112;
     while (x.measureText(look.name).width > 960 && size > 40) { size -= 6; x.font = '800 ' + size + 'px Inter, system-ui, sans-serif'; }
@@ -1034,7 +1401,7 @@ h3 { font-size: 20px; letter-spacing: -0.02em; font-weight: 700; margin: 0; }
       c.position.x = u.base.x + Math.cos(t * 0.4 + u.phase) * 0.2;
     });
     // The brand tag shows while the planet is the subject, and bows out as you fly past.
-    tag.material.opacity = 0.95 * (1 - Math.min(1, Math.max(0, (state.p - 0.22) / 0.12)));
+    tag.material.opacity = 0.95 * (1 - Math.min(1, Math.max(0, (state.p - 0.3) / 0.14)));
     tag.position.y = PLANET_R * 1.08 + Math.sin(t * 0.8) * 0.15;
     halo.rotation.z = t * 0.05;
     // The mark only appears as you near the end of the flight.
@@ -1064,5 +1431,6 @@ h3 { font-size: 20px; letter-spacing: -0.02em; font-weight: 700; margin: 0; }
     requestAnimationFrame(tick);
   }
   requestAnimationFrame((n) => { last = n; tick(n); canvas.classList.add('ready'); });
+
 })();
 </script>

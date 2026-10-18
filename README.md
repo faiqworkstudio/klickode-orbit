@@ -1,13 +1,20 @@
 # Klickode Orbit
 
-The cinematic line of Klickode Studio: 3D scroll websites people fly through. Customers move inward through orbits: **Outer** (Orbit Lite and Kit), **Inner** (Orbit Launch, 14 days), **Stay in orbit** (Care), and the **Core** (Klickode Studio work). Every project is a mission (`ORB-001`…) in the Mission log.
+**Own a planet. Build a world inside.** Orbit is a shared universe of 9,999 Genesis planets. People design a planet (name, colours, ring, moon, crystals), claim its number, write a small world inside it (a dedication and three chapters), and get a certificate of ownership with a fingerprint code and a generated seal. Anyone can search the universe by planet name, number or owner.
 
 | File | What it is |
 |---|---|
-| `index.html` | The Orbit site: WebGL flight, live planet builder, Mission log of four concept missions, orbit pricing, and a mission-brief composer with lift-off dates. |
-| `plan.html` | Orbit strategy: role in the Klickode portfolio, the orbit/gravity model, name system, portfolio playbook, market, revenue model, marketing cadence, roadmap, risks and KPIs. |
+| `index.html` | The Orbit site: 3D flight, planet designer with live pricing, galaxy map and search, planet sheet (world inside + certificate), how it works, FAQ and brand star systems. |
+| `plan.html` | Orbit strategy: product, why it sells, occasions calendar, price ladder and lucky numbers, revenue model, marketing, role in the Klickode portfolio, roadmap, risks and KPIs. |
 | `original.html` | The original concept page, kept for reference. |
 
-`index.html` is written as an artifact body (no `<html>/<head>` wrapper). To self-host it, wrap it in a standard
-`<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head><body>…</body></html>`.
-Both pages load three.js r128 and Google Fonts from public CDNs.
+## Registry storage
+
+When published as a claude.ai artifact, claims are shared between visitors through the artifact database:
+
+- `claims/<number>`: `{owner, at}`. The lock that makes one number belong to one owner (claimed with a short lease).
+- `worlds/<user id>`: `{planets: {<number>: planet}}`. Each person writes only their own document; everyone reads all of them.
+
+Opened anywhere else, the page keeps planets in the browser's local storage so the full flow still works. Payments are not wired up: claiming is free in this preview.
+
+`index.html` is written as an artifact body (no `<html>/<head>` wrapper). To self-host it, wrap it in a standard document shell. Both pages load three.js r128 and Google Fonts from public CDNs.
