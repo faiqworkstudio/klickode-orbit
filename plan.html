@@ -3,13 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Orbit Business Plan</title>
+<title>Orbit Strategy</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap">
 <style>
-/* Layout: one reading column on the same night sky as the Orbit site, with wide bands for the model, the table and the timeline. */
+/* Layout: a mission dossier on the Orbit night sky. One reading column, with the system map, model and timeline breaking wide. */
 :root {
   --void: #06070a;
   --surface: #0e0f15;
@@ -21,10 +21,11 @@
   --red-soft: #ff7070;
   --edge: rgba(255, 255, 255, 0.1);
   --edge-hi: rgba(255, 255, 255, 0.24);
-  /* chart series, validated for the dark surface */
+  /* rings of the system, also the chart series (validated on the dark surface, adjacent pairs in stack order) */
   --s-kit: #ef4444;
   --s-launch: #8c74ff;
   --s-care: #c97b28;
+  --s-studio: #2a9d8f;
   --display: 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
   --accent-face: 'Instrument Serif', 'Iowan Old Style', Georgia, serif;
   --mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
@@ -39,7 +40,7 @@ a { color: var(--red-soft); text-underline-offset: 3px; }
 ::selection { background: var(--red); color: #fff; }
 #sky { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
 .glow { position: fixed; inset: 0; z-index: 0; pointer-events: none; background: radial-gradient(70% 50% at 85% 0%, rgba(224, 49, 49, 0.18), transparent 70%), radial-gradient(60% 50% at 0% 100%, rgba(123, 92, 255, 0.12), transparent 70%); }
-.wrap { position: relative; z-index: 1; width: min(100%, 1120px); margin: 0 auto; padding-left: max(20px, env(safe-area-inset-left, 0px)); padding-right: max(20px, env(safe-area-inset-right, 0px)); }
+.wrap { position: relative; z-index: 1; width: min(100%, 1160px); margin: 0 auto; padding-left: max(20px, env(safe-area-inset-left, 0px)); padding-right: max(20px, env(safe-area-inset-right, 0px)); }
 
 header.bar { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-block: 22px; }
 .brand { display: flex; align-items: center; gap: 11px; text-decoration: none; color: var(--text); }
@@ -49,32 +50,44 @@ header.bar { display: flex; align-items: center; justify-content: space-between;
 .pill { display: inline-flex; align-items: center; height: 38px; padding: 0 18px; border-radius: 999px; text-decoration: none; font-size: 13px; font-weight: 600; color: var(--text); border: 1px solid var(--edge); background: rgba(255, 255, 255, 0.03); }
 .pill:hover { border-color: var(--edge-hi); }
 
-.hero { overflow-x: clip; padding-block: 80px 70px; display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: 40px; align-items: center; }
 .eyebrow { display: inline-flex; align-items: center; gap: 11px; font-family: var(--mono); font-size: 11px; letter-spacing: 0.24em; text-transform: uppercase; color: var(--dim); }
-.eyebrow::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--red); box-shadow: 0 0 12px var(--red); }
+.eyebrow::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--red); box-shadow: 0 0 12px var(--red); flex: none; }
 h1, h2, h3 { text-wrap: balance; margin: 0; }
-h1 { font-size: clamp(44px, 6.6vw, 92px); line-height: 0.95; letter-spacing: -0.05em; font-weight: 800; margin-block: 22px 26px; }
+h1 { font-size: clamp(44px, 6.4vw, 90px); line-height: 0.95; letter-spacing: -0.05em; font-weight: 800; margin-block: 22px 26px; }
 h2 { font-size: clamp(32px, 4.2vw, 54px); line-height: 1; letter-spacing: -0.045em; font-weight: 800; margin-block: 14px 18px; }
 h3 { font-size: 19px; letter-spacing: -0.02em; font-weight: 700; }
 h1 em, h2 em { font-family: var(--accent-face); font-style: italic; font-weight: 400; letter-spacing: -0.01em; color: var(--red-soft); }
-.lede { font-size: clamp(17px, 1.5vw, 19.5px); color: var(--dim); max-width: 56ch; margin: 0; }
+.lede { font-size: clamp(17px, 1.5vw, 19.5px); color: var(--dim); max-width: 54ch; margin: 0; }
 p { margin: 0; }
 .prose { display: grid; gap: 14px; max-width: 66ch; color: var(--dim); }
 .prose strong { color: var(--text); font-weight: 600; }
 
-/* The hero orbit: a CSS drawing of the planet, ring and three moons, one per product. */
-.orrery { position: relative; aspect-ratio: 1; width: min(100%, 380px); justify-self: center; }
-.orrery .planet { position: absolute; inset: 31%; border-radius: 50%; background: radial-gradient(circle at 34% 30%, #ff8a6e, #e03131 38%, #5a0d16 78%, #1a0508); box-shadow: 0 0 80px rgba(224, 49, 49, 0.55), inset -18px -22px 40px rgba(0, 0, 0, 0.6); }
-.orrery .track { position: absolute; border-radius: 50%; border: 1px solid var(--edge); }
-.orrery .track.t1 { inset: 20%; } .orrery .track.t2 { inset: 9%; border-style: dashed; } .orrery .track.t3 { inset: 0; }
-.orrery .arm { position: absolute; inset: 0; animation: spin linear infinite; }
-.orrery .arm { animation-duration: var(--d); animation-direction: var(--dir, normal); }
-.orrery .arm.a1 { inset: 20%; --d: 18s; } .orrery .arm.a2 { inset: 9%; --d: 30s; --dir: reverse; } .orrery .arm.a3 { --d: 46s; }
-.orrery .moon { position: absolute; top: 50%; left: 100%; transform: translate(-50%, -50%); display: flex; align-items: center; gap: 8px; }
-.orrery .moon i { width: 14px; height: 14px; border-radius: 50%; background: var(--c); box-shadow: 0 0 16px var(--c); flex: none; }
-.orrery .moon span { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--dim); white-space: nowrap; animation: counter var(--d) linear infinite; animation-direction: var(--dir, normal); }
+/* ---------- hero + system map ---------- */
+.hero { padding-block: 70px 60px; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr); gap: 40px; align-items: center; overflow-x: clip; }
+.system { display: grid; gap: 18px; }
+.map { width: min(100%, 520px); justify-self: center; }
+.map svg { display: block; width: 100%; height: auto; overflow: visible; }
+.map .ring { fill: none; stroke: var(--edge-hi); stroke-width: 1; transition: stroke 0.3s, stroke-width 0.3s; }
+.map .ring.dashed { stroke-dasharray: 3 6; }
+.map .hit { fill: none; stroke: transparent; stroke-width: 26; cursor: pointer; pointer-events: stroke; }
+.map .hit:focus { outline: none; }
+.map g.orbit.on .ring, .map g.orbit:hover .ring { stroke: var(--c); stroke-width: 2; }
+.map g.orbit:focus-visible .ring { stroke: var(--c); stroke-width: 2.5; }
+.map .moon { fill: var(--c); }
+.map .moon-glow { fill: var(--c); opacity: 0.25; }
+.map .spin { transform-origin: 260px 260px; animation: spin linear infinite; }
+.map .label { fill: var(--dim); font: 500 11px var(--mono); letter-spacing: 0.14em; text-transform: uppercase; pointer-events: none; }
+.map g.orbit.on .label { fill: var(--text); }
+.map .core { cursor: pointer; }
 @keyframes spin { to { transform: rotate(360deg); } }
-@keyframes counter { to { transform: rotate(-360deg); } }
+.ringcard { background: var(--surface); border: 1px solid var(--edge); border-radius: 18px; padding: 20px 22px; display: grid; gap: 8px; min-height: 176px; border-top: 2px solid var(--c, var(--red)); }
+.ringcard .k { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--faint); }
+.ringcard p { color: var(--dim); font-size: 14.5px; }
+.ringcard p b { color: var(--text); font-weight: 600; }
+.ringtabs { display: flex; flex-wrap: wrap; gap: 6px; }
+.ringtabs button { height: 32px; padding: 0 12px; border-radius: 999px; border: 1px solid var(--edge); background: transparent; color: var(--dim); font: 500 12px var(--display); cursor: pointer; display: inline-flex; align-items: center; gap: 7px; }
+.ringtabs button::before { content: ''; width: 8px; height: 8px; border-radius: 50%; background: var(--c); }
+.ringtabs button[aria-selected=true] { color: var(--text); border-color: var(--edge-hi); background: rgba(255, 255, 255, 0.05); }
 
 .summary { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border-block: 1px solid var(--edge); margin-bottom: 30px; }
 .summary div { padding: 22px 20px 22px 0; min-width: 0; }
@@ -83,7 +96,7 @@ p { margin: 0; }
 .summary dd { margin: 6px 0 0; font-size: 28px; font-weight: 800; letter-spacing: -0.03em; font-variant-numeric: tabular-nums; line-height: 1.15; }
 .summary dd small { display: block; font-size: 13px; font-weight: 400; letter-spacing: 0; color: var(--dim); margin-top: 4px; }
 
-section.part { padding-block: 80px; border-top: 1px solid var(--edge); display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 20px 48px; }
+section.part { padding-block: 80px; border-top: 1px solid var(--edge); display: grid; grid-template-columns: 200px minmax(0, 1fr); gap: 20px 48px; }
 section.part > .side { position: sticky; top: 24px; align-self: start; }
 section.part > .side .num { font-family: var(--mono); font-size: 11px; letter-spacing: 0.2em; color: var(--red-soft); }
 section.part > .side .label { display: block; margin-top: 8px; font-family: var(--mono); font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--faint); }
@@ -96,10 +109,21 @@ section.part > .body { min-width: 0; display: grid; gap: 28px; align-content: st
 .card p { color: var(--dim); font-size: 15px; }
 .card .big { font-size: 30px; font-weight: 800; letter-spacing: -0.03em; font-variant-numeric: tabular-nums; }
 .card.hl { border-color: rgba(255, 112, 112, 0.45); background: linear-gradient(160deg, rgba(224, 49, 49, 0.14), var(--surface) 55%); }
-.dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: var(--c); margin-right: 8px; vertical-align: 0; }
+.dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: var(--c); margin-right: 8px; vertical-align: 0; flex: none; }
+
+/* brand architecture */
+.arch { display: grid; grid-template-columns: minmax(0, 1fr) 70px minmax(0, 1fr); gap: 0; align-items: stretch; }
+.arch .side-a, .arch .side-b { background: var(--surface); border: 1px solid var(--edge); border-radius: 18px; padding: 22px; display: grid; gap: 12px; align-content: start; min-width: 0; }
+.arch .side-b { border-color: rgba(255, 112, 112, 0.45); background: linear-gradient(160deg, rgba(224, 49, 49, 0.16), var(--surface) 60%); }
+.arch .link { display: grid; place-items: center; position: relative; }
+.arch .link::before { content: ''; position: absolute; left: 0; right: 0; top: 50%; border-top: 1px dashed var(--edge-hi); }
+.arch .link span { position: relative; font-family: var(--mono); font-size: 10px; letter-spacing: 0.16em; color: var(--faint); background: var(--void); padding: 4px 6px; text-transform: uppercase; }
+.arch ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 8px; }
+.arch li { display: flex; justify-content: space-between; gap: 12px; font-size: 14.5px; color: var(--dim); border-top: 1px solid var(--edge); padding-top: 8px; }
+.arch li b { color: var(--text); font-weight: 600; }
 
 .tablebox { overflow-x: auto; border: 1px solid var(--edge); border-radius: 16px; background: var(--surface); }
-table { width: 100%; border-collapse: collapse; font-size: 14.5px; min-width: 640px; }
+table { width: 100%; border-collapse: collapse; font-size: 14.5px; min-width: 680px; }
 th, td { text-align: left; padding: 14px 16px; border-bottom: 1px solid var(--edge); vertical-align: top; }
 th { font-family: var(--mono); font-size: 10.5px; font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase; color: var(--faint); background: var(--surface-2); }
 tr:last-child td { border-bottom: 0; }
@@ -107,19 +131,42 @@ td { color: var(--dim); }
 td:first-child { color: var(--text); font-weight: 600; }
 td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
 tfoot td { color: var(--text); font-weight: 700; background: var(--surface-2); }
+td .ringname { display: inline-flex; align-items: center; white-space: nowrap; }
+
+/* vocabulary */
+.lexicon { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 32px; border-top: 1px solid var(--edge); }
+.lexicon div { display: grid; grid-template-columns: 150px minmax(0, 1fr); gap: 14px; padding-block: 16px; border-bottom: 1px solid var(--edge); min-width: 0; }
+.lexicon dt { font-family: var(--accent-face); font-style: italic; font-size: 24px; line-height: 1.1; color: var(--text); }
+.lexicon dd { margin: 0; color: var(--dim); font-size: 14.5px; }
+.lexicon dd code { font-family: var(--mono); font-size: 12.5px; color: var(--red-soft); }
+
+/* mission kit: what every project produces */
+.deliverables { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 0; border: 1px solid var(--edge); border-radius: 18px; overflow: hidden; background: var(--surface); }
+.deliverables div { padding: 20px 18px; display: grid; gap: 8px; align-content: start; min-width: 0; }
+.deliverables div + div { border-left: 1px solid var(--edge); }
+.deliverables .n { font-family: var(--mono); font-size: 11px; color: var(--red-soft); letter-spacing: 0.12em; }
+.deliverables p { font-size: 14px; color: var(--dim); }
+
+/* monthly cadence */
+.cadence { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0; position: relative; }
+.cadence::before { content: ''; position: absolute; left: 0; right: 0; top: 14px; border-top: 1px dashed var(--edge-hi); }
+.cadence div { position: relative; padding: 0 16px 0 0; display: grid; gap: 8px; align-content: start; min-width: 0; }
+.cadence i { width: 28px; height: 28px; border-radius: 50%; background: var(--void); border: 1.5px solid var(--red-soft); display: grid; place-items: center; font: 500 11px var(--mono); font-style: normal; color: var(--red-soft); }
+.cadence div:last-child i { background: var(--red); border-color: var(--red); color: #fff; }
+.cadence p { font-size: 14.5px; color: var(--dim); }
 
 /* revenue model */
 .model { background: var(--surface); border: 1px solid var(--edge); border-radius: 22px; padding: 26px; display: grid; gap: 26px; }
-.controls { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; }
-.control { display: grid; gap: 8px; min-width: 0; }
+.controls { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 20px; }
+.control { display: grid; gap: 8px; min-width: 0; align-content: start; }
 .control label { display: flex; justify-content: space-between; gap: 10px; font-size: 14px; color: var(--dim); }
 .control output { font-family: var(--mono); font-size: 13px; color: var(--text); font-variant-numeric: tabular-nums; white-space: nowrap; }
 .control input[type=range] { width: 100%; accent-color: var(--red); }
 .control small { font-size: 12.5px; color: var(--faint); }
-.totals { display: flex; flex-wrap: wrap; gap: 14px 40px; align-items: end; }
+.totals { display: flex; flex-wrap: wrap; gap: 14px 36px; align-items: end; }
 .totals .t b { display: block; font-size: clamp(34px, 4vw, 48px); font-weight: 800; letter-spacing: -0.04em; line-height: 1; font-variant-numeric: tabular-nums; }
 .totals .t span { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--faint); }
-.totals .t.sub b { font-size: 24px; color: var(--dim); }
+.totals .t.sub b { font-size: 22px; color: var(--dim); }
 .legend { display: flex; flex-wrap: wrap; gap: 8px 20px; font-size: 13.5px; color: var(--dim); }
 .chart { position: relative; }
 .chart svg { display: block; width: 100%; height: auto; overflow: visible; }
@@ -127,23 +174,23 @@ tfoot td { color: var(--text); font-weight: 700; background: var(--surface-2); }
 .chart .grid line { stroke: var(--edge); }
 .chart .baseline { stroke: var(--edge-hi); }
 .chart .hit { fill: transparent; cursor: crosshair; }
-.chart .col.dim rect.seg { opacity: 0.35; }
-.tip { position: absolute; pointer-events: none; z-index: 3; background: var(--surface-2); border: 1px solid var(--edge-hi); border-radius: 12px; padding: 12px 14px; font-size: 13px; min-width: 190px; box-shadow: 0 20px 50px -20px rgba(0, 0, 0, 0.9); }
+.chart .col.dim .seg { opacity: 0.35; }
+.tip { position: absolute; pointer-events: none; z-index: 3; background: var(--surface-2); border: 1px solid var(--edge-hi); border-radius: 12px; padding: 12px 14px; font-size: 13px; min-width: 210px; box-shadow: 0 20px 50px -20px rgba(0, 0, 0, 0.9); }
 .tip b { display: block; margin-bottom: 6px; font-size: 13px; }
 .tip div { display: flex; justify-content: space-between; gap: 16px; color: var(--dim); font-variant-numeric: tabular-nums; }
 .tip div.sum { color: var(--text); font-weight: 700; margin-top: 6px; padding-top: 6px; border-top: 1px solid var(--edge); }
 details.tableview summary { cursor: pointer; font-size: 14px; color: var(--dim); }
 details.tableview[open] summary { margin-bottom: 14px; }
-.note { font-size: 13.5px; color: var(--faint); max-width: 70ch; }
+.note { font-size: 13.5px; color: var(--faint); max-width: 74ch; }
 
-.channels { display: grid; gap: 0; border-top: 1px solid var(--edge); }
-.channel { display: grid; grid-template-columns: 170px minmax(0, 1fr) 120px; gap: 8px 24px; padding-block: 20px; border-bottom: 1px solid var(--edge); align-items: baseline; }
+.channels { display: grid; border-top: 1px solid var(--edge); }
+.channel { display: grid; grid-template-columns: 180px minmax(0, 1fr) 130px; gap: 8px 24px; padding-block: 18px; border-bottom: 1px solid var(--edge); align-items: baseline; }
 .channel h3 { font-size: 16px; }
 .channel p { color: var(--dim); font-size: 15px; }
 .channel .cost { font-family: var(--mono); font-size: 11.5px; color: var(--faint); text-align: right; letter-spacing: 0.06em; }
 
-.timeline { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; counter-reset: q; }
-.phase { position: relative; padding: 22px 20px; border-radius: 18px; background: var(--surface); border: 1px solid var(--edge); display: grid; gap: 10px; align-content: start; min-width: 0; }
+.timeline { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; }
+.phase { padding: 22px 20px; border-radius: 18px; background: var(--surface); border: 1px solid var(--edge); display: grid; gap: 10px; align-content: start; min-width: 0; }
 .phase .when { font-family: var(--mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--red-soft); }
 .phase ul { margin: 0; padding-left: 18px; color: var(--dim); font-size: 14.5px; display: grid; gap: 6px; }
 .phase .goal { margin-top: 4px; padding-top: 12px; border-top: 1px solid var(--edge); font-size: 13.5px; color: var(--text); }
@@ -159,22 +206,34 @@ footer { position: relative; z-index: 1; border-top: 1px solid var(--edge); }
 footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 10px 24px; padding-block: 26px 60px; font-size: 13px; color: var(--faint); }
 footer a { color: var(--dim); text-decoration: none; }
 
+@media (max-width: 1000px) {
+  .controls { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .deliverables { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .deliverables div + div { border-left: 0; }
+  .deliverables div { border-top: 1px solid var(--edge); }
+  .lexicon { grid-template-columns: minmax(0, 1fr); }
+}
 @media (max-width: 900px) {
-  .hero { grid-template-columns: minmax(0, 1fr); padding-block: 40px; }
-  .orrery { width: min(78%, 320px); }
+  .hero { grid-template-columns: minmax(0, 1fr); padding-block: 36px; }
   section.part { grid-template-columns: minmax(0, 1fr); padding-block: 60px; }
   section.part > .side { position: static; }
-  .cards, .controls, .timeline { grid-template-columns: minmax(0, 1fr); }
-  .cards.two { grid-template-columns: minmax(0, 1fr); }
+  .cards, .timeline, .controls, .cards.two { grid-template-columns: minmax(0, 1fr); }
   .summary { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .summary div:nth-child(3) { padding-left: 0; border-left: 0; }
   .summary div:nth-child(n+3) { border-top: 1px solid var(--edge); }
   .channel { grid-template-columns: minmax(0, 1fr); }
   .channel .cost { text-align: left; }
+  .arch { grid-template-columns: minmax(0, 1fr); }
+  .arch .link { height: 44px; }
+  .arch .link::before { left: 50%; right: auto; top: 0; bottom: 0; border-top: 0; border-left: 1px dashed var(--edge-hi); }
+  .cadence { grid-template-columns: minmax(0, 1fr); gap: 18px; }
+  .cadence::before { display: none; }
+  .deliverables { grid-template-columns: minmax(0, 1fr); }
+  .lexicon div { grid-template-columns: minmax(0, 1fr); gap: 4px; }
 }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
-  .orrery .arm, .orrery .moon span { animation: none; }
+  .map .spin { animation: none; }
 }
 </style>
 </head>
@@ -193,116 +252,180 @@ footer a { color: var(--dim); text-decoration: none; }
 
   <section class="hero" aria-labelledby="h">
     <div>
-      <span class="eyebrow">Business plan · Year one · Oct 2026</span>
-      <h1 id="h">One planet, <em>three products.</em></h1>
-      <p class="lede">Klickode Orbit sells the feeling people get when a website moves like a film. We package that feeling three ways: a kit anyone can buy, a launch we build for you, and a monthly plan that keeps it fresh.</p>
+      <span class="eyebrow">Strategy · Klickode Orbit · Oct 2026</span>
+      <h1 id="h">Everything we launch <em>stays in orbit.</em></h1>
+      <p class="lede">Orbit is the flagship line of Klickode Studio. It wins attention with cinematic 3D launches, then holds clients in a system of orbits that pulls them closer to the studio over time. The name is the business model.</p>
     </div>
-    <div class="orrery" aria-hidden="true">
-      <div class="track t1"></div><div class="track t2"></div><div class="track t3"></div>
-      <div class="planet"></div>
-      <div class="arm a1"><div class="moon"><i style="--c: var(--s-kit)"></i><span>Kit</span></div></div>
-      <div class="arm a2"><div class="moon"><i style="--c: var(--s-launch)"></i><span>Launch</span></div></div>
-      <div class="arm a3"><div class="moon"><i style="--c: var(--s-care)"></i><span>Care</span></div></div>
+    <div class="system">
+      <div class="map">
+        <svg viewBox="0 0 520 520" role="group" aria-label="The Orbit system: Klickode Studio at the core, with three orbits around it">
+          <defs>
+            <radialGradient id="coreGlow"><stop offset="0" stop-color="#e03131" stop-opacity="0.55"/><stop offset="1" stop-color="#e03131" stop-opacity="0"/></radialGradient>
+          </defs>
+          <g class="orbit" data-ring="outer" style="--c: var(--s-kit)" tabindex="0" role="button" aria-label="Outer orbit: Reach">
+            <circle class="ring dashed" cx="260" cy="260" r="236"/><circle class="hit" cx="260" cy="260" r="236"/>
+            <g class="spin" style="animation-duration: 60s"><circle class="moon-glow" cx="496" cy="260" r="16"/><circle class="moon" cx="496" cy="260" r="8"/><circle class="moon" cx="24" cy="260" r="5" opacity="0.7"/><circle class="moon" cx="260" cy="24" r="4" opacity="0.5"/></g>
+            <text class="label" x="260" y="16" text-anchor="middle">Outer orbit · Reach</text>
+          </g>
+          <g class="orbit" data-ring="inner" style="--c: var(--s-launch)" tabindex="0" role="button" aria-label="Inner orbit: Launch">
+            <circle class="ring" cx="260" cy="260" r="168"/><circle class="hit" cx="260" cy="260" r="168"/>
+            <g class="spin" style="animation-duration: 38s; animation-direction: reverse"><circle class="moon-glow" cx="260" cy="428" r="18"/><circle class="moon" cx="260" cy="428" r="10"/></g>
+            <text class="label" x="260" y="84" text-anchor="middle">Inner orbit · Launch</text>
+          </g>
+          <g class="orbit" data-ring="stay" style="--c: var(--s-care)" tabindex="0" role="button" aria-label="Stay in orbit: Care">
+            <circle class="ring" cx="260" cy="260" r="108"/><circle class="hit" cx="260" cy="260" r="108"/>
+            <g class="spin" style="animation-duration: 22s"><circle class="moon-glow" cx="368" cy="260" r="14"/><circle class="moon" cx="368" cy="260" r="7"/><circle class="moon" cx="152" cy="260" r="5" opacity="0.7"/></g>
+            <text class="label" x="260" y="144" text-anchor="middle">Stay in orbit · Care</text>
+          </g>
+          <g class="orbit core" data-ring="core" style="--c: var(--red)" tabindex="0" role="button" aria-label="Core: Klickode Studio">
+            <circle cx="260" cy="260" r="70" fill="url(#coreGlow)"/>
+            <g transform="translate(222 222) scale(0.0655)"><rect x="45" y="45" width="1160" height="1160" rx="240" fill="#E03131"/><g fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round"><path d="M268 222 L336 280" stroke-width="36"/><path d="M392 182 L389 256" stroke-width="36"/><path d="M230 340 L318 330" stroke-width="36"/></g><path fill="#fff" d="M382 348 C 372 300, 425 272, 462 298 L 868 575 C 902 598, 900 640, 864 648 L 770 684 L 870 818 C 895 850, 880 900, 845 920 L 830 928 C 800 945, 770 935, 752 910 L 647 760 L 595 832 C 575 862, 540 872, 515 860 C 500 853, 494 840, 492 826 Z"/></g>
+            <text class="label" x="260" y="322" text-anchor="middle">Core · Studio</text>
+          </g>
+        </svg>
+      </div>
+      <div class="ringtabs" role="tablist" aria-label="Orbits" id="ringTabs"></div>
+      <div class="ringcard" id="ringCard" role="tabpanel" aria-live="polite"></div>
     </div>
   </section>
 
-  <dl class="summary" aria-label="Plan at a glance">
+  <dl class="summary" aria-label="Strategy at a glance">
     <div><dt>Year-one revenue</dt><dd id="sumYear">$0<small>base case, from the model below</small></dd></div>
-    <div><dt>Month-12 run rate</dt><dd id="sumRun">$0<small>per month</small></dd></div>
-    <div><dt>Cash to start</dt><dd>≈ $1,500<small>ads, domain, store, video tools</small></dd></div>
-    <div><dt>Team</dt><dd>2 people<small>one builder, one seller</small></dd></div>
+    <div><dt>From studio work</dt><dd id="sumHalo">0%<small>of it pulled in by Orbit</small></dd></div>
+    <div><dt>Missions flown</dt><dd id="sumMissions">0<small>launches in year one</small></dd></div>
+    <div><dt>Cash to start</dt><dd>≈ $1,500<small>ads, store, video tools</small></dd></div>
   </dl>
 
   <section class="part" aria-labelledby="p1">
-    <div class="side"><span class="num">01</span><span class="label">The idea</span></div>
+    <div class="side"><span class="num">01</span><span class="label">Orbit’s job</span></div>
     <div class="body">
-      <h2 id="p1">Sell the <em>flight,</em> not the website.</h2>
+      <h2 id="p1">The flagship that makes <em>the whole studio</em> look bigger.</h2>
       <div class="prose">
-        <p>Most small businesses have a website that looks like every other website. A few big brands have homepages that feel like a short film, but those take agencies months and cost far more than a shop, café or startup can pay.</p>
-        <p><strong>Orbit closes that gap.</strong> We already have the engine: a 3D space you scroll through, a planet in your colours, chapters of real text, and a logo that arrives at the end. Each new client is a new world on the same engine, so the tenth build costs a fraction of the first.</p>
-        <p>The design is the marketing. People screenshot it, record it and share it. Every Orbit we ship carries a small “Made in Orbit” link, so every client site becomes an ad.</p>
+        <p>Klickode Studio sells websites, online shops and business systems. That work is useful but hard to show off: a good stock system does not go viral. <strong>Orbit is the piece people share.</strong> It sits in the portfolio as the studio’s signature, and it does three jobs at once.</p>
+      </div>
+      <div class="arch" aria-label="Brand architecture">
+        <div class="side-a">
+          <span class="eyebrow">Klickode Studio</span>
+          <h3>The everyday work</h3>
+          <ul><li><b>Websites</b><span>company, portfolio</span></li><li><b>Online shops</b><span>catalogue, payments</span></li><li><b>Business systems</b><span>bookings, stock, CRM</span></li></ul>
+        </div>
+        <div class="link"><span>pulls</span></div>
+        <div class="side-b">
+          <span class="eyebrow">Klickode Orbit</span>
+          <h3>The cinematic line</h3>
+          <ul><li><b>Showcase</b><span>wins attention and awards</span></li><li><b>Magnet</b><span>brings leads to the studio</span></li><li><b>Engine</b><span>earns from kits and launches</span></li></ul>
+        </div>
       </div>
       <div class="cards">
-        <div class="card"><span class="k"><span class="dot" style="--c: var(--s-kit)"></span>Orbit Kit</span><h3>Buy the engine</h3><p>Template source code for designers, developers and makers worldwide. Sold online, delivered instantly, no time cost per sale.</p></div>
-        <div class="card hl"><span class="k"><span class="dot" style="--c: var(--s-launch)"></span>Orbit Launch</span><h3>We build your world</h3><p>A custom flight for a product launch, opening or campaign, live in 14 days. Highest price, and the work that fills the showcase.</p></div>
-        <div class="card"><span class="k"><span class="dot" style="--c: var(--s-care)"></span>Orbit Care</span><h3>Keep it alive</h3><p>Hosting, edits and seasonal worlds every month. Small, but it repeats, and it keeps clients coming back for the next launch.</p></div>
+        <div class="card"><span class="k">Job 1 · Showcase</span><h3>Proof of craft</h3><p>A prospect who has flown through an Orbit site trusts Klickode with their shop or system. One flagship lifts the price of everything else.</p></div>
+        <div class="card"><span class="k">Job 2 · Magnet</span><h3>Leads for the studio</h3><p>Orbit clients come for a launch and stay for the shop, the booking system, the next campaign. That studio work is where most of the long-term money is.</p></div>
+        <div class="card hl"><span class="k">Job 3 · Engine</span><h3>Revenue that scales</h3><p>The kit sells worldwide with no time per sale. Each launch reuses the same engine, so the tenth costs a fraction of the first.</p></div>
       </div>
     </div>
   </section>
 
   <section class="part" aria-labelledby="p2">
-    <div class="side"><span class="num">02</span><span class="label">Why it sells</span></div>
+    <div class="side"><span class="num">02</span><span class="label">The orbit model</span></div>
     <div class="body">
-      <h2 id="p2">The market is <em>tired of templates.</em></h2>
-      <div class="cards two">
-        <div class="card"><span class="k">Attention</span><h3>Feeds reward motion</h3><p>TikTok, Reels and Shorts favour things that move. A 20-second screen recording of an Orbit flight is native content for those feeds; a static homepage is not.</p></div>
-        <div class="card"><span class="k">Sameness</span><h3>AI made sites cheap and alike</h3><p>Website builders and AI tools now produce a decent page in minutes. That pushes the value toward what they cannot produce on demand: a distinct, crafted experience.</p></div>
-        <div class="card"><span class="k">Proven demand</span><h3>People already buy templates</h3><p>Designers and developers routinely pay for premium templates on Gumroad, Lemon Squeezy, Framer and Webflow marketplaces. Real-time 3D templates are still rare there.</p></div>
-        <div class="card"><span class="k">Home advantage</span><h3>Thai brands launch all year</h3><p>Bangkok has a constant flow of new cafés, beauty brands, condos, events and festivals, each needing a launch page. We work in Thai and English at Bangkok prices.</p></div>
+      <h2 id="p2">Each orbit has <em>gravity.</em></h2>
+      <div class="prose"><p>Customers enter from the outside and move inward. Every ring has one built-in offer, its gravity, that makes the next ring the obvious step. Nobody is sold twice from cold.</p></div>
+      <div class="tablebox">
+        <table>
+          <thead><tr><th>Orbit</th><th>Who is there</th><th>What they pay</th><th>Gravity: what pulls them inward</th></tr></thead>
+          <tbody>
+            <tr><td><span class="ringname"><span class="dot" style="--c: var(--s-kit)"></span>Outer · Reach</span></td><td>Designers, founders, anyone who saw a fly-through video</td><td>Free Orbit Lite, Kit $69–199</td><td>Kit buyers get ฿10,000 off a Launch. The best kit sites are featured in the Mission log.</td></tr>
+            <tr><td><span class="ringname"><span class="dot" style="--c: var(--s-launch)"></span>Inner · Launch</span></td><td>Brands with a launch date</td><td>฿79,000 per mission</td><td>Every Launch includes three months of Care, so the client is already in orbit when it ends.</td></tr>
+            <tr><td><span class="ringname"><span class="dot" style="--c: var(--s-care)"></span>Stay in orbit · Care</span></td><td>Launch clients after lift-off</td><td>฿3,900 a month</td><td>A quarterly mission review plans the next campaign, shop or system with the studio.</td></tr>
+            <tr><td><span class="ringname"><span class="dot" style="--c: var(--s-studio)"></span>Core · Studio</span></td><td>Long-term partners</td><td>Studio projects, about ฿90,000 each</td><td>Partners who refer a brand get a free seasonal world. The referral enters the outer orbit, and the cycle starts again.</td></tr>
+          </tbody>
+        </table>
       </div>
     </div>
   </section>
 
   <section class="part" aria-labelledby="p3">
-    <div class="side"><span class="num">03</span><span class="label">Who buys</span></div>
+    <div class="side"><span class="num">03</span><span class="label">Name system</span></div>
     <div class="body">
-      <h2 id="p3">Four kinds of <em>customer.</em></h2>
-      <div class="tablebox">
-        <table>
-          <thead><tr><th>Customer</th><th>What they need</th><th>What they buy</th><th>Where we find them</th></tr></thead>
-          <tbody>
-            <tr><td>Designers and developers, worldwide</td><td>A standout portfolio or a client project, fast</td><td>Orbit Kit, commercial licence</td><td>Product Hunt, X, Reddit web-design forums, template marketplaces</td></tr>
-            <tr><td>Thai brands launching something</td><td>A launch page people talk about</td><td>Orbit Launch + Care</td><td>Instagram, TikTok, LINE groups, referrals from photographers and event teams</td></tr>
-            <tr><td>Startups and founders</td><td>A homepage that makes a pitch feel bigger</td><td>Orbit Launch</td><td>Startup events in Bangkok, accelerator programmes, LinkedIn</td></tr>
-            <tr><td>Agencies with no 3D team</td><td>3D work they can resell under their own name</td><td>White-label Launch at partner rate</td><td>Direct outreach to small agencies in Thailand and the region</td></tr>
-          </tbody>
-        </table>
-      </div>
+      <h2 id="p3">Speak <em>Orbit</em> everywhere.</h2>
+      <div class="prose"><p>A name sticks when every touchpoint repeats it. These words go on the site, in quotes, in invoices and in the videos, so a client lives the idea from first click to final payment.</p></div>
+      <dl class="lexicon">
+        <div><dt>Mission</dt><dd>Every project, with a code: <code>ORB-001</code>, <code>ORB-002</code>. The code goes on the quote, the invoice and the site footer.</dd></div>
+        <div><dt>World</dt><dd>The planet theme a brand flies in: Klickode Red, Nebula Violet, Andaman Blue, Saffron Gold, Jade Garden, or a custom one.</dd></div>
+        <div><dt>Lift-off date</dt><dd>Launches go live on the 1st, 10th or 20th. Three windows a month makes the calendar visible and the scarcity real.</dd></div>
+        <div><dt>Flight</dt><dd>The scroll experience itself. “Fly through” replaces “scroll down” in every call to action.</dd></div>
+        <div><dt>Mission log</dt><dd>The portfolio. Each entry shows the brief, the idea, the chapters, the video and the results.</dd></div>
+        <div><dt>Stay in orbit</dt><dd>The Care plan. Leaving Care is “landing”, and landed clients can relaunch any time.</dd></div>
+        <div><dt>Gravity</dt><dd>The one offer on each ring that pulls a customer inward. Used internally to design every offer.</dd></div>
+        <div><dt>Fly-through</dt><dd>The 20-second video of each flight. The main piece of marketing, made for every mission.</dd></div>
+      </dl>
     </div>
   </section>
 
   <section class="part" aria-labelledby="p4">
-    <div class="side"><span class="num">04</span><span class="label">Price list</span></div>
+    <div class="side"><span class="num">04</span><span class="label">Portfolio</span></div>
     <div class="body">
-      <h2 id="p4">Prices people <em>can say yes to.</em></h2>
-      <div class="tablebox">
-        <table>
-          <thead><tr><th>Product</th><th>Includes</th><th class="num">Price</th><th class="num">Our time</th></tr></thead>
-          <tbody>
-            <tr><td>Orbit Kit · Personal</td><td>Source, 5 worlds, guide, 12 months of updates. One personal site.</td><td class="num">$69</td><td class="num">0 h</td></tr>
-            <tr><td>Orbit Kit · Commercial</td><td>Same, licensed for client work and unlimited sites you build.</td><td class="num">$199</td><td class="num">0 h</td></tr>
-            <tr><td>Orbit Launch</td><td>Custom world, 3D product or logo, up to 7 chapters in Thai and English, video.</td><td class="num">฿79,000</td><td class="num">≈ 40 h</td></tr>
-            <tr><td>Orbit Care</td><td>Hosting, 2 h edits a month, seasonal worlds, monthly report.</td><td class="num">฿3,900 / mo</td><td class="num">≈ 2.5 h / mo</td></tr>
-            <tr><td>Worlds pack (add-on)</td><td>Extra planets for the kit: Songkran, Loy Krathong, Lunar New Year, Halloween.</td><td class="num">$29</td><td class="num">0 h</td></tr>
-            <tr><td>Wallpaper pack (merch)</td><td>4K desktop and phone wallpapers rendered from the scene.</td><td class="num">$5</td><td class="num">0 h</td></tr>
-          </tbody>
-        </table>
+      <h2 id="p4">Every mission makes <em>five things.</em></h2>
+      <div class="prose"><p>Orbit is how Klickode’s portfolio grows itself. A finished project is not one link; it is a set of five assets, each with its own place to be seen. The site already shows four concept missions (ORB-001 to ORB-004) so the log is full before the first paying client.</p></div>
+      <div class="deliverables">
+        <div><span class="n">01</span><h3>Live site</h3><p>The flight, with a “Made in Orbit” link and the mission code in the footer.</p></div>
+        <div><span class="n">02</span><h3>Fly-through</h3><p>A 20-second vertical video for TikTok, Reels and Shorts, with the client tagged.</p></div>
+        <div><span class="n">03</span><h3>Log entry</h3><p>Brief, idea, chapters and results on the Orbit site and klickode.com.</p></div>
+        <div><span class="n">04</span><h3>Award entry</h3><p>Submitted to Awwwards, CSS Design Awards and Godly in launch week.</p></div>
+        <div><span class="n">05</span><h3>Making-of</h3><p>One post on how the world was built: the colour, the model, the flight path.</p></div>
       </div>
-      <p class="note">Launch at ฿79,000 for about 40 hours of work is roughly ฿2,000 an hour. Kit sales cost no time after the first build, which is why the kit carries the plan once it finds buyers.</p>
     </div>
   </section>
 
   <section class="part" aria-labelledby="p5">
-    <div class="side"><span class="num">05</span><span class="label">Revenue model</span></div>
+    <div class="side"><span class="num">05</span><span class="label">Market</span></div>
     <div class="body">
-      <h2 id="p5">How the money <em>adds up.</em></h2>
-      <p class="prose">Each product ramps in a straight line from almost nothing in month 1 to the level you set for month 12. Move the sliders to see the year change. These are planning assumptions, not forecasts.</p>
+      <h2 id="p5">Why now, <em>and for whom.</em></h2>
+      <div class="cards two">
+        <div class="card"><span class="k">Attention</span><h3>Feeds reward motion</h3><p>Short-video feeds favour things that move. A fly-through is native content there; a static homepage is not.</p></div>
+        <div class="card"><span class="k">Sameness</span><h3>AI made websites cheap and alike</h3><p>Builders and AI tools produce a decent page in minutes. That moves the value toward what they cannot make on demand: a crafted, memorable experience.</p></div>
+        <div class="card"><span class="k">Proven demand</span><h3>People already buy templates</h3><p>Designers pay for premium templates on Gumroad, Lemon Squeezy, Framer and Webflow. Real-time 3D templates are still rare there.</p></div>
+        <div class="card"><span class="k">Home advantage</span><h3>Bangkok launches all year</h3><p>New cafés, beauty brands, condos, resorts and festivals each need a launch page. Klickode works in Thai and English at Bangkok prices.</p></div>
+      </div>
+      <div class="tablebox">
+        <table>
+          <thead><tr><th>Customer</th><th>Enters at</th><th>What they need</th><th>Where we find them</th></tr></thead>
+          <tbody>
+            <tr><td>Designers and developers, worldwide</td><td>Outer orbit</td><td>A standout portfolio or client project, fast</td><td>Product Hunt, X, Reddit design forums, template stores</td></tr>
+            <tr><td>Thai brands with a launch date</td><td>Inner orbit</td><td>A launch page people talk about</td><td>Instagram, TikTok, LINE groups, photographer and event-team referrals</td></tr>
+            <tr><td>Startups and founders</td><td>Inner orbit</td><td>A homepage that makes the pitch feel bigger</td><td>Bangkok startup events, accelerators, LinkedIn</td></tr>
+            <tr><td>Agencies without a 3D team</td><td>Core (partner)</td><td>3D work to resell under their own name</td><td>Direct outreach in Thailand and the region</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section class="part" aria-labelledby="p6">
+    <div class="side"><span class="num">06</span><span class="label">Revenue model</span></div>
+    <div class="body">
+      <h2 id="p6">Follow the money <em>inward.</em></h2>
+      <p class="prose">Each ring ramps in a straight line from almost nothing in month 1 to the level you set for month 12. The core ring is studio work that Orbit clients bring in. These are planning assumptions, not forecasts.</p>
       <div class="model">
         <div class="controls">
           <div class="control">
-            <label for="kitEnd">Kit sales in month 12 <output id="kitEndOut" for="kitEnd"></output></label>
+            <label for="kitEnd">Kits in month 12 <output id="kitEndOut" for="kitEnd"></output></label>
             <input type="range" id="kitEnd" min="10" max="300" step="5" value="90">
-            <small>Blended price $99 (most buyers personal, some commercial)</small>
+            <small>Blended $99 per kit</small>
           </div>
           <div class="control">
             <label for="launchEnd">Launches in month 12 <output id="launchEndOut" for="launchEnd"></output></label>
-            <input type="range" id="launchEnd" min="1" max="8" step="1" value="3">
-            <small>฿79,000 each, about $2,390</small>
+            <input type="range" id="launchEnd" min="1" max="3" step="1" value="3">
+            <small>฿79,000 each. Capped at 3 lift-offs a month</small>
           </div>
           <div class="control">
             <label for="careEnd">Care clients by month 12 <output id="careEndOut" for="careEnd"></output></label>
             <input type="range" id="careEnd" min="0" max="40" step="1" value="15">
-            <small>฿3,900 a month each, about $118</small>
+            <small>฿3,900 a month each</small>
+          </div>
+          <div class="control">
+            <label for="studioEnd">Studio projects in month 12 <output id="studioEndOut" for="studioEnd"></output></label>
+            <input type="range" id="studioEnd" min="0" max="4" step="1" value="2">
+            <small>About ฿90,000 each, from Orbit clients</small>
           </div>
         </div>
         <div class="totals">
@@ -310,117 +433,127 @@ footer a { color: var(--dim); text-decoration: none; }
           <div class="t sub"><span>Kit</span><b id="yKit">$0</b></div>
           <div class="t sub"><span>Launch</span><b id="yLaunch">$0</b></div>
           <div class="t sub"><span>Care</span><b id="yCare">$0</b></div>
+          <div class="t sub"><span>Studio</span><b id="yStudio">$0</b></div>
         </div>
         <div class="legend" aria-hidden="true">
-          <span><span class="dot" style="--c: var(--s-kit)"></span>Orbit Kit</span>
-          <span><span class="dot" style="--c: var(--s-launch)"></span>Orbit Launch</span>
-          <span><span class="dot" style="--c: var(--s-care)"></span>Orbit Care</span>
+          <span><span class="dot" style="--c: var(--s-kit)"></span>Kit · outer</span>
+          <span><span class="dot" style="--c: var(--s-launch)"></span>Launch · inner</span>
+          <span><span class="dot" style="--c: var(--s-care)"></span>Care · stay</span>
+          <span><span class="dot" style="--c: var(--s-studio)"></span>Studio · core</span>
         </div>
         <div class="chart" id="chart">
-          <svg id="chartSvg" viewBox="0 0 760 300" role="img" aria-labelledby="chartTitle"><title id="chartTitle">Monthly revenue in US dollars for months 1 to 12, stacked by product</title></svg>
+          <svg id="chartSvg" viewBox="0 0 760 300" role="img" aria-labelledby="chartTitle"><title id="chartTitle">Monthly revenue in US dollars for months 1 to 12, stacked by orbit</title></svg>
           <div class="tip" id="tip" hidden></div>
         </div>
         <details class="tableview">
           <summary>Show the numbers as a table</summary>
           <div class="tablebox">
             <table>
-              <thead><tr><th>Month</th><th class="num">Kits sold</th><th class="num">Kit $</th><th class="num">Launches</th><th class="num">Launch $</th><th class="num">Care clients</th><th class="num">Care $</th><th class="num">Total $</th></tr></thead>
+              <thead><tr><th>Month</th><th class="num">Kits</th><th class="num">Kit $</th><th class="num">Launches</th><th class="num">Launch $</th><th class="num">Care</th><th class="num">Care $</th><th class="num">Studio</th><th class="num">Studio $</th><th class="num">Total $</th></tr></thead>
               <tbody id="tbody"></tbody>
               <tfoot id="tfoot"></tfoot>
             </table>
           </div>
         </details>
-        <p class="note">Converted at ฿33 to $1. Revenue before card fees (about 5% on kit sales), VAT and income tax. Costs to plan for: ad tests about $300 a month from month 2, hosting about $20 per Care client, and a 3D asset budget of about $100 per Launch.</p>
-      </div>
-    </div>
-  </section>
-
-  <section class="part" aria-labelledby="p6">
-    <div class="side"><span class="num">06</span><span class="label">Marketing</span></div>
-    <div class="body">
-      <h2 id="p6">Let the work <em>do the shouting.</em></h2>
-      <div class="prose"><p>Orbit is visual, so the plan leans on showing it moving. The rule: <strong>every week, publish one new flight</strong>, as a video clip, a live demo, or a client site.</p></div>
-      <div class="channels">
-        <div class="channel"><h3>Fly-through videos</h3><p>Record 15–25 second scroll-throughs of each world, vertical, with sound. Post to TikTok, Reels, Shorts and X. Caption with the brand and “made in a browser”.</p><span class="cost">Free · 2 h/wk</span></div>
-        <div class="channel"><h3>Design showcases</h3><p>Submit every finished Orbit to Awwwards, CSS Design Awards, Godly and Land-book. One feature brings designers who buy the kit and clients who want a Launch.</p><span class="cost">Free to ~$60 each</span></div>
-        <div class="channel"><h3>Product Hunt launch</h3><p>Launch Orbit Kit with a free “Orbit Lite” (one world, watermarked) to collect emails. Line up 30 supporters the week before.</p><span class="cost">Free · one day</span></div>
-        <div class="channel"><h3>Marketplaces</h3><p>List the kit on Gumroad or Lemon Squeezy first, then port to Framer and Webflow template stores, where buyers already search for premium templates.</p><span class="cost">5–10% per sale</span></div>
-        <div class="channel"><h3>Bangkok, in person</h3><p>Show Orbit on an iPad at startup meetups, design events and pop-up markets. Offer the first three Thai clients 30% off in exchange for a case study and video.</p><span class="cost">Time + discount</span></div>
-        <div class="channel"><h3>Seasonal drops</h3><p>Release a themed world before each big moment: Songkran (April), 11.11, Loy Krathong (November), Lunar New Year. Each drop is new content and a reason to email the list.</p><span class="cost">Free · 1 day each</span></div>
-        <div class="channel"><h3>Made in Orbit badge</h3><p>A small link on every client site and kit install (removable on commercial licence). Each site sends visitors back to Orbit.</p><span class="cost">Free</span></div>
+        <p class="note">Converted at ฿33 to $1. Before card fees (about 5% on kit sales), VAT and income tax. Launch clients get their first three months of Care free, which the model counts as unpaid. Costs to plan for: ad tests about $300 a month from month 2, hosting about $20 per Care client, a 3D asset budget of about $100 per Launch.</p>
       </div>
     </div>
   </section>
 
   <section class="part" aria-labelledby="p7">
-    <div class="side"><span class="num">07</span><span class="label">Roadmap</span></div>
+    <div class="side"><span class="num">07</span><span class="label">Marketing</span></div>
     <div class="body">
-      <h2 id="p7">Twelve months, <em>four stages.</em></h2>
-      <div class="timeline">
-        <div class="phase"><span class="when">Months 1–2 · Package</span><h3>Make it sellable</h3><ul><li>Turn the scene into a kit with one settings file</li><li>Write the setup guide</li><li>Open the Gumroad store</li><li>Record the first 8 videos</li></ul><p class="goal">Goal: first 50 kit sales</p></div>
-        <div class="phase"><span class="when">Months 3–4 · Prove</span><h3>First clients</h3><ul><li>Product Hunt launch</li><li>3 discounted Thai Launches</li><li>Submit each to showcases</li><li>Start Care on every Launch</li></ul><p class="goal">Goal: 3 case studies live</p></div>
-        <div class="phase"><span class="when">Months 5–8 · Grow</span><h3>More worlds, more stores</h3><ul><li>Seasonal Worlds packs</li><li>Framer and Webflow versions</li><li>Agency partner rate</li><li>Raise Launch price after 5 clients</li></ul><p class="goal">Goal: 2 Launches a month</p></div>
-        <div class="phase"><span class="when">Months 9–12 · Bet</span><h3>Orbit Studio</h3><ul><li>Prototype a no-code editor: pick a world, type chapters, publish</li><li>Hosted at about $15 a month</li><li>Test with kit buyers first</li></ul><p class="goal">Goal: 100 Studio waitlist sign-ups</p></div>
+      <h2 id="p7">A mission <em>every month.</em></h2>
+      <div class="prose"><p>Orbit markets itself in a monthly rhythm. Each mission, paid or concept, is released in four beats so there is always something new to post, and every beat ends on a lift-off date.</p></div>
+      <div class="cadence">
+        <div><i>W1</i><h3>Reveal</h3><p>Announce the mission: the brand, the world colour, the lift-off date.</p></div>
+        <div><i>W2</i><h3>Build</h3><p>Short clips from inside the scene: the planet forming, the product model.</p></div>
+        <div><i>W3</i><h3>Making-of</h3><p>One carousel or thread on a single decision, like why the ring is the roast curve.</p></div>
+        <div><i>W4</i><h3>Lift-off</h3><p>The fly-through goes out with the client, the log entry and the award entries.</p></div>
+      </div>
+      <div class="channels">
+        <div class="channel"><h3>Fly-through videos</h3><p>15–25 seconds, vertical, with sound. TikTok, Reels, Shorts and X, captioned “made in a browser”.</p><span class="cost">Free · 2 h a week</span></div>
+        <div class="channel"><h3>Design showcases</h3><p>Every mission goes to Awwwards, CSS Design Awards, Godly and Land-book. One feature brings both kit buyers and launch clients.</p><span class="cost">Free to ~$60 each</span></div>
+        <div class="channel"><h3>Product Hunt</h3><p>Launch Orbit Kit with free Orbit Lite (one world, watermarked) to collect emails. Line up 30 supporters first.</p><span class="cost">Free · one day</span></div>
+        <div class="channel"><h3>Template stores</h3><p>Gumroad or Lemon Squeezy first, then Framer and Webflow versions where buyers already search.</p><span class="cost">5–10% per sale</span></div>
+        <div class="channel"><h3>Bangkok, in person</h3><p>Fly Orbit on an iPad at startup meetups and design events. First three Thai clients get 30% off for a full case study.</p><span class="cost">Time + discount</span></div>
+        <div class="channel"><h3>Seasonal worlds</h3><p>A themed world before Songkran, 11.11, Loy Krathong and Lunar New Year. New content, and a reason to email Care clients.</p><span class="cost">1 day each</span></div>
+        <div class="channel"><h3>Made in Orbit</h3><p>A small link and mission code on every site. Each client site sends visitors back to the log.</p><span class="cost">Free</span></div>
       </div>
     </div>
   </section>
 
   <section class="part" aria-labelledby="p8">
-    <div class="side"><span class="num">08</span><span class="label">Risks</span></div>
+    <div class="side"><span class="num">08</span><span class="label">Roadmap</span></div>
     <div class="body">
-      <h2 id="p8">What could go wrong, <em>and the answer.</em></h2>
+      <h2 id="p8">Ignition to <em>expansion.</em></h2>
+      <div class="timeline">
+        <div class="phase"><span class="when">Months 1–2 · Ignition</span><h3>Make it sellable</h3><ul><li>Orbit site live with 4 concept missions</li><li>Scene settings in one file</li><li>Kit store and Orbit Lite</li><li>First 8 fly-throughs</li></ul><p class="goal">Goal: 50 kit sales, 300 emails</p></div>
+        <div class="phase"><span class="when">Months 3–4 · Lift-off</span><h3>First real missions</h3><ul><li>Product Hunt launch</li><li>ORB-005 to ORB-007 for Thai brands</li><li>Award entry for each</li><li>Care on every launch</li></ul><p class="goal">Goal: 3 missions in the log</p></div>
+        <div class="phase"><span class="when">Months 5–8 · Orbit</span><h3>Fill the calendar</h3><ul><li>Seasonal world packs</li><li>Framer and Webflow kits</li><li>Agency partner rate</li><li>Raise Launch price after 5 missions</li></ul><p class="goal">Goal: all 3 monthly windows booked</p></div>
+        <div class="phase"><span class="when">Months 9–12 · Expansion</span><h3>Two moonshots</h3><ul><li><b>Orbit Studio</b>: a no-code editor, pick a world, type chapters, publish. About $15 a month.</li><li><b>Orbit Live</b>: the flight on an LED wall at launch events, steered from visitors’ phones.</li></ul><p class="goal">Goal: 100 Studio waitlist, 1 Live event</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="part" aria-labelledby="p9">
+    <div class="side"><span class="num">09</span><span class="label">Risks</span></div>
+    <div class="body">
+      <h2 id="p9">What could go wrong, <em>and the answer.</em></h2>
       <div class="tablebox">
         <table>
           <thead><tr><th>Risk</th><th>What we do about it</th></tr></thead>
           <tbody>
-            <tr><td>Slow on cheap phones</td><td>Already lower particle counts on small screens. Add a frame-rate check that drops quality automatically, and test on a ฿4,000 Android phone before every release.</td></tr>
-            <tr><td>Someone copies the look</td><td>The engine is easy to copy, the service is not. Keep shipping new worlds faster than copies appear, and sell the kit with updates so buyers stay with the original.</td></tr>
-            <tr><td>3D starts to feel like a gimmick</td><td>Every chapter carries a real message and real text. Sell Orbit on results (time on page, shares), not effects.</td></tr>
-            <tr><td>Launch work crowds out everything else</td><td>Cap at 3 Launches a month until there is a second builder. Raise the price before taking more.</td></tr>
-            <tr><td>Kit buyers need support</td><td>One settings file, a clear guide, and a short video for each step. Answer support by email twice a week.</td></tr>
+            <tr><td>Slow on cheap phones</td><td>Fewer particles on small screens already. Add an automatic quality drop when the frame rate falls, and test on a ฿4,000 Android phone before every lift-off.</td></tr>
+            <tr><td>Someone copies the look</td><td>The engine can be copied; the mission system, the log and the service cannot. Keep shipping new worlds faster than copies appear.</td></tr>
+            <tr><td>3D starts to feel like a gimmick</td><td>Every chapter carries a real message in real text. Report results (time on page, shares, sales), not effects.</td></tr>
+            <tr><td>Orbit pulls the studio off course</td><td>Three lift-off windows a month is a hard cap. Studio work stays the core; Orbit is the gravity around it.</td></tr>
+            <tr><td>Kit support eats time</td><td>One settings file, a clear guide, a short video per step. Support by email twice a week.</td></tr>
           </tbody>
         </table>
       </div>
     </div>
   </section>
 
-  <section class="part" aria-labelledby="p9">
-    <div class="side"><span class="num">09</span><span class="label">Numbers to watch</span></div>
+  <section class="part" aria-labelledby="p10">
+    <div class="side"><span class="num">10</span><span class="label">Numbers to watch</span></div>
     <div class="body">
-      <h2 id="p9">Five numbers, <em>every Monday.</em></h2>
+      <h2 id="p10">One number <em>per orbit.</em></h2>
       <div class="cards">
-        <div class="card"><span class="k">Store</span><div class="big">2–3%</div><p>Kit page visitors who buy. Below 1% means the demo or the price needs work.</p></div>
-        <div class="card"><span class="k">Site</span><div class="big">60 s+</div><p>Average time on the Orbit site. The flight only works if people finish it.</p></div>
-        <div class="card"><span class="k">Sales</span><div class="big">1 in 4</div><p>Launch enquiries that become paid projects.</p></div>
-        <div class="card"><span class="k">Social</span><div class="big">1 / week</div><p>New flight videos posted. The habit matters more than any single post.</p></div>
-        <div class="card"><span class="k">Care</span><div class="big">80%</div><p>Launch clients who add Care. Each one is income that repeats.</p></div>
+        <div class="card"><span class="k"><span class="dot" style="--c: var(--s-kit)"></span>Outer</span><div class="big">2–3%</div><p>Kit page visitors who buy. Below 1% means the demo or the price needs work.</p></div>
+        <div class="card"><span class="k"><span class="dot" style="--c: var(--s-launch)"></span>Inner</span><div class="big">1 in 4</div><p>Mission briefs received that become paid launches.</p></div>
+        <div class="card"><span class="k"><span class="dot" style="--c: var(--s-care)"></span>Stay</span><div class="big">80%</div><p>Launch clients who keep Care after the three free months.</p></div>
+        <div class="card"><span class="k"><span class="dot" style="--c: var(--s-studio)"></span>Core</span><div class="big">1 in 3</div><p>Care clients who start a studio project within a year.</p></div>
+        <div class="card"><span class="k">Flight</span><div class="big">60 s+</div><p>Average time on an Orbit site. The flight only works if people finish it.</p></div>
         <div class="card hl"><span class="k">North star</span><div class="big">Shares</div><p>How often people send an Orbit site to someone else. That is the whole idea working.</p></div>
       </div>
     </div>
   </section>
 
-  <section class="part" aria-labelledby="p10">
-    <div class="side"><span class="num">10</span><span class="label">This week</span></div>
+  <section class="part" aria-labelledby="p11">
+    <div class="side"><span class="num">11</span><span class="label">This week</span></div>
     <div class="body">
-      <h2 id="p10">Start in the <em>next seven days.</em></h2>
+      <h2 id="p11">Countdown: <em>seven days.</em></h2>
       <ul class="checklist">
-        <li><input type="checkbox" id="c1"><label for="c1"><b>Put the Orbit site live</b> on its own domain or a klickode.com page.</label></li>
-        <li><input type="checkbox" id="c2"><label for="c2"><b>Record three fly-throughs</b> in Klickode Red, Nebula Violet and Saffron Gold and post them.</label></li>
-        <li><input type="checkbox" id="c3"><label for="c3"><b>Open a kit waitlist</b> with an email form and a launch price for early sign-ups.</label></li>
-        <li><input type="checkbox" id="c4"><label for="c4"><b>Message ten Bangkok brands</b> that have a launch coming, with a 20-second video of their logo in Orbit.</label></li>
-        <li><input type="checkbox" id="c5"><label for="c5"><b>Move the scene settings into one file</b> so the kit is a change of colours and words, not code.</label></li>
+        <li><input type="checkbox" id="c1"><label for="c1"><b>Put the Orbit site live</b> at orbit.klickode.com and link it from the klickode.com portfolio.</label></li>
+        <li><input type="checkbox" id="c2"><label for="c2"><b>Record the four concept fly-throughs</b> (ORB-001 to ORB-004) and post the first one.</label></li>
+        <li><input type="checkbox" id="c3"><label for="c3"><b>Add mission codes</b> to the quote and invoice templates, starting at ORB-005.</label></li>
+        <li><input type="checkbox" id="c4"><label for="c4"><b>Message ten Bangkok brands</b> with a launch coming, each with a 20-second clip of their logo in Orbit.</label></li>
+        <li><input type="checkbox" id="c5"><label for="c5"><b>Open the kit waitlist</b> with Orbit Lite as the free sign-up gift.</label></li>
       </ul>
     </div>
   </section>
 </div>
 
-<footer><div class="wrap"><span>© 2026 Klickode Studio Ltd. Internal plan; figures are planning assumptions.</span><span><a href="index.html">Klickode Orbit</a> · <a href="https://www.klickode.com/">klickode.com</a></span></div></footer>
+<footer><div class="wrap"><span>© 2026 Klickode Studio Ltd. Internal strategy; figures are planning assumptions.</span><span><a href="index.html">Klickode Orbit</a> · <a href="https://www.klickode.com/">klickode.com</a></span></div></footer>
 
 <script>
 (() => {
-  // ---------- a quiet starfield behind the plan ----------
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const sky = document.getElementById('sky'), sx = sky.getContext('2d');
+  const $ = (id) => document.getElementById(id);
+
+  // ---------- a quiet starfield behind the plan ----------
+  const sky = $('sky'), sx = sky.getContext('2d');
   let starsArr = [];
   function sizeSky() {
     const dpr = Math.min(devicePixelRatio || 1, 2);
@@ -438,18 +571,49 @@ footer a { color: var(--dim); text-decoration: none; }
   }
   sizeSky(); addEventListener('resize', sizeSky); requestAnimationFrame(drawSky);
 
+  // ---------- system map: pick an orbit, read its role ----------
+  const RINGS = {
+    outer: { c: 'var(--s-kit)', tab: 'Outer', k: 'Outer orbit · Reach', title: 'Orbit Lite, Orbit Kit and every fly-through video', pay: 'Free to $199', who: 'Designers, founders and anyone who saw a video.', gravity: 'Kit buyers get ฿10,000 off a Launch.' },
+    inner: { c: 'var(--s-launch)', tab: 'Inner', k: 'Inner orbit · Launch', title: 'Orbit Launch: a custom world, live in 14 days', pay: '฿79,000 per mission', who: 'Brands with a product, venue or event to launch.', gravity: 'Three months of Care are included, so every client is already in orbit.' },
+    stay: { c: 'var(--s-care)', tab: 'Stay', k: 'Stay in orbit · Care', title: 'Hosting, edits and seasonal worlds every month', pay: '฿3,900 a month', who: 'Launch clients after lift-off.', gravity: 'A quarterly mission review plans the next campaign, shop or system.' },
+    core: { c: 'var(--s-studio)', tab: 'Core', k: 'Core · Klickode Studio', title: 'Websites, online shops and business systems', pay: 'About ฿90,000 per project', who: 'Long-term partners.', gravity: 'Each referral earns a free seasonal world and starts a new orbit.' },
+  };
+  const tabs = $('ringTabs'), card = $('ringCard'), groups = [...document.querySelectorAll('.map g.orbit')];
+  Object.entries(RINGS).forEach(([key, r]) => {
+    const b = document.createElement('button'); b.type = 'button'; b.setAttribute('role', 'tab'); b.dataset.ring = key; b.style.setProperty('--c', r.c); b.textContent = r.tab;
+    b.addEventListener('click', () => pick(key)); tabs.appendChild(b);
+  });
+  function pick(key) {
+    const r = RINGS[key];
+    groups.forEach((g) => g.classList.toggle('on', g.dataset.ring === key));
+    [...tabs.children].forEach((b) => b.setAttribute('aria-selected', String(b.dataset.ring === key)));
+    card.style.setProperty('--c', r.c);
+    card.innerHTML = `<span class="k">${r.k}</span><h3>${r.title}</h3><p><b>Pays:</b> ${r.pay}</p><p><b>Who:</b> ${r.who}</p><p><b>Gravity:</b> ${r.gravity}</p>`;
+  }
+  groups.forEach((g) => {
+    g.addEventListener('click', () => pick(g.dataset.ring));
+    g.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); pick(g.dataset.ring); } });
+  });
+  pick('inner');
+
   // ---------- revenue model ----------
-  const FX = 33, KIT = 99, LAUNCH = Math.round(79000 / FX), CARE = Math.round(3900 / FX);
-  const $ = (id) => document.getElementById(id);
+  const FX = 33, KIT = 99, LAUNCH = Math.round(79000 / FX), CARE = Math.round(3900 / FX), STUDIO = Math.round(90000 / FX);
   const money = (v) => '$' + Math.round(v).toLocaleString('en-US');
-  const inputs = { kit: $('kitEnd'), launch: $('launchEnd'), care: $('careEnd') };
+  const inputs = { kit: $('kitEnd'), launch: $('launchEnd'), care: $('careEnd'), studio: $('studioEnd') };
+  const MONTHS = ['Nov', 'Dec', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct'];
 
   function model() {
-    const k = +inputs.kit.value, l = +inputs.launch.value, c = +inputs.care.value;
+    const k = +inputs.kit.value, l = +inputs.launch.value, c = +inputs.care.value, s = +inputs.studio.value;
+    let launched = [];
     return Array.from({ length: 12 }, (_, i) => {
       const m = i + 1, f = m / 12;
-      const kits = Math.round(k * f), launches = Math.round(l * f), care = Math.round(c * f);
-      return { m, kits, launches, care, kit$: kits * KIT, launch$: launches * LAUNCH, care$: care * CARE, get total() { return this.kit$ + this.launch$ + this.care$; } };
+      const kits = Math.round(k * f), launches = Math.round(l * f), studio = Math.round(s * f);
+      launched.push(launches);
+      // Care clients ramp to the target, but launches from the last three months are still in their free months.
+      const free = launched.slice(-3).reduce((a, b) => a + b, 0);
+      const care = Math.round(c * f), paidCare = Math.max(0, care - free);
+      return { m, kits, launches, care, paidCare, studio, kit$: kits * KIT, launch$: launches * LAUNCH, care$: paidCare * CARE, studio$: studio * STUDIO,
+        get total() { return this.kit$ + this.launch$ + this.care$ + this.studio$; } };
     });
   }
 
@@ -457,37 +621,30 @@ footer a { color: var(--dim); text-decoration: none; }
   const NS = 'http://www.w3.org/2000/svg';
   const el = (n, a) => { const e = document.createElementNS(NS, n); for (const k in a) e.setAttribute(k, a[k]); return e; };
   const W = 760, H = 300, L = 56, R = 8, T = 12, B = 30;
-  const MONTHS = ['Nov', 'Dec', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct'];
-  const SERIES = [['kit$', 'Orbit Kit', 'var(--s-kit)'], ['launch$', 'Orbit Launch', 'var(--s-launch)'], ['care$', 'Orbit Care', 'var(--s-care)']];
-
-  function niceMax(v) {
-    const p = Math.pow(10, Math.floor(Math.log10(v || 1)));
-    for (const n of [1, 2, 2.5, 5, 10]) if (n * p >= v) return n * p;
-    return 10 * p;
-  }
-  function roundedTop(x, y, w, h, r) {
-    r = Math.min(r, h, w / 2);
-    return `M${x},${y + h}V${y + r}Q${x},${y} ${x + r},${y}H${x + w - r}Q${x + w},${y} ${x + w},${y + r}V${y + h}Z`;
-  }
+  const SERIES = [['kit$', 'Kit', 'var(--s-kit)'], ['launch$', 'Launch', 'var(--s-launch)'], ['care$', 'Care', 'var(--s-care)'], ['studio$', 'Studio', 'var(--s-studio)']];
+  function niceMax(v) { const p = Math.pow(10, Math.floor(Math.log10(v || 1))); for (const n of [1, 2, 2.5, 5, 10]) if (n * p >= v) return n * p; return 10 * p; }
+  function roundedTop(x, y, w, h, r) { r = Math.min(r, h, w / 2); return `M${x},${y + h}V${y + r}Q${x},${y} ${x + r},${y}H${x + w - r}Q${x + w},${y} ${x + w},${y + r}V${y + h}Z`; }
 
   function render() {
     const rows = model();
     $('kitEndOut').textContent = inputs.kit.value + ' / mo';
     $('launchEndOut').textContent = inputs.launch.value + ' / mo';
     $('careEndOut').textContent = inputs.care.value + ' clients';
+    $('studioEndOut').textContent = inputs.studio.value + ' / mo';
     const sum = (key) => rows.reduce((a, r) => a + r[key], 0);
-    const yk = sum('kit$'), yl = sum('launch$'), yc = sum('care$'), year = yk + yl + yc;
-    $('yearTotal').textContent = money(year); $('yKit').textContent = money(yk); $('yLaunch').textContent = money(yl); $('yCare').textContent = money(yc);
+    const yk = sum('kit$'), yl = sum('launch$'), yc = sum('care$'), ys = sum('studio$'), year = yk + yl + yc + ys;
+    $('yearTotal').textContent = money(year); $('yKit').textContent = money(yk); $('yLaunch').textContent = money(yl); $('yCare').textContent = money(yc); $('yStudio').textContent = money(ys);
     $('sumYear').firstChild.textContent = money(year);
-    $('sumRun').firstChild.textContent = money(rows[11].total);
+    $('sumHalo').firstChild.textContent = Math.round((ys / (year || 1)) * 100) + '%';
+    $('sumMissions').firstChild.textContent = String(sum('launches'));
 
-    // chart
     while (svg.childNodes.length > 1) svg.removeChild(svg.lastChild);
     const max = niceMax(Math.max(...rows.map((r) => r.total)));
     const y = (v) => T + (H - T - B) * (1 - v / max);
     const grid = el('g', { class: 'grid' }), axis = el('g', { class: 'axis' });
-    for (let i = 0; i <= 4; i++) {
-      const v = (max / 4) * i, yy = y(v);
+    const steps = /^2\.?5/.test(String(max)) ? 5 : 4; // keep ticks on round numbers
+    for (let i = 0; i <= steps; i++) {
+      const v = (max / steps) * i, yy = y(v);
       if (i > 0) grid.appendChild(el('line', { x1: L, x2: W - R, y1: yy, y2: yy }));
       const t = el('text', { x: L - 10, y: yy + 4, 'text-anchor': 'end' }); t.textContent = v >= 1000 ? '$' + v / 1000 + 'k' : '$' + v; axis.appendChild(t);
     }
@@ -501,39 +658,34 @@ footer a { color: var(--dim); text-decoration: none; }
       segs.forEach(([k, , color], si) => {
         const y0 = y(acc), y1 = y(acc + r[k]);
         const h = Math.max(0, y0 - y1 - (si > 0 ? 2 : 0)); // 2px surface gap between stacked segments
-        const top = si === segs.length - 1;
-        g.appendChild(top ? el('path', { class: 'seg', d: roundedTop(x, y1, bw, h, 4), fill: color }) : el('rect', { class: 'seg', x, y: y1, width: bw, height: h, fill: color }));
+        g.appendChild(si === segs.length - 1 ? el('path', { class: 'seg', d: roundedTop(x, y1, bw, h, 4), fill: color }) : el('rect', { class: 'seg', x, y: y1, width: bw, height: h, fill: color }));
         acc += r[k];
       });
-      const lab = el('text', { x: x + bw / 2, y: H - 10, 'text-anchor': 'middle' }); lab.textContent = MONTHS[i];
-      axis.appendChild(lab);
+      const lab = el('text', { x: x + bw / 2, y: H - 10, 'text-anchor': 'middle' }); lab.textContent = MONTHS[i]; axis.appendChild(lab);
       g.appendChild(el('rect', { class: 'hit', x: L + slot * i, y: T, width: slot, height: H - T - B }));
       svg.appendChild(g);
     });
     svg.appendChild(el('line', { class: 'baseline', x1: L, x2: W - R, y1: y(0), y2: y(0) }));
     svg.appendChild(axis);
 
-    // table view
-    $('tbody').innerHTML = rows.map((r) => `<tr><td>${MONTHS[r.m - 1]} (month ${r.m})</td><td class="num">${r.kits}</td><td class="num">${money(r.kit$)}</td><td class="num">${r.launches}</td><td class="num">${money(r.launch$)}</td><td class="num">${r.care}</td><td class="num">${money(r.care$)}</td><td class="num">${money(r.total)}</td></tr>`).join('');
-    $('tfoot').innerHTML = `<tr><td>Year one</td><td class="num">${sum('kits')}</td><td class="num">${money(yk)}</td><td class="num">${sum('launches')}</td><td class="num">${money(yl)}</td><td class="num">–</td><td class="num">${money(yc)}</td><td class="num">${money(year)}</td></tr>`;
+    $('tbody').innerHTML = rows.map((r) => `<tr><td>${MONTHS[r.m - 1]} (month ${r.m})</td><td class="num">${r.kits}</td><td class="num">${money(r.kit$)}</td><td class="num">${r.launches}</td><td class="num">${money(r.launch$)}</td><td class="num">${r.paidCare} paid / ${r.care}</td><td class="num">${money(r.care$)}</td><td class="num">${r.studio}</td><td class="num">${money(r.studio$)}</td><td class="num">${money(r.total)}</td></tr>`).join('');
+    $('tfoot').innerHTML = `<tr><td>Year one</td><td class="num">${sum('kits')}</td><td class="num">${money(yk)}</td><td class="num">${sum('launches')}</td><td class="num">${money(yl)}</td><td class="num">–</td><td class="num">${money(yc)}</td><td class="num">${sum('studio')}</td><td class="num">${money(ys)}</td><td class="num">${money(year)}</td></tr>`;
     render.rows = rows;
   }
 
+  const hide = () => { tip.hidden = true; svg.querySelectorAll('.col').forEach((c) => c.classList.remove('dim')); };
   svg.addEventListener('pointermove', (e) => {
     const g = e.target.closest('.col'); if (!g) return hide();
     const i = +g.dataset.i, r = render.rows[i];
     svg.querySelectorAll('.col').forEach((c) => c.classList.toggle('dim', c !== g));
-    tip.innerHTML = `<b>${MONTHS[i]} · month ${r.m}</b>` +
-      `<div><span><span class="dot" style="--c: var(--s-kit)"></span>Kit · ${r.kits} sold</span><span>${money(r.kit$)}</span></div>` +
-      `<div><span><span class="dot" style="--c: var(--s-launch)"></span>Launch · ${r.launches}</span><span>${money(r.launch$)}</span></div>` +
-      `<div><span><span class="dot" style="--c: var(--s-care)"></span>Care · ${r.care} clients</span><span>${money(r.care$)}</span></div>` +
-      `<div class="sum"><span>Total</span><span>${money(r.total)}</span></div>`;
+    const line = (c, label, v) => `<div><span><span class="dot" style="--c: ${c}"></span>${label}</span><span>${money(v)}</span></div>`;
+    tip.innerHTML = `<b>${MONTHS[i]} · month ${r.m}</b>` + line('var(--s-kit)', 'Kit · ' + r.kits + ' sold', r.kit$) + line('var(--s-launch)', 'Launch · ' + r.launches, r.launch$) +
+      line('var(--s-care)', 'Care · ' + r.paidCare + ' paying', r.care$) + line('var(--s-studio)', 'Studio · ' + r.studio, r.studio$) + `<div class="sum"><span>Total</span><span>${money(r.total)}</span></div>`;
     tip.hidden = false;
     const box = chartBox.getBoundingClientRect();
     let left = e.clientX - box.left + 14; if (left + tip.offsetWidth > box.width) left = e.clientX - box.left - tip.offsetWidth - 14;
     tip.style.left = Math.max(0, left) + 'px'; tip.style.top = Math.max(0, e.clientY - box.top - tip.offsetHeight - 10) + 'px';
   });
-  const hide = () => { tip.hidden = true; svg.querySelectorAll('.col').forEach((c) => c.classList.remove('dim')); };
   svg.addEventListener('pointerleave', hide);
   Object.values(inputs).forEach((i) => i.addEventListener('input', render));
   render();

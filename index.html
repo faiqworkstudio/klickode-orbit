@@ -86,7 +86,7 @@ main { position: relative; z-index: 2; }
 .copy::before { content: ''; position: absolute; z-index: -1; inset: -22% -30% -22% -26%; background: radial-gradient(closest-side, rgba(6, 7, 10, 0.74), transparent); pointer-events: none; }
 .stop.right .copy { margin-left: auto; text-align: right; }
 .stop.center { align-items: flex-end; padding-bottom: 96px; }
-.stop.center .copy { margin: 0 auto; text-align: center; max-width: 780px; }
+.stop.center .copy { margin: 0 auto; text-align: center; max-width: 920px; }
 .eyebrow { display: inline-flex; align-items: center; gap: 11px; font-family: var(--mono); font-size: 11px; font-weight: 500; letter-spacing: 0.24em; text-transform: uppercase; color: var(--dim); }
 .eyebrow::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--red); box-shadow: 0 0 12px var(--red); flex: none; }
 .stop.right .eyebrow { flex-direction: row-reverse; }
@@ -177,7 +177,44 @@ h3 { font-size: 20px; letter-spacing: -0.02em; font-weight: 700; margin: 0; }
 .legal a { color: var(--dim); text-decoration: none; }
 .legal a:hover { color: var(--text); }
 
+/* ---------- missions (concept portfolio) ---------- */
+.missions-head { max-width: 640px; position: relative; margin-bottom: 40px; }
+.missions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
+.mission { display: grid; gap: 14px; padding: 26px; min-width: 0; align-content: start; }
+.mission .mhead { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.mission .code { font-family: var(--mono); font-size: 11px; letter-spacing: 0.18em; color: var(--faint); }
+.mission .orb { width: 46px; height: 46px; border-radius: 50%; flex: none; background: radial-gradient(circle at 34% 30%, rgba(255,255,255,0.6), var(--c) 40%, rgba(0,0,0,0.85) 100%); box-shadow: 0 0 34px -4px var(--c); }
+.mission h3 { font-size: 26px; letter-spacing: -0.03em; }
+.mission .kind { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--red-soft); }
+.mission p { margin: 0; color: var(--dim); font-size: 15px; }
+.mission p b { color: var(--text); font-weight: 600; }
+.mission .chapters { display: flex; flex-wrap: wrap; gap: 6px; }
+.mission .chapters span { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.12em; text-transform: uppercase; padding: 5px 10px; border-radius: 999px; border: 1px solid var(--edge); color: var(--dim); }
+.mission .btn { justify-self: start; height: 42px; padding: 0 18px; font-size: 11.5px; }
+.mission.next { border-style: dashed; background: rgba(12, 13, 19, 0.35); }
+.mission.next .orb { background: transparent; border: 1.5px dashed var(--red-soft); box-shadow: none; }
+
+/* ---------- mission brief composer ---------- */
+.brief { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 0; margin-top: 40px; text-align: left; overflow: hidden; }
+.brief .inputs { display: grid; gap: 18px; padding: 26px; border-right: 1px solid var(--edge); }
+.brief select, .brief textarea, .brief input[type=text] { width: 100%; padding: 12px 14px; border-radius: 12px; border: 1px solid var(--edge); background: rgba(0, 0, 0, 0.35); color: var(--text); font: 500 15px var(--display); }
+.brief textarea { resize: vertical; min-height: 76px; line-height: 1.5; }
+.brief select:focus, .brief textarea:focus, .brief input[type=text]:focus { outline: none; border-color: var(--red-soft); }
+.windows { display: flex; flex-wrap: wrap; gap: 8px; }
+.windows button { height: 36px; padding: 0 13px; border-radius: 999px; border: 1px solid var(--edge); background: transparent; color: var(--dim); font: 500 12.5px var(--mono); letter-spacing: 0.04em; cursor: pointer; transition: all 0.2s; }
+.windows button:hover { border-color: var(--edge-hi); color: var(--text); }
+.windows button[aria-checked=true] { background: var(--red); border-color: var(--red); color: #fff; }
+.brief .note { font-size: 12.5px; color: var(--faint); }
+.brief .output { display: grid; gap: 16px; padding: 26px; background: rgba(0, 0, 0, 0.28); align-content: start; }
+.brief pre { margin: 0; white-space: pre-wrap; word-break: break-word; font: 13px/1.75 var(--mono); color: var(--dim); }
+.brief pre b { color: var(--text); font-weight: 500; }
+.brief .output .actions { margin-top: 0; justify-content: flex-start; }
+.brief .output .btn { height: 46px; font-size: 12px; }
+
 @media (max-width: 980px) {
+  .missions { grid-template-columns: minmax(0, 1fr); }
+  .brief { grid-template-columns: minmax(0, 1fr); }
+  .brief .inputs { border-right: 0; border-bottom: 1px solid var(--edge); }
   .plans { grid-template-columns: minmax(0, 1fr); max-width: 520px; margin: 0 auto; }
   .specs { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 10px; }
   .top nav a.link { display: none; }
@@ -212,6 +249,7 @@ h3 { font-size: 20px; letter-spacing: -0.02em; font-weight: 700; margin: 0; }
   </a>
   <nav aria-label="Main">
     <a class="link" href="#build">Build a world</a>
+    <a class="link" href="#missions">Missions</a>
     <a class="link" href="#plans">Pricing</a>
     <a class="link" href="plan.html">The plan</a>
     <a class="pill" href="https://www.klickode.com/">Klickode Studio ↗</a>
@@ -222,6 +260,7 @@ h3 { font-size: 20px; letter-spacing: -0.02em; font-weight: 700; margin: 0; }
 <nav class="rail" aria-label="Chapters">
   <a href="#start" class="on"><span>Start</span></a>
   <a href="#build"><span>Build</span></a>
+  <a href="#missions"><span>Missions</span></a>
   <a href="#drift"><span>Drift</span></a>
   <a href="#shape"><span>Shape</span></a>
   <a href="#launch"><span>Launch</span></a>
@@ -232,9 +271,9 @@ h3 { font-size: 20px; letter-spacing: -0.02em; font-weight: 700; margin: 0; }
 <main>
   <section class="stop" id="start" aria-labelledby="t0">
     <div><div class="copy">
-      <span class="eyebrow">Klickode Orbit · Cinematic web, made in Bangkok</span>
+      <span class="eyebrow">Klickode Orbit · The cinematic line by Klickode Studio</span>
       <h1 id="t0">Websites people <em>fly through.</em></h1>
-      <p class="lede">Orbit turns a homepage into a short flight through your brand’s own world. Visitors scroll, the camera moves, and your product arrives like a landing. Buy the kit, or let us build yours in two weeks.</p>
+      <p class="lede">Orbit turns a homepage into a short flight through your brand’s own world. Visitors scroll, the camera moves, and your product arrives like a landing. Every launch we fly becomes a mission, and every client stays in orbit.</p>
       <div class="actions">
         <a class="btn primary" href="#build">Build your planet ↓</a>
         <a class="btn" href="#plans">See pricing</a>
@@ -271,11 +310,22 @@ h3 { font-size: 20px; letter-spacing: -0.02em; font-weight: 700; margin: 0; }
           </div>
         </div>
         <div class="row">
-          <small id="worldCode">ORB-KR-111</small>
+          <small id="worldCode">ORB-005 · KR-111</small>
           <a class="btn primary" href="#plans">Get this world →</a>
         </div>
       </form>
     </div></div>
+  </section>
+
+  <section class="stop tall" id="missions" aria-labelledby="t-missions" data-still>
+    <div>
+      <div class="missions-head"><div class="copy" style="max-width:none">
+        <span class="eyebrow">Mission log · Concept studies</span>
+        <h2 id="t-missions">Four worlds, <em>four launches.</em></h2>
+        <p class="lede">Self-initiated studies by Klickode Studio, one per kind of business we build for. Pick one to fly it in the scene above. Your launch becomes mission ORB-005.</p>
+      </div></div>
+      <div class="missions" id="missionList"></div>
+    </div>
   </section>
 
   <section class="stop right" id="drift" aria-labelledby="t1">
@@ -310,13 +360,13 @@ h3 { font-size: 20px; letter-spacing: -0.02em; font-weight: 700; margin: 0; }
       <div class="plans-head">
         <div class="copy" style="max-width:none">
           <span class="eyebrow">Pricing</span>
-          <h2 id="t-plans">Three ways <em>into orbit.</em></h2>
-          <p class="lede">Build it yourself from the kit, have Klickode build it for you, or keep it fresh every month.</p>
+          <h2 id="t-plans">Pick your <em>orbit.</em></h2>
+          <p class="lede">The further out, the more you do yourself. The closer in, the more Klickode does for you. Most clients start in the inner orbit and stay.</p>
         </div>
       </div>
       <div class="plans">
         <article class="plan glass">
-          <span class="tag">Do it yourself</span>
+          <span class="tag">Outer orbit · Do it yourself</span>
           <h3>Orbit Kit</h3>
           <div class="price"><strong>$69</strong><span>personal · $199 commercial</span></div>
           <p>The scene you are scrolling right now, as clean source code. Change colours, logo and chapters in one settings file.</p>
@@ -329,7 +379,7 @@ h3 { font-size: 20px; letter-spacing: -0.02em; font-weight: 700; margin: 0; }
           <a class="btn" href="#contact">Join the kit waitlist</a>
         </article>
         <article class="plan glass featured">
-          <span class="tag">Most chosen · Done for you</span>
+          <span class="tag">Inner orbit · Done for you</span>
           <h3>Orbit Launch</h3>
           <div class="price"><strong>฿79,000</strong><span>about $2,400 · one time</span></div>
           <p>We build a world around your product: custom 3D object, your story in chapters, live in 14 days.</p>
@@ -339,10 +389,10 @@ h3 { font-size: 20px; letter-spacing: -0.02em; font-weight: 700; margin: 0; }
             <li>Analytics, SEO and share images set up</li>
             <li>A 20-second fly-through video for social</li>
           </ul>
-          <a class="btn primary" href="#contact">Book a launch</a>
+          <a class="btn primary" href="#contact">Reserve a lift-off date</a>
         </article>
         <article class="plan glass">
-          <span class="tag">Keep it alive</span>
+          <span class="tag">Stay in orbit · Monthly</span>
           <h3>Orbit Care</h3>
           <div class="price"><strong>฿3,900</strong><span>per month</span></div>
           <p>Hosting, small edits and a new look for the moments your customers shop.</p>
@@ -355,7 +405,7 @@ h3 { font-size: 20px; letter-spacing: -0.02em; font-weight: 700; margin: 0; }
           <a class="btn" href="#contact">Add Care</a>
         </article>
       </div>
-      <p class="fineprint">Prices before VAT. Launch is paid 50% to start and 50% on go-live.</p>
+      <p class="fineprint">We fly three launches a month, lifting off on the 1st, 10th and 20th. Prices before VAT; Launch is paid 50% to start and 50% on lift-off.</p>
       <dl class="specs">
         <div><dt>Loads light</dt><dd>One small 3D library and no video files. Copy shows before the scene finishes loading.</dd></div>
         <div><dt>Readable</dt><dd>Every word is real HTML text, so search engines and screen readers get the full story.</dd></div>
@@ -369,11 +419,25 @@ h3 { font-size: 20px; letter-spacing: -0.02em; font-weight: 700; margin: 0; }
     <div><div class="copy">
       <span class="eyebrow">Your turn</span>
       <h2 id="t4">Let’s put <em>you</em> in orbit.</h2>
-      <p class="lede">Tell us what you are launching and when. We reply within one working day, in Thai or English.</p>
-      <div class="actions">
-        <a class="btn primary" href="https://www.klickode.com/contact">Talk to Klickode ↗</a>
-        <a class="btn" href="#start">Fly back ↑</a>
-      </div>
+      <p class="lede">Write your mission brief here, copy it, and send it to Klickode. We reply within one working day, in Thai or English.</p>
+      <form class="brief glass" id="briefForm" autocomplete="off">
+        <div class="inputs">
+          <div class="field"><label for="bBrand">Brand</label><input type="text" id="bBrand" maxlength="40" value="Your Brand"></div>
+          <div class="field"><label for="bKind">What are you launching?</label>
+            <select id="bKind"><option>A new product</option><option>A shop, café or venue</option><option>An event or festival</option><option>A company or startup</option><option>A rebrand</option></select></div>
+          <div class="field"><span id="winLabel">Lift-off date</span><div class="windows" id="windows" role="radiogroup" aria-labelledby="winLabel"></div>
+            <span class="note">Three windows a month. We start building 14 days before lift-off.</span></div>
+          <div class="field"><label for="bNotes">One line about it</label><textarea id="bNotes" maxlength="280">We want people to remember the first time they open our site.</textarea></div>
+        </div>
+        <div class="output">
+          <span class="eyebrow">Your brief</span>
+          <pre id="briefOut" aria-live="polite"></pre>
+          <div class="actions">
+            <button type="button" class="btn primary" id="copyBrief">Copy brief</button>
+            <a class="btn" href="https://www.klickode.com/contact">Contact page ↗</a>
+          </div>
+        </div>
+      </form>
       <div class="mail"><span id="mailText">klickode@gmail.com</span><button type="button" id="copyMail">Copy</button></div>
     </div></div>
   </section>
@@ -440,9 +504,77 @@ h3 { font-size: 20px; letter-spacing: -0.02em; font-weight: 700; margin: 0; }
     const w = WORLDS[look.world];
     [...sw.children].forEach((b, i) => { b.setAttribute('aria-checked', String(i === look.world)); b.tabIndex = i === look.world ? 0 : -1; });
     swName.innerHTML = '<b>' + w.name + '</b> · ' + w.note;
-    code.textContent = 'ORB-' + w.id + '-' + (look.ring ? 1 : 0) + (look.moon ? 1 : 0) + (look.crystals ? 1 : 0);
+    code.textContent = 'ORB-005 · ' + w.id + '-' + (look.ring ? 1 : 0) + (look.moon ? 1 : 0) + (look.crystals ? 1 : 0);
   }
   updateBuilderUI();
+
+  // ---------- mission log: concept studies that drive the scene ----------
+  const MISSIONS = [
+    { code: 'ORB-001', world: 4, brand: 'Bai Toey Skin', kind: 'Skincare launch', brief: 'A pandan skincare brand launching its first serum.', idea: 'Visitors drift through a jade planet where each crystal is one ingredient. The bottle lands at the end of the flight.', chapters: ['Origin', 'Ingredients', 'Ritual', 'Shop'] },
+    { code: 'ORB-002', world: 3, brand: 'Chao Roast', kind: 'Café opening', brief: 'A specialty roaster opening its first café in Ari.', idea: 'A golden planet of coffee dust, with the ring drawn as the roast curve. The flight ends on the café door and a map link.', chapters: ['Bean', 'Roast', 'Space', 'Visit'] },
+    { code: 'ORB-003', world: 2, brand: 'Koh Lom Retreat', kind: 'Island resort', brief: 'A twelve-villa resort reopening after renovation.', idea: 'The camera sinks through ocean-blue cloud bands toward the villas. Each chapter is one hour of a day on the island.', chapters: ['Arrive', 'Sea', 'Table', 'Stay'] },
+    { code: 'ORB-004', world: 1, brand: 'Ratri Sound', kind: 'Night festival', brief: 'A two-night electronic festival announcing its line-up.', idea: 'Each moon is a stage and the line-up appears planet by planet. Ticket tiers wait at the end of the flight.', chapters: ['Line-up', 'Stages', 'Tickets'] },
+  ];
+  const ml = document.getElementById('missionList');
+  ml.innerHTML = MISSIONS.map((m, i) => `
+    <article class="mission glass">
+      <div class="mhead"><span class="code">${m.code} · ${WORLDS[m.world].name}</span><span class="orb" style="--c:${WORLDS[m.world].css}"></span></div>
+      <div><span class="kind">${m.kind} · Concept</span><h3>${m.brand}</h3></div>
+      <p><b>Brief.</b> ${m.brief}</p>
+      <p><b>Idea.</b> ${m.idea}</p>
+      <div class="chapters" aria-label="Chapters">${m.chapters.map((c) => '<span>' + c + '</span>').join('')}</div>
+      <button type="button" class="btn" data-m="${i}">Fly this world ↑</button>
+    </article>`).join('') + `
+    <article class="mission glass next">
+      <div class="mhead"><span class="code">ORB-005 · Open</span><span class="orb"></span></div>
+      <div><span class="kind">Your launch</span><h3>This slot is yours.</h3></div>
+      <p>Build your planet above, write a brief at the bottom of this page, and pick a lift-off date. Every finished mission joins this log with its own fly-through video.</p>
+      <a class="btn primary" href="#contact">Write my brief ↓</a>
+    </article>`;
+  ml.addEventListener('click', (e) => {
+    const b = e.target.closest('[data-m]'); if (!b) return;
+    const m = MISSIONS[+b.dataset.m];
+    look.world = m.world; look.name = m.brand; nameInput.value = m.brand; changed();
+    document.getElementById('build').scrollIntoView({ behavior: reduce ? 'auto' : 'smooth' });
+  });
+
+  // ---------- mission brief: lift-off windows on the 1st, 10th and 20th, at least 14 days out ----------
+  const winBox = document.getElementById('windows');
+  const windows = [];
+  { const d = new Date(); d.setHours(0, 0, 0, 0); const earliest = new Date(d.getTime() + 14 * 864e5);
+    for (let m = 0; windows.length < 6 && m < 6; m++) for (const day of [1, 10, 20]) {
+      const w = new Date(d.getFullYear(), d.getMonth() + m, day);
+      if (w >= earliest && windows.length < 6) windows.push(w);
+    } }
+  const fmt = (d, long) => d.toLocaleDateString('en-GB', long ? { weekday: 'short', day: 'numeric', month: 'long', year: 'numeric' } : { day: 'numeric', month: 'short' });
+  let win = 0;
+  windows.forEach((w, i) => {
+    const b = document.createElement('button'); b.type = 'button'; b.setAttribute('role', 'radio'); b.textContent = fmt(w);
+    b.addEventListener('click', () => { win = i; renderBrief(); });
+    winBox.appendChild(b);
+  });
+  const bBrand = document.getElementById('bBrand'), bKind = document.getElementById('bKind'), bNotes = document.getElementById('bNotes'), out = document.getElementById('briefOut');
+  let briefText = '';
+  const esc = (t) => t.replace(/[&<>]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]));
+  function renderBrief() {
+    [...winBox.children].forEach((b, i) => { b.setAttribute('aria-checked', String(i === win)); b.tabIndex = i === win ? 0 : -1; });
+    const w = WORLDS[look.world], lift = windows[win], start = new Date(lift.getTime() - 14 * 864e5);
+    const rows = [['Mission', 'ORB-005 (proposed)'], ['Brand', bBrand.value.trim() || 'Your Brand'], ['Launching', bKind.value], ['World', w.name + ' · ring ' + (look.ring ? 'on' : 'off') + ', moon ' + (look.moon ? 'on' : 'off')],
+      ['Build starts', fmt(start, true)], ['Lift-off', fmt(lift, true)], ['Orbit', 'Inner orbit (Orbit Launch) + Care'], ['Notes', bNotes.value.trim() || '-']];
+    briefText = 'KLICKODE ORBIT · MISSION BRIEF\n\n' + rows.map(([k, v]) => (k + ':').padEnd(14) + v).join('\n');
+    out.innerHTML = '<b>KLICKODE ORBIT · MISSION BRIEF</b>\n\n' + rows.map(([k, v]) => '<b>' + (k + ':').padEnd(14) + '</b>' + esc(v)).join('\n');
+  }
+  [bBrand, bKind, bNotes].forEach((el) => el.addEventListener('input', renderBrief));
+  nameInput.addEventListener('input', () => { bBrand.value = look.name; renderBrief(); });
+  listeners.push(() => { if (bBrand.value !== look.name && look.name !== 'Your Brand') bBrand.value = look.name; renderBrief(); });
+  document.getElementById('briefForm').addEventListener('submit', (e) => e.preventDefault());
+  renderBrief();
+  const copyBrief = document.getElementById('copyBrief');
+  copyBrief.addEventListener('click', () => {
+    const done = () => { copyBrief.textContent = 'Copied. Now email it'; setTimeout(() => { copyBrief.textContent = 'Copy brief'; }, 2400); };
+    const select = () => { const r = document.createRange(); r.selectNodeContents(out); const s = getSelection(); s.removeAllRanges(); s.addRange(r); copyBrief.textContent = 'Selected. Press copy'; };
+    try { navigator.clipboard.writeText(briefText).then(done, select); } catch (e) { select(); }
+  });
 
   // ---------- copy email ----------
   const copyBtn = document.getElementById('copyMail');
