@@ -237,30 +237,22 @@ footer a { color: var(--dim); text-decoration: none; }
   .map .spin { animation: none; }
 }
 
-/* ---------- registry-specific ---------- */
+/* ---------- flywheel and model extras ---------- */
+.hero h1 { font-size: clamp(40px, 5.2vw, 74px); }
 .flywheel .node { cursor: pointer; }
 .flywheel .node circle.bg { fill: var(--surface); stroke: var(--edge-hi); stroke-width: 1.5; transition: stroke 0.3s, fill 0.3s; }
 .flywheel .node.on circle.bg, .flywheel .node:hover circle.bg { stroke: var(--c); fill: var(--surface-2); }
 .flywheel .node:focus { outline: none; }
 .flywheel .node:focus-visible circle.bg { stroke: var(--c); stroke-width: 3; }
-.flywheel .node text { fill: var(--text); font: 700 15px var(--display); pointer-events: none; }
+.flywheel .node text { fill: var(--text); font: 700 14px var(--display); pointer-events: none; }
 .flywheel .node text.sub { fill: var(--faint); font: 500 10px var(--mono); letter-spacing: 0.14em; }
 .flywheel .loop { fill: none; stroke: var(--edge-hi); stroke-width: 1.5; stroke-dasharray: 4 7; }
 .flywheel .runner { fill: var(--red-soft); }
-.lucky-table td.num { color: var(--gold, #e8c27a); }
-.occasions { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 0; border: 1px solid var(--edge); border-radius: 18px; overflow: hidden; background: var(--surface); }
-.occasions div { padding: 18px 16px; display: grid; gap: 6px; align-content: start; min-width: 0; border-left: 1px solid var(--edge); }
-.occasions div:nth-child(6n+1) { border-left: 0; }
-.occasions div:nth-child(n+7) { border-top: 1px solid var(--edge); }
-.occasions .m { font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; color: var(--red-soft); text-transform: uppercase; }
-.occasions b { font-size: 15px; }
-.occasions p { font-size: 13px; color: var(--dim); }
-.soldout { display: inline-flex; align-items: center; gap: 8px; font-family: var(--mono); font-size: 12px; letter-spacing: 0.08em; color: #e8c27a; border: 1px solid rgba(232, 194, 122, 0.4); border-radius: 999px; padding: 6px 12px; }
-.controls.three { grid-template-columns: repeat(4, minmax(0, 1fr)); }
-@media (max-width: 1000px) { .controls.three { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-@media (max-width: 900px) { .controls.three { grid-template-columns: minmax(0, 1fr); } }
-@media (max-width: 1000px) { .occasions { grid-template-columns: repeat(3, minmax(0, 1fr)); } .occasions div:nth-child(6n+1) { border-left: 1px solid var(--edge); } .occasions div:nth-child(3n+1) { border-left: 0; } .occasions div:nth-child(n+4) { border-top: 1px solid var(--edge); } }
-@media (max-width: 600px) { .occasions { grid-template-columns: repeat(2, minmax(0, 1fr)); } .occasions div { border-left: 0 !important; border-top: 1px solid var(--edge); } .occasions div:nth-child(2n) { border-left: 1px solid var(--edge) !important; } .occasions div:nth-child(-n+2) { border-top: 0; } }
+.controls.four { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+@media (max-width: 1000px) { .controls.four { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 900px) { .controls.four { grid-template-columns: minmax(0, 1fr); } }
+.compare td.y { color: var(--text); }
+.compare td.n { color: var(--faint); }
 </style>
 </head>
 <body>
@@ -273,25 +265,25 @@ footer a { color: var(--dim); text-decoration: none; }
       <svg viewBox="45 45 1160 1160" aria-hidden="true"><rect x="45" y="45" width="1160" height="1160" rx="240" fill="#E03131"/><g fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round"><path d="M268 222 L336 280" stroke-width="36"/><path d="M392 182 L389 256" stroke-width="36"/><path d="M230 340 L318 330" stroke-width="36"/></g><path fill="#fff" d="M382 348 C 372 300, 425 272, 462 298 L 868 575 C 902 598, 900 640, 864 648 L 770 684 L 870 818 C 895 850, 880 900, 845 920 L 830 928 C 800 945, 770 935, 752 910 L 647 760 L 595 832 C 575 862, 540 872, 515 860 C 500 853, 494 840, 492 826 Z"/></svg>
       <span><b>KLICKODE</b><small>ORBIT</small></span>
     </a>
-    <a class="pill" href="index.html">← Design a planet</a>
+    <a class="pill" href="index.html">← Build your world</a>
   </header>
 
   <section class="hero" aria-labelledby="h">
     <div>
-      <span class="eyebrow">Strategy · Klickode Orbit Registry · Oct 2026</span>
-      <h1 id="h">Sell planets, <em>not pages.</em></h1>
-      <p class="lede">Orbit becomes a product anyone can buy in two minutes: a numbered planet they design, a small world they write inside it, and a certificate that proves it is theirs. 9,999 planets, one shared universe, and every planet sold is an advert for the next.</p>
+      <span class="eyebrow">Strategy · Klickode Orbit · Oct 2026</span>
+      <h1 id="h">A universe of companies, <em>one world each.</em></h1>
+      <p class="lede">Orbit sells small and mid-size companies something a listing can’t give them: an animated world of their own, inside a galaxy people enjoy exploring. They pay monthly to keep it lit. Klickode builds the best ones and wins the bigger projects that follow.</p>
     </div>
     <div class="system">
       <div class="map">
-        <svg class="flywheel" viewBox="0 0 520 520" role="group" aria-label="The Orbit flywheel: design, claim, share, discover">
+        <svg class="flywheel" viewBox="0 0 520 520" role="group" aria-label="The Orbit flywheel: build, launch, get discovered, win customers">
           <circle class="loop" cx="260" cy="260" r="170"/>
           <g class="spin" style="animation-duration: 14s"><circle class="runner" cx="430" cy="260" r="6"/></g>
           <g transform="translate(222 222) scale(0.0655)"><rect x="45" y="45" width="1160" height="1160" rx="240" fill="#E03131"/><g fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round"><path d="M268 222 L336 280" stroke-width="36"/><path d="M392 182 L389 256" stroke-width="36"/><path d="M230 340 L318 330" stroke-width="36"/></g><path fill="#fff" d="M382 348 C 372 300, 425 272, 462 298 L 868 575 C 902 598, 900 640, 864 648 L 770 684 L 870 818 C 895 850, 880 900, 845 920 L 830 928 C 800 945, 770 935, 752 910 L 647 760 L 595 832 C 575 862, 540 872, 515 860 C 500 853, 494 840, 492 826 Z"/></g>
-          <g class="node" data-k="design" style="--c: var(--s-kit)" tabindex="0" role="button" aria-label="Design"><circle class="bg" cx="260" cy="90" r="54"/><text x="260" y="88" text-anchor="middle">Design</text><text class="sub" x="260" y="108" text-anchor="middle">01</text></g>
-          <g class="node" data-k="claim" style="--c: var(--s-launch)" tabindex="0" role="button" aria-label="Claim"><circle class="bg" cx="430" cy="260" r="54"/><text x="430" y="258" text-anchor="middle">Claim</text><text class="sub" x="430" y="278" text-anchor="middle">02</text></g>
-          <g class="node" data-k="share" style="--c: var(--s-care)" tabindex="0" role="button" aria-label="Share"><circle class="bg" cx="260" cy="430" r="54"/><text x="260" y="428" text-anchor="middle">Share</text><text class="sub" x="260" y="448" text-anchor="middle">03</text></g>
-          <g class="node" data-k="discover" style="--c: var(--s-studio)" tabindex="0" role="button" aria-label="Discover"><circle class="bg" cx="90" cy="260" r="54"/><text x="90" y="258" text-anchor="middle">Discover</text><text class="sub" x="90" y="278" text-anchor="middle">04</text></g>
+          <g class="node" data-k="build" style="--c: var(--s-kit)" tabindex="0" role="button" aria-label="Build"><circle class="bg" cx="260" cy="90" r="56"/><text x="260" y="88" text-anchor="middle">Build</text><text class="sub" x="260" y="108" text-anchor="middle">01</text></g>
+          <g class="node" data-k="launch" style="--c: var(--s-launch)" tabindex="0" role="button" aria-label="Launch"><circle class="bg" cx="430" cy="260" r="56"/><text x="430" y="258" text-anchor="middle">Launch</text><text class="sub" x="430" y="278" text-anchor="middle">02</text></g>
+          <g class="node" data-k="found" style="--c: var(--s-care)" tabindex="0" role="button" aria-label="Get discovered"><circle class="bg" cx="260" cy="430" r="56"/><text x="260" y="428" text-anchor="middle">Discovered</text><text class="sub" x="260" y="448" text-anchor="middle">03</text></g>
+          <g class="node" data-k="win" style="--c: var(--s-studio)" tabindex="0" role="button" aria-label="Win customers"><circle class="bg" cx="90" cy="260" r="56"/><text x="90" y="258" text-anchor="middle">Customers</text><text class="sub" x="90" y="278" text-anchor="middle">04</text></g>
         </svg>
       </div>
       <div class="ringtabs" role="tablist" aria-label="Flywheel steps" id="ringTabs"></div>
@@ -300,56 +292,59 @@ footer a { color: var(--dim); text-decoration: none; }
   </section>
 
   <dl class="summary" aria-label="Strategy at a glance">
-    <div><dt>Year-one revenue</dt><dd id="sumYear">฿0<small id="sumYearUsd">base case</small></dd></div>
-    <div><dt>Planets sold</dt><dd id="sumPlanets">0<small>of 9,999 in Genesis</small></dd></div>
-    <div><dt>Average order</dt><dd id="sumAov">฿0<small>planet, add-ons, lucky fees</small></dd></div>
-    <div><dt>Gross margin</dt><dd>≈ 95%<small>on digital planets, before ads</small></dd></div>
+    <div><dt>Monthly revenue, month 12</dt><dd id="sumMrr">฿0<small>recurring, base case</small></dd></div>
+    <div><dt>Year-one revenue</dt><dd id="sumYear">฿0<small id="sumYearUsd">including Flagship builds</small></dd></div>
+    <div><dt>Worlds live, month 12</dt><dd id="sumWorlds">0<small>after cancellations</small></dd></div>
+    <div><dt>Flagship builds</dt><dd id="sumFlag">0<small>studio projects in year one</small></dd></div>
   </dl>
 
   <section class="part" aria-labelledby="p1">
     <div class="side"><span class="num">01</span><span class="label">The product</span></div>
     <div class="body">
-      <h2 id="p1">What people <em>actually buy.</em></h2>
-      <div class="prose"><p>Not a website and not a picture. A buyer gets <strong>a place in a universe other people can visit.</strong> That is the difference between Orbit and a printable “name a star” certificate: the planet exists, it has neighbours, and anyone can search it and step inside.</p></div>
+      <h2 id="p1">A website, a directory listing <em>and a show.</em></h2>
+      <div class="prose"><p>Each company gets a numbered planet in the Genesis galaxy. Visitors who open it warp in and land in a <strong>world themed in the company’s colours</strong>: hero, numbers, story, services, a quote and contacts. The company edits it any time from the builder.</p></div>
       <div class="cards">
-        <div class="card"><span class="k">Own</span><h3>A number no one else has</h3><p>One of 9,999 Genesis planets, locked to one owner, with a certificate and a fingerprint code. NFT-style scarcity with no wallet and no crypto.</p></div>
-        <div class="card"><span class="k">Create</span><h3>A planet that looks like them</h3><p>Colours, ring, moon, crystals and a name. Then a world inside: a dedication and three short chapters.</p></div>
-        <div class="card hl"><span class="k">Belong</span><h3>A place others can find</h3><p>A shared galaxy map, a search box and a link per planet. Owners show it off; visitors become the next buyers.</p></div>
+        <div class="card"><span class="k">For the company</span><h3>One link that impresses</h3><p>A mini-site that feels like a launch, ready in ten minutes. Perfect for small businesses that have only a Facebook page or a stale website.</p></div>
+        <div class="card"><span class="k">For visitors</span><h3>A galaxy worth exploring</h3><p>Search by industry or city, tap lights on a map, fly into companies. Discovery feels like play, so people browse longer.</p></div>
+        <div class="card hl"><span class="k">For Klickode</span><h3>Recurring revenue and leads</h3><p>Monthly plans pay the bills. Flagship builds and the clients they lead to grow the studio.</p></div>
       </div>
     </div>
   </section>
 
   <section class="part" aria-labelledby="p2">
-    <div class="side"><span class="num">02</span><span class="label">Why it sells</span></div>
+    <div class="side"><span class="num">02</span><span class="label">The value</span></div>
     <div class="body">
-      <h2 id="p2">Four reasons people <em>say yes.</em></h2>
-      <div class="cards two">
-        <div class="card"><span class="k">Gift</span><h3>A proven gift idea, made better</h3><p>Naming a star has been a popular gift for decades. Orbit keeps the feeling and fixes the weak part: you can actually see, visit and share what you bought.</p></div>
-        <div class="card"><span class="k">Collectible</span><h3>NFT excitement, none of the pain</h3><p>People liked owning a numbered, one-of-a-kind thing. They did not like wallets, gas fees and scams. Orbit pays in baht with PromptPay or card.</p></div>
-        <div class="card"><span class="k">Culture</span><h3>Thailand pays for lucky numbers</h3><p>Lucky phone numbers and licence plates already sell for extra. Founders numbers, 888 and 9999 turn that habit into the highest-margin item in the shop.</p></div>
-        <div class="card"><span class="k">Share</span><h3>Every planet is content</h3><p>A reveal video (“I bought you a planet”), a link, a certificate photo. Buyers post it because it is about someone they love.</p></div>
+      <h2 id="p2">Why a company <em>pays every month.</em></h2>
+      <div class="tablebox compare">
+        <table>
+          <thead><tr><th>What a company needs</th><th>Free directory or map listing</th><th>Template website</th><th>Orbit world</th></tr></thead>
+          <tbody>
+            <tr><td>Looks different from competitors</td><td class="n">No</td><td class="n">Rarely</td><td class="y">Animated world in its own colours and style</td></tr>
+            <tr><td>Found by new people</td><td class="y">Yes</td><td class="n">Only with ads or SEO</td><td class="y">Galaxy search by industry and city</td></tr>
+            <tr><td>Ready fast</td><td class="y">Yes</td><td class="n">Days to weeks</td><td class="y">About ten minutes</td></tr>
+            <tr><td>Proof of being real</td><td class="n">Reviews only</td><td class="n">No</td><td class="y">Numbered certificate with a fingerprint</td></tr>
+            <tr><td>People share it</td><td class="n">Rarely</td><td class="n">Rarely</td><td class="y">The warp-in is made for screen recordings</td></tr>
+          </tbody>
+        </table>
       </div>
     </div>
   </section>
 
   <section class="part" aria-labelledby="p3">
-    <div class="side"><span class="num">03</span><span class="label">Occasions</span></div>
+    <div class="side"><span class="num">03</span><span class="label">Who buys</span></div>
     <div class="body">
-      <h2 id="p3">A reason to buy <em>every month.</em></h2>
-      <div class="prose"><p>Gifts follow the calendar, so marketing does too. Each moment gets its own world colour, a limited add-on and a push on social.</p></div>
-      <div class="occasions">
-        <div><span class="m">Nov</span><b>Loy Krathong</b><p>Launch drop. Lantern-gold worlds.</p></div>
-        <div><span class="m">Dec</span><b>Christmas, New Year</b><p>Gift cards for people far away.</p></div>
-        <div><span class="m">Feb</span><b>Valentine’s</b><p>Twin planets that orbit each other.</p></div>
-        <div><span class="m">Mar</span><b>Graduation</b><p>“Your world starts now.”</p></div>
-        <div><span class="m">Apr</span><b>Songkran</b><p>Water world, Andaman Blue.</p></div>
-        <div><span class="m">Aug</span><b>Mother’s Day</b><p>Jasmine-white limited world.</p></div>
-        <div><span class="m">Any</span><b>Birthdays</b><p>Number = birthday, e.g. 1402.</p></div>
-        <div><span class="m">Any</span><b>New baby</b><p>A planet as old as they are.</p></div>
-        <div><span class="m">Any</span><b>Anniversaries</b><p>Add a chapter each year.</p></div>
-        <div><span class="m">Any</span><b>Memorials</b><p>A quiet, respectful world.</p></div>
-        <div><span class="m">Any</span><b>Teams</b><p>A planet per employee.</p></div>
-        <div><span class="m">Any</span><b>Fans</b><p>Neighbours of a creator’s planet.</p></div>
+      <h2 id="p3">Start where Klickode <em>already works.</em></h2>
+      <div class="tablebox">
+        <table>
+          <thead><tr><th>Customer</th><th>Why Orbit fits</th><th>Likely plan</th><th>Where we find them</th></tr></thead>
+          <tbody>
+            <tr><td>Cafés, restaurants, florists</td><td>Visual brands that live on Instagram and need one good link</td><td>Outpost → Orbit</td><td>Neighbourhood clusters: Ari, Thonglor, Nimman</td></tr>
+            <tr><td>Beauty, wellness, clinics</td><td>Trust and look matter; services and prices are easy to show</td><td>Orbit</td><td>Instagram, LINE groups, distributors</td></tr>
+            <tr><td>Startups and agencies</td><td>A pitch-ready world for investors and clients</td><td>Orbit or Flagship</td><td>Co-working spaces, startup events, LinkedIn</td></tr>
+            <tr><td>Events and launches</td><td>Short campaigns that need impact fast</td><td>Orbit for 3 months</td><td>Organisers, venues, ticketing partners</td></tr>
+            <tr><td>Hotels, resorts, property</td><td>Big brands that want the full 3D treatment</td><td>Flagship</td><td>Direct outreach by Klickode Studio</td></tr>
+          </tbody>
+        </table>
       </div>
     </div>
   </section>
@@ -357,93 +352,60 @@ footer a { color: var(--dim); text-decoration: none; }
   <section class="part" aria-labelledby="p4">
     <div class="side"><span class="num">04</span><span class="label">Price ladder</span></div>
     <div class="body">
-      <h2 id="p4">Cheap to start, <em>easy to add.</em></h2>
-      <div class="prose"><p>The entry price is an impulse buy. Everything after it is a small yes that the buyer makes while designing, so the average order lands well above the base price.</p></div>
+      <h2 id="p4">Easy to start, <em>natural to upgrade.</em></h2>
+      <div class="prose"><p>The builder itself sells the upgrade. When a company picks a custom colour, a quote, a third service or an animated sky, the plan moves to Orbit by itself, so the price always matches what they designed.</p></div>
       <div class="tablebox">
         <table>
-          <thead><tr><th>Item</th><th>What it is</th><th class="num">Price</th></tr></thead>
+          <thead><tr><th>Item</th><th>What it includes</th><th class="num">Price</th></tr></thead>
           <tbody>
-            <tr><td>Planet</td><td>Number, name, colours, world inside, digital certificate, place on the map</td><td class="num">฿390</td></tr>
-            <tr><td>Moon · Ring · Crystal field</td><td>Visual add-ons, shown on the planet and the certificate</td><td class="num">฿200 · ฿300 · ฿400</td></tr>
-            <tr><td>Lucky number</td><td>Founders, repeating digits, endings in 8 or 9 (table below)</td><td class="num">+฿190 to ฿9,900</td></tr>
-            <tr><td>Printed certificate</td><td>A4, heavy paper, gold seal, shipped in Thailand</td><td class="num">฿490</td></tr>
-            <tr><td>Twin planets</td><td>Two planets that orbit each other, one certificate for two names</td><td class="num">฿990</td></tr>
-            <tr><td>Gift card</td><td>A printed card with a claim code, sold online and in partner cafés and flower shops</td><td class="num">฿390 / ฿990</td></tr>
-            <tr><td>Transfer</td><td>Give or sell a planet to someone else; the certificate is reissued</td><td class="num">฿99 + 10% of sale</td></tr>
-            <tr><td>Star system (brands)</td><td>Brand star with 5 planets and an Orbit flight site by Klickode Studio. Fans claim planets inside; the brand keeps 30%</td><td class="num">from ฿24,900</td></tr>
+            <tr><td>Outpost</td><td>World with about, 2 services, numbers and contacts; starfield sky; preset colours; galaxy listing; certificate</td><td class="num">฿390 / month</td></tr>
+            <tr><td>Orbit</td><td>All sections, 4 services, quote, any colour, Drift and Aurora skies, brighter map light, visitor report</td><td class="num">฿990 / month</td></tr>
+            <tr><td>Flagship</td><td>Klickode designs and writes the world, 3D logo or product, fly-in video, Founders number</td><td class="num">฿24,900 + ฿990 / month</td></tr>
+            <tr><td>Yearly billing</td><td>Two months free on any plan</td><td class="num">10 × monthly</td></tr>
+            <tr><td>Lucky number</td><td>Founders 1–99, repeating digits like 888, endings in 8 or 9</td><td class="num">+฿190 to ฿9,900 once</td></tr>
+            <tr><td>Featured</td><td>Top of an industry filter and a named light on the map for 30 days</td><td class="num">฿1,500 / month</td></tr>
+            <tr><td>Branch worlds</td><td>Extra planets next to the main one, one per branch or product line</td><td class="num">฿290 / month each</td></tr>
           </tbody>
         </table>
       </div>
-      <div class="tablebox lucky-table">
-        <table>
-          <thead><tr><th>Lucky number</th><th>Examples</th><th class="num">How many</th><th class="num">Extra</th></tr></thead>
-          <tbody>
-            <tr><td>Founders, single digit</td><td>1 to 9</td><td class="num">9</td><td class="num">฿9,900</td></tr>
-            <tr><td>Founders</td><td>10 to 99</td><td class="num">90</td><td class="num">฿2,900</td></tr>
-            <tr><td>Repeating digits</td><td>111, 888, 9999</td><td class="num">18</td><td class="num">฿1,900</td></tr>
-            <tr><td>Ends in 8 or 9</td><td>1428, 2569</td><td class="num">1,976</td><td class="num">฿190</td></tr>
-          </tbody>
-        </table>
-      </div>
-      <p class="note">Founders and repeating numbers alone are worth about ฿384,000 if they all sell. They also make the best launch-day content: a live drop of numbers 1 to 99.</p>
     </div>
   </section>
 
   <section class="part" aria-labelledby="p5">
     <div class="side"><span class="num">05</span><span class="label">Revenue model</span></div>
     <div class="body">
-      <h2 id="p5">How the money <em>adds up.</em></h2>
-      <p class="prose">Sales ramp in a straight line from month 1 to the level you set for month 12. Genesis has 9,999 planets, so the model stops selling planets when they run out. These are planning assumptions, not forecasts.</p>
+      <h2 id="p5">Recurring money <em>that compounds.</em></h2>
+      <p class="prose">New sign-ups ramp in a straight line to the level you set for month 12. Each month some companies cancel. Flagship builds pay ฿24,900 once, then stay on ฿990 a month. These are planning assumptions, not forecasts.</p>
       <div class="model">
-        <div class="controls three">
-          <div class="control">
-            <label for="planetsEnd">Planets in month 12 <output id="planetsEndOut" for="planetsEnd"></output></label>
-            <input type="range" id="planetsEnd" min="100" max="3000" step="50" value="800">
-            <small>Linear ramp from month 1</small>
-          </div>
-          <div class="control">
-            <label for="aov">Average order <output id="aovOut" for="aov"></output></label>
-            <input type="range" id="aov" min="390" max="1500" step="10" value="840">
-            <small>Planet ฿390 plus add-ons and lucky fees</small>
-          </div>
-          <div class="control">
-            <label for="print">Buyers adding a print <output id="printOut" for="print"></output></label>
-            <input type="range" id="print" min="0" max="60" step="5" value="25">
-            <small>฿490 each, about ฿180 to make and ship</small>
-          </div>
-          <div class="control">
-            <label for="brands">Star systems in month 12 <output id="brandsOut" for="brands"></output></label>
-            <input type="range" id="brands" min="0" max="6" step="1" value="2">
-            <small>฿24,900 each</small>
-          </div>
+        <div class="controls four">
+          <div class="control"><label for="outEnd">New Outpost / month, month 12 <output id="outEndOut" for="outEnd"></output></label><input type="range" id="outEnd" min="0" max="400" step="10" value="120"><small>฿390 a month each</small></div>
+          <div class="control"><label for="orbEnd">New Orbit / month, month 12 <output id="orbEndOut" for="orbEnd"></output></label><input type="range" id="orbEnd" min="0" max="200" step="5" value="60"><small>฿990 a month each</small></div>
+          <div class="control"><label for="flagEnd">Flagship builds / month, month 12 <output id="flagEndOut" for="flagEnd"></output></label><input type="range" id="flagEnd" min="0" max="8" step="1" value="3"><small>฿24,900 build + ฿990 a month</small></div>
+          <div class="control"><label for="churn">Cancel each month <output id="churnOut" for="churn"></output></label><input type="range" id="churn" min="0" max="10" step="0.5" value="3"><small>Share of live worlds that leave</small></div>
         </div>
         <div class="totals">
           <div class="t"><span>Year one</span><b id="yearTotal">฿0</b></div>
-          <div class="t sub"><span>Planets</span><b id="yPlanets">฿0</b></div>
-          <div class="t sub"><span>Prints</span><b id="yPrints">฿0</b></div>
-          <div class="t sub"><span>Star systems</span><b id="yBrands">฿0</b></div>
-          <span class="soldout" id="soldout" hidden></span>
+          <div class="t sub"><span>Outpost</span><b id="yOut">฿0</b></div>
+          <div class="t sub"><span>Orbit</span><b id="yOrb">฿0</b></div>
+          <div class="t sub"><span>Flagship</span><b id="yFlag">฿0</b></div>
         </div>
         <div class="legend" aria-hidden="true">
-          <span><span class="dot" style="--c: var(--s-kit)"></span>Planets</span>
-          <span><span class="dot" style="--c: var(--s-launch)"></span>Printed certificates</span>
-          <span><span class="dot" style="--c: var(--s-care)"></span>Star systems</span>
+          <span><span class="dot" style="--c: var(--s-kit)"></span>Outpost</span>
+          <span><span class="dot" style="--c: var(--s-launch)"></span>Orbit</span>
+          <span><span class="dot" style="--c: var(--s-care)"></span>Flagship (builds + monthly)</span>
         </div>
         <div class="chart" id="chart">
-          <svg id="chartSvg" viewBox="0 0 760 300" role="img" aria-labelledby="chartTitle"><title id="chartTitle">Monthly revenue in baht for months 1 to 12, stacked by product</title></svg>
+          <svg id="chartSvg" viewBox="0 0 760 300" role="img" aria-labelledby="chartTitle"><title id="chartTitle">Monthly revenue in baht for months 1 to 12, stacked by plan</title></svg>
           <div class="tip" id="tip" hidden></div>
         </div>
         <details class="tableview">
           <summary>Show the numbers as a table</summary>
-          <div class="tablebox">
-            <table>
-              <thead><tr><th>Month</th><th class="num">Planets</th><th class="num">Planet ฿</th><th class="num">Prints</th><th class="num">Print ฿</th><th class="num">Star systems</th><th class="num">Star ฿</th><th class="num">Total ฿</th></tr></thead>
-              <tbody id="tbody"></tbody>
-              <tfoot id="tfoot"></tfoot>
-            </table>
-          </div>
+          <div class="tablebox"><table>
+            <thead><tr><th>Month</th><th class="num">Outpost live</th><th class="num">Orbit live</th><th class="num">Flagship live</th><th class="num">Builds</th><th class="num">Outpost ฿</th><th class="num">Orbit ฿</th><th class="num">Flagship ฿</th><th class="num">Total ฿</th></tr></thead>
+            <tbody id="tbody"></tbody><tfoot id="tfoot"></tfoot>
+          </table></div>
         </details>
-        <p class="note">Before VAT and payment fees (about 3–4% for cards and PromptPay through a Thai gateway). Main costs: paid social tests from month 2, print and shipping about ฿180 per print, hosting and database, and moderation time. A planet itself costs almost nothing to make.</p>
+        <p class="note">Before VAT and payment fees (about 3–4% through a Thai gateway). Main costs: hosting and database, support, sales time, and about 40 hours of studio work per Flagship build.</p>
       </div>
     </div>
   </section>
@@ -451,14 +413,14 @@ footer a { color: var(--dim); text-decoration: none; }
   <section class="part" aria-labelledby="p6">
     <div class="side"><span class="num">06</span><span class="label">Marketing</span></div>
     <div class="body">
-      <h2 id="p6">Let owners <em>do the selling.</em></h2>
+      <h2 id="p6">Fill the galaxy <em>neighbourhood by neighbourhood.</em></h2>
       <div class="channels">
-        <div class="channel"><h3>Founders drop</h3><p>Launch night on TikTok Live: numbers 1 to 99 released one by one. Scarcity, a countdown and a reason to tell friends.</p><span class="cost">One evening</span></div>
-        <div class="channel"><h3>Reveal videos</h3><p>Template for “I bought you a planet” reactions: open the link, fly to the planet, read the dedication. Owners film their partner’s face.</p><span class="cost">Free · user-made</span></div>
-        <div class="channel"><h3>Creator neighbourhoods</h3><p>Give 20 Thai creators a planet. Fans claim the free numbers next to it and become neighbours on the map.</p><span class="cost">20 free planets</span></div>
-        <div class="channel"><h3>Gift cards in shops</h3><p>Claim-code cards at cafés, flower shops and gift stores in Bangkok. The shop keeps 20%.</p><span class="cost">Print + 20%</span></div>
-        <div class="channel"><h3>Bring a friend</h3><p>Each owner gets a link. A friend who buys earns the owner a free moon for their planet.</p><span class="cost">฿200 per sale</span></div>
-        <div class="channel"><h3>Occasion pushes</h3><p>Paid social only in the two weeks before Valentine’s, Mother’s Day and the year-end holidays, when gift intent is highest.</p><span class="cost">≈ ฿15,000 each</span></div>
+        <div class="channel"><h3>Founders 99</h3><p>The first 99 numbers go only to Flagship clients. Low numbers become a status symbol, and each Founder is a showcase for the next.</p><span class="cost">Built into Flagship</span></div>
+        <div class="channel"><h3>Street clusters</h3><p>Sign ten cafés on one street in Ari, give them neighbouring planets, then show the next café its competitors already in orbit.</p><span class="cost">Sales time</span></div>
+        <div class="channel"><h3>Warp-in videos</h3><p>A 10-second screen recording of flying into each new world, posted with the company tagged. They repost it to their own followers.</p><span class="cost">Free · 15 min each</span></div>
+        <div class="channel"><h3>Klickode clients first</h3><p>Every existing Klickode client gets a free year of Orbit. The galaxy starts full of real companies on day one.</p><span class="cost">Free year</span></div>
+        <div class="channel"><h3>Partners</h3><p>Co-working spaces, accountants and business groups offer Orbit to their members. Partners earn 20% of the first year.</p><span class="cost">20% first year</span></div>
+        <div class="channel"><h3>Made in Orbit</h3><p>Every world’s footer links back to the galaxy and to “Build your world”. Each visitor is a possible next customer.</p><span class="cost">Free</span></div>
       </div>
     </div>
   </section>
@@ -466,12 +428,12 @@ footer a { color: var(--dim); text-decoration: none; }
   <section class="part" aria-labelledby="p7">
     <div class="side"><span class="num">07</span><span class="label">For Klickode</span></div>
     <div class="body">
-      <h2 id="p7">A product that is also <em>a portfolio.</em></h2>
-      <div class="prose"><p>Orbit Registry shows, in one link, everything Klickode Studio sells: real-time 3D, a shop with checkout, a live database, generated certificates and search. A brand that buys a star system is one conversation away from a full website, shop or system.</p></div>
+      <h2 id="p7">The portfolio that <em>sells the studio.</em></h2>
+      <div class="prose"><p>Orbit shows, in one link, everything Klickode Studio does: real-time 3D, a builder, a live database, payments, certificates and search. Klickode Studio is planet No. 0001. Every Flagship world is a case study, and every Orbit customer who grows needs a shop, a booking system or a full site next.</p></div>
       <div class="arch" aria-label="How Orbit feeds the studio">
-        <div class="side-b"><span class="eyebrow">Klickode Orbit</span><h3>The consumer product</h3><ul><li><b>Planets</b><span>everyone</span></li><li><b>Star systems</b><span>brands and creators</span></li><li><b>Gift cards</b><span>shops and partners</span></li></ul></div>
+        <div class="side-b"><span class="eyebrow">Klickode Orbit</span><h3>The platform</h3><ul><li><b>Outpost · Orbit</b><span>self-serve, monthly</span></li><li><b>Flagship</b><span>built by Klickode</span></li><li><b>Featured · Branches</b><span>add-ons</span></li></ul></div>
         <div class="link"><span>leads</span></div>
-        <div class="side-a"><span class="eyebrow">Klickode Studio</span><h3>The client work</h3><ul><li><b>Websites</b><span>for star-system brands</span></li><li><b>Online shops</b><span>proven by Orbit checkout</span></li><li><b>Systems</b><span>registry, search, admin</span></li></ul></div>
+        <div class="side-a"><span class="eyebrow">Klickode Studio</span><h3>The projects</h3><ul><li><b>Websites</b><span>when a world outgrows itself</span></li><li><b>Online shops</b><span>linked from the world</span></li><li><b>Business systems</b><span>bookings, stock, CRM</span></li></ul></div>
       </div>
     </div>
   </section>
@@ -479,12 +441,12 @@ footer a { color: var(--dim); text-decoration: none; }
   <section class="part" aria-labelledby="p8">
     <div class="side"><span class="num">08</span><span class="label">Roadmap</span></div>
     <div class="body">
-      <h2 id="p8">Twelve months, <em>season by season.</em></h2>
+      <h2 id="p8">Twelve months, <em>four stages.</em></h2>
       <div class="timeline">
-        <div class="phase"><span class="when">Nov–Dec 2026 · Launch</span><h3>Genesis opens</h3><ul><li>Payments with PromptPay and cards</li><li>Founders drop on Loy Krathong week</li><li>Printed certificates</li><li>20 creator planets</li></ul><p class="goal">Goal: 1,000 planets claimed</p></div>
-        <div class="phase"><span class="when">Jan–Feb 2027 · Love</span><h3>Twin planets</h3><ul><li>Valentine’s twin bundle</li><li>Gift cards in 30 shops</li><li>Reveal-video template</li><li>Report button and moderation</li></ul><p class="goal">Goal: 3,000 planets, 25% prints</p></div>
-        <div class="phase"><span class="when">Mar–Jun 2027 · Grow</span><h3>Brands arrive</h3><ul><li>First star systems</li><li>Planet transfers</li><li>Songkran world</li><li>Thai and English site</li></ul><p class="goal">Goal: 5 star systems</p></div>
-        <div class="phase"><span class="when">Jul–Oct 2027 · Season 2</span><h3>The next galaxy</h3><ul><li>Genesis sells out; owners keep Genesis status</li><li>Season 2 galaxy opens</li><li>See your planet in AR on your phone</li></ul><p class="goal">Goal: 9,999 Genesis sold</p></div>
+        <div class="phase"><span class="when">Nov–Dec 2026 · Ignite</span><h3>Founders and friends</h3><ul><li>Payments with PromptPay and cards</li><li>Klickode clients move in free</li><li>First 10 Flagship worlds</li><li>Warp-in video for each</li></ul><p class="goal">Goal: 50 live worlds</p></div>
+        <div class="phase"><span class="when">Jan–Mar 2027 · Cluster</span><h3>Street by street</h3><ul><li>Ari and Thonglor café clusters</li><li>Thai language worlds</li><li>Visitor reports for Orbit plan</li><li>Report and moderation tools</li></ul><p class="goal">Goal: 300 live worlds</p></div>
+        <div class="phase"><span class="when">Apr–Jul 2027 · Grow</span><h3>Partners and add-ons</h3><ul><li>Partner programme</li><li>Featured and branch worlds</li><li>Enquiry form inside each world</li><li>Chiang Mai and Phuket</li></ul><p class="goal">Goal: ฿500k a month</p></div>
+        <div class="phase"><span class="when">Aug–Oct 2027 · Expand</span><h3>Beyond Thailand</h3><ul><li>English-first marketing for the region</li><li>Photo galleries and products in worlds</li><li>Season 2 galaxy for new sign-ups</li></ul><p class="goal">Goal: 1,000 live worlds</p></div>
       </div>
     </div>
   </section>
@@ -492,17 +454,16 @@ footer a { color: var(--dim); text-decoration: none; }
   <section class="part" aria-labelledby="p9">
     <div class="side"><span class="num">09</span><span class="label">Risks</span></div>
     <div class="body">
-      <h2 id="p9">Keep it <em>honest and safe.</em></h2>
+      <h2 id="p9">What could go wrong, <em>and the answer.</em></h2>
       <div class="tablebox">
         <table>
           <thead><tr><th>Risk</th><th>What we do about it</th></tr></thead>
           <tbody>
-            <tr><td>People think it is a real planet</td><td>Say it plainly on the page, at checkout and on the certificate: a planet in the Klickode Orbit universe, not an astronomical body.</td></tr>
-            <tr><td>It looks like an investment</td><td>Never promise value or resale profit. Transfers are for gifting. No crypto, no tokens, prices in baht.</td></tr>
-            <tr><td>Rude or hurtful names</td><td>Word filter at claim, a report button on every planet, and a moderation queue checked daily. Removed planets are refunded.</td></tr>
-            <tr><td>Losing the registry</td><td>Daily backups and an ownership log. The certificate fingerprint lets any owner prove their planet’s original details.</td></tr>
-            <tr><td>“Name a star” copycats</td><td>Copy the certificate and you still lack the universe: search, neighbours, the world inside and the 3D flight. Keep adding to those.</td></tr>
-            <tr><td>Refunds and disputes</td><td>Full refund within 7 days if the planet link has not been shared. Clear terms at checkout.</td></tr>
+            <tr><td>Companies cancel after the novelty</td><td>Monthly visitor reports show value; yearly billing with two months free; seasonal sky themes keep worlds fresh.</td></tr>
+            <tr><td>Fake or misleading companies</td><td>Check business registration before a world goes public; report button on every world; certificates only for checked companies.</td></tr>
+            <tr><td>Slow on cheap phones</td><td>Worlds use a light 2D sky, not full 3D. The heavy 3D stays on the galaxy home page.</td></tr>
+            <tr><td>Empty galaxy at launch</td><td>Klickode clients move in free, Flagship Founders fill numbers 1–99, and clusters make each area feel busy.</td></tr>
+            <tr><td>Search engines can’t read it</td><td>Each world also renders as plain HTML at its own link, with title and description from the builder.</td></tr>
           </tbody>
         </table>
       </div>
@@ -514,12 +475,12 @@ footer a { color: var(--dim); text-decoration: none; }
     <div class="body">
       <h2 id="p10">Six numbers, <em>every Monday.</em></h2>
       <div class="cards">
-        <div class="card"><span class="k">Conversion</span><div class="big">3%</div><p>Visitors who claim a planet. The designer should feel like play, not a form.</p></div>
-        <div class="card"><span class="k">Average order</span><div class="big">฿840</div><p>Add-ons and lucky numbers do the work. Below ฿600, the add-ons need better placement.</p></div>
-        <div class="card"><span class="k">Print rate</span><div class="big">25%</div><p>Buyers who add the printed certificate. The gift buyers.</p></div>
-        <div class="card"><span class="k">Share rate</span><div class="big">40%</div><p>Owners who copy their planet link within a week.</p></div>
-        <div class="card"><span class="k">Referral</span><div class="big">1 in 5</div><p>New planets that came from an owner’s link.</p></div>
-        <div class="card hl"><span class="k">North star</span><div class="big">Planets / week</div><p>The one number that says the universe is growing.</p></div>
+        <div class="card"><span class="k">Build to launch</span><div class="big">20%</div><p>Companies who open the builder and launch a world.</p></div>
+        <div class="card"><span class="k">Orbit share</span><div class="big">40%</div><p>New worlds that choose Orbit over Outpost.</p></div>
+        <div class="card"><span class="k">Monthly cancel</span><div class="big">&lt; 3%</div><p>Live worlds that leave each month.</p></div>
+        <div class="card"><span class="k">Visits per world</span><div class="big">300 / mo</div><p>The number that keeps companies paying.</p></div>
+        <div class="card"><span class="k">Studio leads</span><div class="big">1 in 20</div><p>Orbit companies who start a Klickode project.</p></div>
+        <div class="card hl"><span class="k">North star</span><div class="big">Monthly revenue</div><p>Recurring baht from live worlds. Everything else feeds it.</p></div>
       </div>
     </div>
   </section>
@@ -529,11 +490,11 @@ footer a { color: var(--dim); text-decoration: none; }
     <div class="body">
       <h2 id="p11">Countdown: <em>seven days.</em></h2>
       <ul class="checklist">
-        <li><input type="checkbox" id="c1"><label for="c1"><b>Share the beta</b> with 30 friends and ask each to claim a planet for someone else.</label></li>
-        <li><input type="checkbox" id="c2"><label for="c2"><b>Pick a payment gateway</b> that takes PromptPay and cards in Thailand, and draft refund terms.</label></li>
-        <li><input type="checkbox" id="c3"><label for="c3"><b>Get a print quote</b> for A4 certificates with a gold-foil seal, 100 and 1,000 copies.</label></li>
-        <li><input type="checkbox" id="c4"><label for="c4"><b>List 20 creators</b> for neighbourhood planets and draft the message.</label></li>
-        <li><input type="checkbox" id="c5"><label for="c5"><b>Set the Founders drop date</b> for Loy Krathong week and announce the countdown.</label></li>
+        <li><input type="checkbox" id="c1"><label for="c1"><b>Move five Klickode clients in</b>: build their worlds with them and record the warp-ins.</label></li>
+        <li><input type="checkbox" id="c2"><label for="c2"><b>Pick a payment gateway</b> for monthly PromptPay and card billing in Thailand.</label></li>
+        <li><input type="checkbox" id="c3"><label for="c3"><b>Choose the first cluster</b>: one street, ten companies, one afternoon of visits.</label></li>
+        <li><input type="checkbox" id="c4"><label for="c4"><b>Offer three Flagship Founders</b> to brands Klickode already knows.</label></li>
+        <li><input type="checkbox" id="c5"><label for="c5"><b>Write the terms</b>: what happens when a world is paused, refunds, and the business check.</label></li>
       </ul>
     </div>
   </section>
@@ -556,27 +517,20 @@ footer a { color: var(--dim); text-decoration: none; }
   }
   function drawSky(t) {
     sx.clearRect(0, 0, innerWidth, innerHeight);
-    for (const s of starsArr) {
-      const a = 0.35 + 0.35 * Math.sin(t / 1400 + s.p * 3);
-      sx.fillStyle = s.red ? `rgba(255,120,120,${a})` : `rgba(235,235,255,${a})`;
-      sx.beginPath(); sx.arc(s.x, s.y, s.r, 0, 6.283); sx.fill();
-    }
+    for (const s of starsArr) { const a = 0.35 + 0.35 * Math.sin(t / 1400 + s.p * 3); sx.fillStyle = s.red ? `rgba(255,120,120,${a})` : `rgba(235,235,255,${a})`; sx.beginPath(); sx.arc(s.x, s.y, s.r, 0, 6.283); sx.fill(); }
     if (!reduce) requestAnimationFrame(drawSky);
   }
   sizeSky(); addEventListener('resize', sizeSky); requestAnimationFrame(drawSky);
 
-  // ---------- flywheel: each step explains how one sale makes the next ----------
+  // ---------- flywheel ----------
   const STEPS = {
-    design: { c: 'var(--s-kit)', tab: 'Design', k: '01 · Design', title: 'Two minutes of play', body: 'Name, colours, ring, moon, a lucky number and a dedication. The 3D planet changes as they choose, so designing feels like a game.', why: 'Every add-on is a small yes that raises the order.' },
-    claim: { c: 'var(--s-launch)', tab: 'Claim', k: '02 · Claim', title: 'The number locks to them', body: 'Pay in baht, the registry locks the number, and the certificate with its fingerprint appears at once.', why: 'Scarcity: once a number is gone, it is gone.' },
-    share: { c: 'var(--s-care)', tab: 'Share', k: '03 · Share', title: 'A gift people show off', body: 'A link straight to the planet, a reveal video, a printed certificate on the wall.', why: 'Most planets are gifts, and gifts get posted.' },
-    discover: { c: 'var(--s-studio)', tab: 'Discover', k: '04 · Discover', title: 'Visitors become buyers', body: 'Whoever opens a shared link lands in the universe, sees the map filling up, and finds the free number next to their friend’s.', why: 'Each planet sold is an ad for the next one.' },
+    build: { c: 'var(--s-kit)', tab: 'Build', k: '01 · Build', title: 'Ten minutes in the builder', body: 'Name, colours, planet, style, content and contacts. The 3D planet changes with every choice, and the preview shows the world before it goes live.', why: 'The design picks the plan, so upgrading feels like their idea.' },
+    launch: { c: 'var(--s-launch)', tab: 'Launch', k: '02 · Launch', title: 'A number, a certificate, a link', body: 'The registry locks the number, the certificate appears, and the company gets one link to share everywhere.', why: 'A launch moment the company wants to post about.' },
+    found: { c: 'var(--s-care)', tab: 'Discovered', k: '03 · Get discovered', title: 'Explorers fly in', body: 'People browse the galaxy by industry and city and warp into worlds that catch their eye. Neighbours send visitors to each other.', why: 'Visits are the value companies pay to keep.' },
+    win: { c: 'var(--s-studio)', tab: 'Customers', k: '04 · Win customers', title: 'Visitors become customers', body: 'The main button, contacts and LINE turn visits into enquiries. Visitors who like the experience ask how to build their own.', why: 'Every world sells the product to the next company.' },
   };
   const tabs = $('ringTabs'), card = $('ringCard'), nodes = [...document.querySelectorAll('.flywheel .node')];
-  Object.entries(STEPS).forEach(([key, r]) => {
-    const b = document.createElement('button'); b.type = 'button'; b.setAttribute('role', 'tab'); b.dataset.k = key; b.style.setProperty('--c', r.c); b.textContent = r.tab;
-    b.addEventListener('click', () => pick(key)); tabs.appendChild(b);
-  });
+  Object.entries(STEPS).forEach(([key, r]) => { const b = document.createElement('button'); b.type = 'button'; b.setAttribute('role', 'tab'); b.dataset.k = key; b.style.setProperty('--c', r.c); b.textContent = r.tab; b.addEventListener('click', () => pick(key)); tabs.appendChild(b); });
   function pick(key) {
     const r = STEPS[key];
     nodes.forEach((g) => g.classList.toggle('on', g.dataset.k === key));
@@ -584,93 +538,67 @@ footer a { color: var(--dim); text-decoration: none; }
     card.style.setProperty('--c', r.c);
     card.innerHTML = `<span class="k">${r.k}</span><h3>${r.title}</h3><p>${r.body}</p><p><b>Why it matters:</b> ${r.why}</p>`;
   }
-  nodes.forEach((g) => {
-    g.addEventListener('click', () => pick(g.dataset.k));
-    g.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); pick(g.dataset.k); } });
-  });
-  pick('share');
+  nodes.forEach((g) => { g.addEventListener('click', () => pick(g.dataset.k)); g.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); pick(g.dataset.k); } }); });
+  pick('found');
 
-  // ---------- revenue model (baht) ----------
-  const GENESIS = 9999, PRINT = 490, BRAND = 24900, FX = 33;
+  // ---------- revenue model: subscriptions with monthly cancellations ----------
+  const OUT = 390, ORB = 990, FLAG_BUILD = 24900, FLAG_M = 990, FX = 33;
   const thb = (v) => '฿' + Math.round(v).toLocaleString('en-US');
-  const short = (v) => v >= 1e6 ? '฿' + (v / 1e6).toFixed(v % 1e6 ? 1 : 0) + 'M' : v >= 1000 ? '฿' + Math.round(v / 1000) + 'k' : '฿' + v;
-  const inputs = { planets: $('planetsEnd'), aov: $('aov'), print: $('print'), brands: $('brands') };
+  const short = (v) => v >= 1e6 ? '฿' + (v / 1e6).toFixed(1).replace(/\.0$/, '') + 'M' : v >= 1000 ? '฿' + Math.round(v / 1000) + 'k' : '฿' + Math.round(v);
+  const inputs = { out: $('outEnd'), orb: $('orbEnd'), flag: $('flagEnd'), churn: $('churn') };
   const MONTHS = ['Nov', 'Dec', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct'];
-
   function model() {
-    const pe = +inputs.planets.value, aov = +inputs.aov.value, pr = +inputs.print.value / 100, be = +inputs.brands.value;
-    let left = GENESIS, soldOut = 0;
-    return { rows: Array.from({ length: 12 }, (_, i) => {
-      const m = i + 1, f = m / 12;
-      let planets = Math.min(left, Math.round(pe * f)); left -= planets;
-      if (!left && !soldOut) soldOut = m;
-      const prints = Math.round(planets * pr), brands = Math.round(be * f);
-      return { m, planets, prints, brands, planet$: planets * aov, print$: prints * PRINT, brand$: brands * BRAND, get total() { return this.planet$ + this.print$ + this.brand$; } };
-    }), soldOut, aov };
+    const oe = +inputs.out.value, be = +inputs.orb.value, fe = +inputs.flag.value, ch = +inputs.churn.value / 100;
+    let o = 0, b = 0, f = 0;
+    return Array.from({ length: 12 }, (_, i) => {
+      const m = i + 1, k = m / 12, builds = Math.round(fe * k);
+      o = o * (1 - ch) + Math.round(oe * k); b = b * (1 - ch) + Math.round(be * k); f = f * (1 - ch / 2) + builds;
+      const O = Math.round(o), B = Math.round(b), Fl = Math.round(f);
+      return { m, O, B, Fl, builds, out$: O * OUT, orb$: B * ORB, flag$: builds * FLAG_BUILD + Fl * FLAG_M, get total() { return this.out$ + this.orb$ + this.flag$; }, get mrr() { return O * OUT + B * ORB + Fl * FLAG_M; } };
+    });
   }
-
   const svg = $('chartSvg'), tip = $('tip'), chartBox = $('chart');
   const NS = 'http://www.w3.org/2000/svg';
-  const el = (n, a) => { const e = document.createElementNS(NS, n); for (const k in a) e.setAttribute(k, a[k]); return e; };
+  const sv = (n, a) => { const e = document.createElementNS(NS, n); for (const k in a) e.setAttribute(k, a[k]); return e; };
   const W = 760, H = 300, L = 60, R = 8, T = 12, B = 30;
-  const SERIES = [['planet$', 'var(--s-kit)'], ['print$', 'var(--s-launch)'], ['brand$', 'var(--s-care)']];
+  const SERIES = [['out$', 'var(--s-kit)'], ['orb$', 'var(--s-launch)'], ['flag$', 'var(--s-care)']];
   function niceMax(v) { const p = Math.pow(10, Math.floor(Math.log10(v || 1))); for (const n of [1, 2, 2.5, 5, 10]) if (n * p >= v) return n * p; return 10 * p; }
   function roundedTop(x, y, w, h, r) { r = Math.min(r, h, w / 2); return `M${x},${y + h}V${y + r}Q${x},${y} ${x + r},${y}H${x + w - r}Q${x + w},${y} ${x + w},${y + r}V${y + h}Z`; }
   let rowsNow = [];
-
   function render() {
-    const { rows, soldOut, aov } = model();
-    rowsNow = rows;
-    $('planetsEndOut').textContent = (+inputs.planets.value).toLocaleString('en-US') + ' / mo';
-    $('aovOut').textContent = thb(aov);
-    $('printOut').textContent = inputs.print.value + '%';
-    $('brandsOut').textContent = inputs.brands.value + ' / mo';
+    const rows = model(); rowsNow = rows;
+    $('outEndOut').textContent = inputs.out.value; $('orbEndOut').textContent = inputs.orb.value; $('flagEndOut').textContent = inputs.flag.value; $('churnOut').textContent = inputs.churn.value + '%';
     const sum = (k) => rows.reduce((a, r) => a + r[k], 0);
-    const yp = sum('planet$'), ypr = sum('print$'), yb = sum('brand$'), year = yp + ypr + yb;
-    $('yearTotal').textContent = thb(year); $('yPlanets').textContent = thb(yp); $('yPrints').textContent = thb(ypr); $('yBrands').textContent = thb(yb);
-    $('sumYear').firstChild.textContent = short(year); $('sumYearUsd').textContent = '≈ $' + Math.round(year / FX).toLocaleString('en-US') + ' · base case';
-    $('sumPlanets').firstChild.textContent = sum('planets').toLocaleString('en-US');
-    $('sumAov').firstChild.textContent = thb(aov);
-    const so = $('soldout'); so.hidden = !soldOut; if (soldOut) so.textContent = '★ Genesis sells out in ' + MONTHS[soldOut - 1] + ' (month ' + soldOut + ')';
-
+    const yo = sum('out$'), yb = sum('orb$'), yf = sum('flag$'), year = yo + yb + yf, last = rows[11];
+    $('yearTotal').textContent = thb(year); $('yOut').textContent = thb(yo); $('yOrb').textContent = thb(yb); $('yFlag').textContent = thb(yf);
+    $('sumMrr').firstChild.textContent = short(last.mrr); $('sumYear').firstChild.textContent = short(year); $('sumYearUsd').textContent = '≈ $' + Math.round(year / FX).toLocaleString('en-US') + ' · with Flagship builds';
+    $('sumWorlds').firstChild.textContent = (last.O + last.B + last.Fl).toLocaleString('en-US'); $('sumFlag').firstChild.textContent = String(sum('builds'));
     while (svg.childNodes.length > 1) svg.removeChild(svg.lastChild);
     const max = niceMax(Math.max(...rows.map((r) => r.total)));
     const y = (v) => T + (H - T - B) * (1 - v / max);
-    const grid = el('g', { class: 'grid' }), axis = el('g', { class: 'axis' });
+    const grid = sv('g', { class: 'grid' }), axis = sv('g', { class: 'axis' });
     const steps = /^2\.?5/.test(String(max)) ? 5 : 4;
-    for (let i = 0; i <= steps; i++) {
-      const v = (max / steps) * i, yy = y(v);
-      if (i > 0) grid.appendChild(el('line', { x1: L, x2: W - R, y1: yy, y2: yy }));
-      const t = el('text', { x: L - 10, y: yy + 4, 'text-anchor': 'end' }); t.textContent = short(v); axis.appendChild(t);
-    }
+    for (let i = 0; i <= steps; i++) { const v = (max / steps) * i, yy = y(v); if (i > 0) grid.appendChild(sv('line', { x1: L, x2: W - R, y1: yy, y2: yy })); const t = sv('text', { x: L - 10, y: yy + 4, 'text-anchor': 'end' }); t.textContent = short(v); axis.appendChild(t); }
     svg.appendChild(grid);
     const slot = (W - L - R) / 12, bw = Math.min(40, slot * 0.58);
     rows.forEach((r, i) => {
-      const x = L + slot * i + (slot - bw) / 2, g = el('g', { class: 'col', 'data-i': i });
+      const x = L + slot * i + (slot - bw) / 2, g = sv('g', { class: 'col', 'data-i': i });
       let acc = 0; const segs = SERIES.filter(([k]) => r[k] > 0);
-      segs.forEach(([k, color], si) => {
-        const y0 = y(acc), y1 = y(acc + r[k]), h = Math.max(0, y0 - y1 - (si > 0 ? 2 : 0));
-        g.appendChild(si === segs.length - 1 ? el('path', { class: 'seg', d: roundedTop(x, y1, bw, h, 4), fill: color }) : el('rect', { class: 'seg', x, y: y1, width: bw, height: h, fill: color }));
-        acc += r[k];
-      });
-      const lab = el('text', { x: x + bw / 2, y: H - 10, 'text-anchor': 'middle' }); lab.textContent = MONTHS[i]; axis.appendChild(lab);
-      g.appendChild(el('rect', { class: 'hit', x: L + slot * i, y: T, width: slot, height: H - T - B }));
-      svg.appendChild(g);
+      segs.forEach(([k, color], si) => { const y0 = y(acc), y1 = y(acc + r[k]), h = Math.max(0, y0 - y1 - (si > 0 ? 2 : 0)); g.appendChild(si === segs.length - 1 ? sv('path', { class: 'seg', d: roundedTop(x, y1, bw, h, 4), fill: color }) : sv('rect', { class: 'seg', x, y: y1, width: bw, height: h, fill: color })); acc += r[k]; });
+      const lab = sv('text', { x: x + bw / 2, y: H - 10, 'text-anchor': 'middle' }); lab.textContent = MONTHS[i]; axis.appendChild(lab);
+      g.appendChild(sv('rect', { class: 'hit', x: L + slot * i, y: T, width: slot, height: H - T - B })); svg.appendChild(g);
     });
-    svg.appendChild(el('line', { class: 'baseline', x1: L, x2: W - R, y1: y(0), y2: y(0) }));
-    svg.appendChild(axis);
-
-    $('tbody').innerHTML = rows.map((r) => `<tr><td>${MONTHS[r.m - 1]} (month ${r.m})</td><td class="num">${r.planets.toLocaleString('en-US')}</td><td class="num">${thb(r.planet$)}</td><td class="num">${r.prints}</td><td class="num">${thb(r.print$)}</td><td class="num">${r.brands}</td><td class="num">${thb(r.brand$)}</td><td class="num">${thb(r.total)}</td></tr>`).join('');
-    $('tfoot').innerHTML = `<tr><td>Year one</td><td class="num">${sum('planets').toLocaleString('en-US')}</td><td class="num">${thb(yp)}</td><td class="num">${sum('prints')}</td><td class="num">${thb(ypr)}</td><td class="num">${sum('brands')}</td><td class="num">${thb(yb)}</td><td class="num">${thb(year)}</td></tr>`;
+    svg.appendChild(sv('line', { class: 'baseline', x1: L, x2: W - R, y1: y(0), y2: y(0) })); svg.appendChild(axis);
+    $('tbody').innerHTML = rows.map((r) => `<tr><td>${MONTHS[r.m - 1]} (month ${r.m})</td><td class="num">${r.O}</td><td class="num">${r.B}</td><td class="num">${r.Fl}</td><td class="num">${r.builds}</td><td class="num">${thb(r.out$)}</td><td class="num">${thb(r.orb$)}</td><td class="num">${thb(r.flag$)}</td><td class="num">${thb(r.total)}</td></tr>`).join('');
+    $('tfoot').innerHTML = `<tr><td>Year one</td><td class="num">${last.O}</td><td class="num">${last.B}</td><td class="num">${last.Fl}</td><td class="num">${sum('builds')}</td><td class="num">${thb(yo)}</td><td class="num">${thb(yb)}</td><td class="num">${thb(yf)}</td><td class="num">${thb(year)}</td></tr>`;
   }
-
   const hide = () => { tip.hidden = true; svg.querySelectorAll('.col').forEach((c) => c.classList.remove('dim')); };
   svg.addEventListener('pointermove', (e) => {
     const g = e.target.closest('.col'); if (!g) return hide();
     const i = +g.dataset.i, r = rowsNow[i];
     svg.querySelectorAll('.col').forEach((c) => c.classList.toggle('dim', c !== g));
     const line = (c, label, v) => `<div><span><span class="dot" style="--c: ${c}"></span>${label}</span><span>${thb(v)}</span></div>`;
-    tip.innerHTML = `<b>${MONTHS[i]} · month ${r.m}</b>` + line('var(--s-kit)', r.planets.toLocaleString('en-US') + ' planets', r.planet$) + line('var(--s-launch)', r.prints + ' prints', r.print$) + line('var(--s-care)', r.brands + ' star systems', r.brand$) + `<div class="sum"><span>Total</span><span>${thb(r.total)}</span></div>`;
+    tip.innerHTML = `<b>${MONTHS[i]} · month ${r.m}</b>` + line('var(--s-kit)', r.O + ' Outpost', r.out$) + line('var(--s-launch)', r.B + ' Orbit', r.orb$) + line('var(--s-care)', r.Fl + ' Flagship · ' + r.builds + ' new', r.flag$) + `<div class="sum"><span>Total</span><span>${thb(r.total)}</span></div>`;
     tip.hidden = false;
     const box = chartBox.getBoundingClientRect();
     let left = e.clientX - box.left + 14; if (left + tip.offsetWidth > box.width) left = e.clientX - box.left - tip.offsetWidth - 14;
@@ -680,10 +608,9 @@ footer a { color: var(--dim); text-decoration: none; }
   Object.values(inputs).forEach((i) => i.addEventListener('input', render));
   render();
 
-  // ---------- remember this viewer's checklist ----------
   document.querySelectorAll('.checklist input').forEach((c) => {
-    try { c.checked = localStorage.getItem('orbit-reg-' + c.id) === '1'; } catch (e) {}
-    c.addEventListener('change', () => { try { localStorage.setItem('orbit-reg-' + c.id, c.checked ? '1' : '0'); } catch (e) {} });
+    try { c.checked = localStorage.getItem('orbit-co-' + c.id) === '1'; } catch (e) {}
+    c.addEventListener('change', () => { try { localStorage.setItem('orbit-co-' + c.id, c.checked ? '1' : '0'); } catch (e) {} });
   });
 })();
 </script>
