@@ -346,6 +346,40 @@ dialog.sheet::backdrop { background: rgba(3, 3, 6, 0.75); backdrop-filter: blur(
 .logo3d::after { content: ''; position: absolute; left: 20%; right: 20%; bottom: 6%; height: 8%; border-radius: 50%; background: radial-gradient(closest-side, rgba(0, 0, 0, 0.55), transparent); filter: blur(6px); z-index: -1; }
 .world[data-theme=paper] .logo3d::after { background: radial-gradient(closest-side, rgba(40, 30, 20, 0.25), transparent); }
 
+/* verify */
+.verify-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 18px; align-items: start; }
+.vform { display: grid; gap: 16px; padding: 24px; }
+.vform input#vCode { font-family: var(--mono); letter-spacing: 0.1em; text-transform: uppercase; }
+.vresult { min-height: 220px; }
+.vstate { display: grid; grid-template-columns: 44px minmax(0, 1fr); gap: 14px; align-items: start; padding: 18px; border-radius: var(--r-md); border: 1px solid var(--edge); background: rgba(0, 0, 0, 0.25); }
+.vstate b { display: block; font-size: 17px; letter-spacing: -0.01em; }
+.vstate p { margin: 6px 0 0; font-size: 14.5px; color: var(--dim); }
+.vicon { width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center; border: 1.5px solid var(--edge-hi); font: 800 20px var(--display); color: var(--dim); }
+.vicon::before { content: '?'; }
+.vstate.ok { border-color: rgba(74, 222, 128, 0.45); background: rgba(74, 222, 128, 0.07); }
+.vstate.ok .vicon { border-color: #4ade80; color: #4ade80; } .vstate.ok .vicon::before { content: '✓'; }
+.vstate.bad { border-color: rgba(255, 112, 112, 0.5); background: rgba(224, 49, 49, 0.08); }
+.vstate.bad .vicon { border-color: var(--red-soft); color: var(--red-soft); } .vstate.bad .vicon::before { content: '✕'; }
+.vstate.warn { border-color: rgba(232, 194, 122, 0.5); background: rgba(232, 194, 122, 0.07); }
+.vstate.warn .vicon { border-color: var(--gold); color: var(--gold); } .vstate.warn .vicon::before { content: '!'; }
+.vrecord { display: grid; grid-template-columns: 56px minmax(0, 1fr); gap: 14px; align-items: center; margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--edge); }
+.vrecord b { font-size: 16px; }
+.vrecord dl { margin: 10px 0 0; display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 4px 14px; font-size: 13.5px; grid-column: 1 / -1; }
+.vrecord dt { color: var(--faint); }
+.vrecord dd { margin: 0; color: var(--text); font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+.vacts { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+.vside { display: grid; gap: 18px; }
+.vrules, .vreport { padding: 24px; display: grid; gap: 12px; }
+.vrules ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
+.vrules li { font-size: 14.5px; color: var(--dim); padding-left: 18px; position: relative; }
+.vrules li::before { content: ''; position: absolute; left: 0; top: 9px; width: 6px; height: 6px; border-radius: 50%; background: #4ade80; }
+.vrules li b { color: var(--text); }
+.vnote { margin: 0; font-size: 13px; color: var(--faint); }
+.vreport p { margin: 0; font-size: 14.5px; color: var(--dim); }
+.vfoot { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.linkbtn { border: 0; background: none; padding: 0; color: var(--text); font: inherit; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+@media (max-width: 1000px) { .verify-grid { grid-template-columns: minmax(0, 1fr); } }
+
 /* share kit */
 dialog.kit { width: min(1080px, calc(100% - 32px)); }
 .kit-body { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 22px; align-items: start; }
@@ -422,6 +456,7 @@ dialog.kit { width: min(1080px, calc(100% - 32px)); }
   <nav aria-label="Main">
     <a class="link" href="#explore">Explore companies</a>
     <a class="link" href="#brands">For brands</a>
+    <a class="link" href="#verify">Verify</a>
     <a class="link" href="#plans">Plans</a>
     <a class="link" href="plan.html">Strategy</a>
     <a class="pill hot" href="#build">Build your world</a>
@@ -433,6 +468,7 @@ dialog.kit { width: min(1080px, calc(100% - 32px)); }
   <a href="#build"><span>Build</span></a>
   <a href="#explore"><span>Explore</span></a>
   <a href="#brands"><span>Brands</span></a>
+  <a href="#verify"><span>Verify</span></a>
   <a href="#plans"><span>Plans</span></a>
 </nav>
 
@@ -597,6 +633,52 @@ dialog.kit { width: min(1080px, calc(100% - 32px)); }
     </div>
   </section>
 
+  <section class="stop" id="verify" aria-labelledby="t-verify">
+    <div class="inner">
+      <div class="head"><div class="copy">
+        <span class="eyebrow">Verify</span>
+        <h2 id="t-verify">Check a certificate <em>before you trust it.</em></h2>
+        <p class="lede">Every genuine Orbit certificate has a planet number and a verification code. Enter both, or scan the code on the certificate, to see the live registry record.</p>
+      </div></div>
+      <div class="verify-grid">
+        <form class="vform glass" id="vForm" autocomplete="off">
+          <div class="grid2">
+            <div class="field"><label for="vNum">Planet number</label><input type="number" id="vNum" min="1" max="9999" inputmode="numeric" placeholder="1"></div>
+            <div class="field"><label for="vCode">Verification code</label><input type="text" id="vCode" maxlength="9" placeholder="ABCD-1234" spellcheck="false" autocapitalize="characters"></div>
+          </div>
+          <button type="submit" class="btn primary">Check the registry</button>
+          <div class="vresult" id="vResult" aria-live="polite">
+            <div class="vstate idle"><span class="vicon" aria-hidden="true"></span><div><b>Waiting for a certificate</b><p>Try Klickode Studio: planet <button type="button" class="linkbtn" id="vTry">No. 0001</button>.</p></div></div>
+          </div>
+        </form>
+        <div class="vside">
+          <div class="glass vrules">
+            <h3>How Orbit stops fakes</h3>
+            <ul>
+              <li><b>One seller.</b> Planets are issued only at Klickode Orbit. There are no resellers, agents, marketplaces or tokens.</li>
+              <li><b>One owner per number.</b> The registry locks each number to one company. It can never be sold twice.</li>
+              <li><b>A code you can check.</b> The verification code comes from the planet’s registry fingerprint. A copied or edited certificate will not match.</li>
+              <li><b>No private transfers.</b> Ownership moves only through Klickode support, which issues a new certificate and a new code.</li>
+              <li><b>Never pay a person.</b> Orbit only takes payment in its own checkout. Anyone asking for a bank transfer, crypto or a gift card is not Klickode.</li>
+            </ul>
+            <p class="vnote">A valid result proves the certificate matches the registry. It does not vouch for the company’s business. Check reviews and registration as you would anywhere else.</p>
+          </div>
+          <form class="glass vreport" id="rForm" autocomplete="off">
+            <h3>Report a seller</h3>
+            <p>Seen planets or certificates sold outside Klickode Orbit? Tell us and we will investigate and warn buyers.</p>
+            <div class="field"><label for="rWhere">Where did you see it?</label><input type="text" id="rWhere" maxlength="140" placeholder="Link, page or group name"></div>
+            <div class="grid2">
+              <div class="field"><label for="rNum">Planet number <em>if shown</em></label><input type="text" id="rNum" maxlength="5" inputmode="numeric"></div>
+              <div class="field"><label for="rSeller">Seller name or handle</label><input type="text" id="rSeller" maxlength="60"></div>
+            </div>
+            <div class="field"><label for="rNote">What happened?</label><textarea id="rNote" maxlength="600" placeholder="Price asked, how they asked to be paid, anything else that helps"></textarea></div>
+            <div class="vfoot"><button type="submit" class="btn small">Send report</button><span class="note" id="rStatus" role="status"></span></div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <section class="stop" id="plans" aria-labelledby="t-plans">
     <div class="inner">
       <div class="head">
@@ -620,6 +702,8 @@ dialog.kit { width: min(1080px, calc(100% - 32px)); }
       <div class="faq">
         <details class="glass"><summary>Does this replace my website?</summary><p>For many small businesses, yes: one link with your story, services and contacts. If you need a shop or booking system, Klickode Studio builds that and links it from your world.</p></details>
         <details class="glass"><summary>What happens to my planet if I stop paying?</summary><p>Your world goes dark but your number is held for 60 days. Pay again and it lights up exactly as you left it.</p></details>
+        <details class="glass"><summary>Can I buy a planet from someone else?</summary><p>No. Orbit planets are issued only at Klickode Orbit and are not for resale. If a company changes hands, Klickode support moves the planet and issues a new certificate with a new verification code. Any other seller is not genuine. Please report them in Verify.</p></details>
+        <details class="glass"><summary>How do I know a certificate is real?</summary><p>Scan the code on the certificate, or enter the planet number and verification code in Verify. A genuine certificate matches the live registry record. If it does not match, do not pay, and report the seller.</p></details>
         <details class="glass"><summary>Is this a real planet?</summary><p>No. It is a planet in the Klickode Orbit universe, a digital world made by Klickode Studio. Your company owns its registry entry and everything inside it.</p></details>
         <details class="glass"><summary>Can I print the business card?</summary><p>Yes. The share kit saves the front and back at 3.5 × 2 inches and 300 dpi, the standard size printers expect. The back carries a QR code that opens your world.</p></details>
         <details class="glass"><summary>Do you work with bigger brands?</summary><p>Yes. Brand systems give a company several planets (one per brand, branch or campaign), a product modelled in 3D, monthly reporting and a named contact at Klickode Studio. Book a demo for a quote.</p></details>
@@ -660,7 +744,7 @@ dialog.kit { width: min(1080px, calc(100% - 32px)); }
   <div class="sheet-head"><span class="eyebrow" id="certTitle">Certificate of registry</span><button type="button" class="xbtn" id="certClose" aria-label="Close">×</button></div>
   <div class="sheet-body">
     <canvas class="certcanvas" id="certCanvas" width="1600" height="1130" role="img" aria-label="Certificate of registry"></canvas>
-    <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap"><button type="button" class="btn primary small" id="dlCert" hidden>Download certificate</button></div>
+    <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap"><button type="button" class="btn primary small" id="dlCert" hidden>Download certificate</button><button type="button" class="btn small" id="certVerify">Check this certificate</button></div>
   </div>
 </dialog>
 <dialog class="sheet kit" id="kitSheet" aria-labelledby="kitTitle">
@@ -819,6 +903,7 @@ dialog.kit { width: min(1080px, calc(100% - 32px)); }
     mine[p.n] = p;
     await reg.db.doc('worlds/' + reg.uid).set({ companies: mine });
   }
+  HOUSE.forEach(async (h) => { h.fp = await fingerprint(h); });
   async function fingerprint(p) {
     const text = JSON.stringify([p.n, p.name, p.industry, p.city, p.at]);
     try { const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(text)); return [...new Uint8Array(buf)].map((b) => b.toString(16).padStart(2, '0')).join(''); }
@@ -949,8 +1034,8 @@ dialog.kit { width: min(1080px, calc(100% - 32px)); }
     if (!F('fName').value.trim()) { showTab('identity'); F('fName').focus(); showToast('Give your company a name first.'); return; }
     if (!numNote()) { showTab('launch'); return; }
     const c = draftCompany();
-    if (draft.editing) { const old = companies.get(draft.editing); c.n = draft.editing; c.at = old ? old.at : c.at; }
-    c.fp = await fingerprint(c);
+    if (draft.editing) { const old = companies.get(draft.editing); c.n = draft.editing; c.at = old ? old.at : c.at; c.fp = old && old.fp ? old.fp : await fingerprint(c); }
+    else c.fp = await fingerprint(c);
     F('launchBtn').disabled = true; st.textContent = draft.editing ? 'Saving…' : 'Locking No. ' + pad(c.n) + ' in the registry…';
     try {
       await save(c, !draft.editing);
@@ -1145,8 +1230,11 @@ dialog.kit { width: min(1080px, calc(100% - 32px)); }
     const rows = [['COORDINATES', coords(c.n)], ['COMPANY', [c.industry, c.city].filter(Boolean).join(' · ')], ['EDITION', 'Genesis · 1 of 9,999'], ['REGISTERED', when]];
     x.strokeStyle = 'rgba(232,194,122,0.35)'; x.lineWidth = 1; x.beginPath(); x.moveTo(110, 760); x.lineTo(Wd - 110, 760); x.stroke();
     rows.forEach(([k, v], i) => { const cx2 = 110 + (i % 2) * 520, cy2 = 810 + Math.floor(i / 2) * 66; x.fillStyle = gold; x.font = '500 15px "JetBrains Mono", monospace'; x.fillText(k, cx2, cy2); x.fillStyle = ink; x.font = '500 22px Inter, sans-serif'; x.fillText(v, cx2, cy2 + 30); });
-    x.fillStyle = gold; x.font = '500 15px "JetBrains Mono", monospace'; x.fillText('FINGERPRINT', 110, 978);
-    x.fillStyle = dim; x.font = '400 17px "JetBrains Mono", monospace'; x.fillText(c.fp ? c.fp.match(/.{1,8}/g).slice(0, 8).join(' ') : 'House world · registered by Klickode Studio', 110, 1008);
+    x.fillStyle = gold; x.font = '500 15px "JetBrains Mono", monospace'; x.fillText('VERIFICATION CODE', 110, 958); x.fillText('FINGERPRINT', 630, 958);
+    x.fillStyle = ink; x.font = '700 30px "JetBrains Mono", monospace'; x.fillText(c.fp ? verifyCode(c) : 'PENDING', 110, 996);
+    x.fillStyle = dim; x.font = '400 14px "JetBrains Mono", monospace'; if (c.fp) { const parts = c.fp.match(/.{1,16}/g); x.fillText(parts.slice(0, 2).join(' '), 630, 984); x.fillText(parts.slice(2, 4).join(' '), 630, 1004); }
+    x.fillStyle = dim; x.font = '500 14px Inter, sans-serif'; x.fillText('Issued only by Klickode Orbit. Not for resale. Check it: scan the code or enter the number and verification code at Klickode Orbit → Verify.', 110, 1050);
+    if (c.fp) { x.fillStyle = '#fff'; x.fillRect(1062, 872, 118, 118); drawQR(x, verifyLink(c), 1065, 875, 112, '#111216', '#ffffff'); x.fillStyle = dim; x.font = '500 11px "JetBrains Mono", monospace'; x.textAlign = 'center'; x.fillText('SCAN TO VERIFY', 1121, 1012); x.textAlign = 'left'; }
     const sx = 1310, sy = 930, sr = 96;
     x.fillStyle = 'rgba(232,194,122,0.08)'; x.beginPath(); x.arc(sx, sy, sr, 0, 6.283); x.fill();
     x.strokeStyle = gold; x.lineWidth = 2; x.beginPath(); x.arc(sx, sy, sr, 0, 6.283); x.stroke(); x.beginPath(); x.arc(sx, sy, sr - 12, 0, 6.283); x.stroke();
@@ -1474,6 +1562,51 @@ dialog.kit { width: min(1080px, calc(100% - 32px)); }
   F('demoKit').addEventListener('click', () => openKit(HOUSE[0]));
 
 
+  // ---------- verify: check a certificate against the live registry ----------
+  function verifyCode(c) { const h = (c.fp || '').slice(0, 8).toUpperCase(); return h.slice(0, 4) + '-' + h.slice(4); }
+  function verifyLink(c) { return SHARE_BASE + '#v' + pad(c.n) + '-' + (c.fp || '').slice(0, 8).toUpperCase(); }
+  let lastVerify = null;
+  function runVerify(silent) {
+    const n = Math.round(+F('vNum').value), code = F('vCode').value.replace(/[^a-f0-9]/gi, '').toUpperCase();
+    const box = F('vResult'); box.textContent = '';
+    const state = (cls, title, text) => { const d = el('div', 'vstate ' + cls); d.appendChild(el('span', 'vicon')); const t = el('div'); t.append(el('b', '', title), el('p', '', text)); d.appendChild(t); box.appendChild(d); return t; };
+    if (!(n >= 1 && n <= MAX)) { if (!silent) state('warn', 'Enter a planet number', 'Planet numbers run from 1 to 9,999 and are printed on the certificate.'); lastVerify = null; return; }
+    lastVerify = { n, code };
+    const c = companies.get(n);
+    if (!c) { state('bad', 'No company holds planet No. ' + pad(n), 'Any certificate for this number is fake. Do not pay for it, and report the seller below.'); return; }
+    if (c.house === 'example') { state('warn', 'No. ' + pad(n) + ' is an example world', c.name + ' is a fictional company Klickode made to show what Orbit can do. It has no real certificate. Anyone selling it is running a scam.'); return; }
+    if (!c.fp) { state('warn', 'Registry record is still being written', 'Try again in a moment.'); return; }
+    if (!code) { state('warn', 'Planet No. ' + pad(n) + ' is registered', 'Add the verification code from the certificate to confirm the certificate itself is genuine.'); return; }
+    if (code.length !== 8 || code !== c.fp.slice(0, 8).toUpperCase()) { state('bad', 'This code does not match planet No. ' + pad(n), 'The certificate may be copied or edited. Do not pay for it or trust it. Report the seller below, or ask the company to show you its world on Klickode Orbit.'); return; }
+    const t = state('ok', 'Genuine certificate', 'This certificate matches the live registry record for planet No. ' + pad(n) + '.');
+    const rec = el('div', 'vrecord'); rec.appendChild(planetThumb(c, 56));
+    const nm = el('div'); nm.append(el('b', '', c.name), el('p', '', [c.industry, c.city].filter(Boolean).join(' · '))); rec.appendChild(nm);
+    const dl = el('dl');
+    [['Planet', 'No. ' + pad(c.n) + ' · ' + coords(c.n)], ['Registered', c.at ? new Date(c.at).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }) : 'Founding world'], ['Issued by', 'Klickode Orbit'], ['Code', verifyCode(c)]].forEach(([k, v]) => dl.append(el('dt', '', k), el('dd', '', v)));
+    rec.appendChild(dl); t.appendChild(rec);
+    const acts = el('div', 'vacts');
+    const enter = el('button', 'btn small primary', 'Enter world'); enter.type = 'button'; enter.addEventListener('click', () => openWorld(c));
+    const cert = el('button', 'btn small', 'View certificate'); cert.type = 'button'; cert.addEventListener('click', () => openCert(c));
+    acts.append(enter, cert); t.appendChild(acts);
+  }
+  F('vForm').addEventListener('submit', (e) => { e.preventDefault(); runVerify(); });
+  F('vCode').addEventListener('input', () => { const v = F('vCode').value.replace(/[^a-f0-9]/gi, '').toUpperCase().slice(0, 8); F('vCode').value = v.length > 4 ? v.slice(0, 4) + '-' + v.slice(4) : v; });
+  F('vTry').addEventListener('click', () => { const k = companies.get(1); F('vNum').value = 1; F('vCode').value = k && k.fp ? verifyCode(k) : ''; runVerify(); });
+  F('certVerify').addEventListener('click', () => { if (!certC) return; F('certSheet').close(); if (!WV.hidden) closeWorld(); F('vNum').value = certC.n; F('vCode').value = certC.fp ? verifyCode(certC) : ''; runVerify(); F('verify').scrollIntoView({ behavior: reduce ? 'auto' : 'smooth' }); });
+
+  // reports go to a private inbox only Klickode can read
+  F('rForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const st = F('rStatus'), where = F('rWhere').value.trim(), note = F('rNote').value.trim();
+    if (!where && !note) { st.textContent = 'Tell us where you saw it or what happened.'; return; }
+    const report = { where: where.slice(0, 140), planet: F('rNum').value.replace(/\D/g, '').slice(0, 4), seller: F('rSeller').value.trim().slice(0, 60), note: note.slice(0, 600), at: Date.now() };
+    if (reg.mode === 'db' && reg.canWrite) {
+      try { await reg.db.collection('reports/' + reg.uid + '/items').add(report); st.textContent = 'Report sent. Thank you for keeping Orbit safe.'; F('rForm').reset(); return; }
+      catch (err) { /* fall through to email */ }
+    }
+    st.textContent = 'Please email this report to klickode@gmail.com. We could not send it from this page.';
+  });
+
   // ---------- explore: galaxy map, filters and cards ----------
   const gcv = F('galaxy'), gx = gcv.getContext('2d'), tip = F('mapTip');
   let gW = 0, gH = 0, gScale = 1, spin = 0, hoverN = 0;
@@ -1580,6 +1713,9 @@ dialog.kit { width: min(1080px, calc(100% - 32px)); }
     renderCards(); renderFeatured(); drawGalaxy(); updateBuilder();
     const m = /^#w(\d{4})$/.exec(location.hash);
     if (m && !hashDone && companies.has(+m[1])) { hashDone = true; openWorld(companies.get(+m[1]), { noHash: true }); }
+    const v = /^#v(\d{4})-?([A-Fa-f0-9]{8})?$/.exec(location.hash);
+    if (v && !hashDone) { hashDone = true; setTimeout(() => { F('vNum').value = +v[1]; F('vCode').value = v[2] ? v[2].toUpperCase().replace(/(.{4})/, '$1-') : ''; runVerify(); F('verify').scrollIntoView({ behavior: 'auto' }); }, 600); }
+    if (lastVerify) runVerify(true);
   }
   let toastTimer = 0;
   function showToast(t) { const x = F('toast'); x.textContent = t; x.hidden = false; clearTimeout(toastTimer); toastTimer = setTimeout(() => { x.hidden = true; }, 2800); }

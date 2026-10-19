@@ -14,6 +14,9 @@ When published as a claude.ai artifact, worlds are shared between visitors throu
 
 - `claims/<number>`: `{owner, at}`. The lock that gives one number to one company (claimed with a short lease).
 - `worlds/<user id>`: `{companies: {<number>: world}}`. Each person writes only their own document; everyone reads all of them.
+- `reports/<user id>/items/*`: seller reports from the Verify section. Each person can write only their own; only the artifact owner can read them.
+
+Certificates carry a verification code (the first 8 characters of the registry fingerprint, fixed at launch) and a QR code that opens `#v<number>-<code>` to check it against the live registry.
 
 Opened anywhere else, the page keeps worlds in the browser's local storage so the whole flow still works. Payments are not wired up: launching is free in this preview.
 
