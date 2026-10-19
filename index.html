@@ -5,6 +5,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;700&display=swap">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
 <style>
 /* Layout: a fixed WebGL universe the camera flies through as you scroll. Over it, one design system of glass panels: the world builder, the company directory and the plans. Opening a company plays a warp into its planet and lands in that company's own themed world. */
 :root {
@@ -315,6 +316,66 @@ dialog.sheet::backdrop { background: rgba(3, 3, 6, 0.75); backdrop-filter: blur(
 .xbtn { width: 36px; height: 36px; border-radius: 50%; border: 1px solid var(--edge); background: transparent; cursor: pointer; font-size: 18px; line-height: 1; }
 .toast { position: fixed; z-index: 40; left: 50%; bottom: calc(26px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); padding: 12px 18px; border-radius: 999px; background: var(--text); color: var(--void); font-weight: 600; font-size: 14px; box-shadow: 0 20px 50px -20px rgba(0, 0, 0, 0.8); max-width: calc(100% - 32px); text-align: center; }
 
+/* logo tools */
+.logo-row { display: grid; grid-template-columns: 168px minmax(0, 1fr); gap: 18px; align-items: start; }
+.logo-prev { position: relative; width: 168px; height: 168px; border-radius: var(--r-md); background: radial-gradient(circle at 50% 40%, rgba(255, 255, 255, 0.07), rgba(0, 0, 0, 0.35) 70%); border: 1px solid var(--edge); }
+.logo-prev canvas { width: 100%; height: 100%; display: block; }
+.logo-ctrl { display: grid; gap: 14px; min-width: 0; }
+.upload { position: relative; overflow: hidden; }
+.upload input { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+.opt.inline { display: inline-flex; align-items: center; gap: 10px; }
+
+/* brands */
+.brands-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 48px; align-items: center; }
+.brand-points { list-style: none; margin: 30px 0 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 26px; }
+.brand-points li { padding: 16px 0; border-top: 1px solid var(--edge); min-width: 0; }
+.brand-points b { display: block; font-size: 15.5px; margin-bottom: 4px; }
+.brand-points span { font-size: 14px; color: var(--dim); }
+.brand-stage { position: relative; aspect-ratio: 1; max-width: 560px; width: 100%; justify-self: center; overflow: hidden; background: radial-gradient(circle at 50% 42%, rgba(255, 255, 255, 0.06), rgba(6, 6, 9, 0.75) 68%); }
+.brand-stage canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.brand-stage .floor { position: absolute; left: 22%; right: 22%; bottom: 17%; height: 9%; border-radius: 50%; background: radial-gradient(closest-side, rgba(0, 0, 0, 0.75), transparent); filter: blur(6px); pointer-events: none; }
+.brand-stage .switch-row { position: absolute; left: 0; right: 0; bottom: 18px; display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; padding: 0 12px; }
+.brand-stage .switch-row .chip { height: 32px; font-size: 12.5px; background: rgba(6, 6, 9, 0.6); }
+.brand-stage .cap { position: absolute; left: 20px; top: 18px; font-size: 12px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--faint); }
+
+/* world hero with the 3D emblem */
+.whero { grid-template-columns: minmax(0, 1.25fr) minmax(0, 0.75fr); align-items: center; column-gap: 40px; }
+.whero > .wtext { display: grid; justify-items: start; min-width: 0; }
+.logo3d { position: relative; width: min(100%, 380px); aspect-ratio: 1; justify-self: center; }
+.logo3d canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.logo3d::after { content: ''; position: absolute; left: 20%; right: 20%; bottom: 6%; height: 8%; border-radius: 50%; background: radial-gradient(closest-side, rgba(0, 0, 0, 0.55), transparent); filter: blur(6px); z-index: -1; }
+.world[data-theme=paper] .logo3d::after { background: radial-gradient(closest-side, rgba(40, 30, 20, 0.25), transparent); }
+
+/* share kit */
+dialog.kit { width: min(1080px, calc(100% - 32px)); }
+.kit-body { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 22px; align-items: start; }
+.card-stage { position: relative; aspect-ratio: 5 / 3.4; border-radius: var(--r-md); background: radial-gradient(circle at 50% 40%, #1d1e25, #0a0a0d 75%); border: 1px solid var(--edge); overflow: hidden; touch-action: none; }
+.card-stage canvas { width: 100%; height: 100%; display: block; cursor: grab; }
+.card-stage .hintline { position: absolute; left: 0; right: 0; bottom: 12px; text-align: center; font-size: 12.5px; color: var(--faint); pointer-events: none; }
+.kit-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+.kit-side { display: grid; gap: 14px; }
+.kit-block { display: grid; gap: 8px; padding: 16px; border-radius: var(--r-md); border: 1px solid var(--edge); background: rgba(0, 0, 0, 0.25); }
+.kit-block .lbl { font-size: 12px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--faint); }
+.linkrow { display: flex; gap: 8px; }
+.linkrow input { font-family: var(--mono); font-size: 13px; }
+.kit-qr { display: grid; grid-template-columns: 120px minmax(0, 1fr); gap: 16px; align-items: center; }
+.kit-qr canvas { width: 120px; height: 120px; border-radius: 10px; background: #fff; display: block; }
+.kit-qr p { margin: 4px 0 10px; font-size: 13.5px; color: var(--dim); }
+.kit-list { display: grid; gap: 8px; }
+.kit-list button { display: flex; justify-content: space-between; align-items: center; gap: 12px; width: 100%; padding: 14px 16px; border-radius: var(--r-sm); border: 1px solid var(--edge); background: rgba(255, 255, 255, 0.03); color: var(--text); font: 600 14px var(--display); cursor: pointer; text-align: left; }
+.kit-list button:hover { border-color: var(--edge-hi); }
+.kit-list button small { font-weight: 400; color: var(--faint); font-size: 12.5px; }
+
+@media (max-width: 1000px) {
+  .brands-grid, .kit-body { grid-template-columns: minmax(0, 1fr); }
+  .whero { grid-template-columns: minmax(0, 1fr); }
+  .logo3d { order: -1; width: 220px; justify-self: start; margin-bottom: 8px; }
+}
+@media (max-width: 760px) {
+  .logo-row { grid-template-columns: minmax(0, 1fr); }
+  .logo-prev { width: 140px; height: 140px; }
+  .brand-points { grid-template-columns: minmax(0, 1fr); }
+}
 @media (max-width: 1000px) {
   .explore { grid-template-columns: minmax(0, 1fr); }
   .mapbox { min-height: 380px; }
@@ -360,6 +421,7 @@ dialog.sheet::backdrop { background: rgba(3, 3, 6, 0.75); backdrop-filter: blur(
   </a>
   <nav aria-label="Main">
     <a class="link" href="#explore">Explore companies</a>
+    <a class="link" href="#brands">For brands</a>
     <a class="link" href="#plans">Plans</a>
     <a class="link" href="plan.html">Strategy</a>
     <a class="pill hot" href="#build">Build your world</a>
@@ -370,6 +432,7 @@ dialog.sheet::backdrop { background: rgba(3, 3, 6, 0.75); backdrop-filter: blur(
   <a href="#start" class="on"><span>Start</span></a>
   <a href="#build"><span>Build</span></a>
   <a href="#explore"><span>Explore</span></a>
+  <a href="#brands"><span>Brands</span></a>
   <a href="#plans"><span>Plans</span></a>
 </nav>
 
@@ -413,7 +476,16 @@ dialog.sheet::backdrop { background: rgba(3, 3, 6, 0.75); backdrop-filter: blur(
             <div class="field"><label for="fCity">City</label><input type="text" id="fCity" maxlength="28" placeholder="Bangkok"></div>
             <div class="field"><label for="fSince">Since</label><input type="text" id="fSince" maxlength="4" inputmode="numeric" placeholder="2024"></div>
           </div>
-          <div class="field"><span class="lbl">Mark shape</span><div class="opts" role="radiogroup" id="optShape"></div></div>
+          <div class="logo-row">
+            <div class="logo-prev"><canvas id="logoPrev" aria-label="3D preview of your logo" role="img"></canvas></div>
+            <div class="logo-ctrl">
+              <div class="field"><span class="lbl">Logo <em>PNG, JPG, WebP or SVG</em></span>
+                <div class="opts"><span class="btn small upload">Upload logo<input type="file" id="fLogo" accept="image/png,image/jpeg,image/webp,image/svg+xml" aria-label="Upload logo"></span><button type="button" class="btn small" id="logoClear" hidden>Remove</button></div>
+                <span class="hintline" id="logoNote"></span></div>
+              <div class="field"><span class="lbl">Emblem shape</span><div class="opts" role="radiogroup" id="optShape"></div></div>
+            </div>
+          </div>
+          <div class="field"><span class="lbl">Finish</span><div class="opts" role="radiogroup" id="optFinish"></div></div>
         </div>
 
         <div class="panel" role="tabpanel" data-panel="planet" hidden>
@@ -500,6 +572,31 @@ dialog.sheet::backdrop { background: rgba(3, 3, 6, 0.75); backdrop-filter: blur(
     </div>
   </section>
 
+  <section class="stop" id="brands" aria-labelledby="t-brands">
+    <div class="inner brands-grid">
+      <div class="copy">
+        <span class="eyebrow">For brands</span>
+        <h2 id="t-brands">Your logo, <em>in three dimensions.</em></h2>
+        <p class="lede">Upload a logo and Orbit turns it into a lit 3D emblem in enamel, brushed metal or gold. It leads your world, your business card and everything you share.</p>
+        <ul class="brand-points">
+          <li><b>3D logo</b><span>Made from your own file, in four finishes and three shapes.</span></li>
+          <li><b>Share kit</b><span>World link, QR code, 3D business card, contact file and certificate.</span></li>
+          <li><b>Campaign worlds</b><span>A planet for each launch, product or event, live in minutes.</span></li>
+          <li><b>Star systems</b><span>One planet per brand, branch or market, around your main world.</span></li>
+          <li><b>Built by the studio</b><span>Klickode models your product in 3D and writes your story in Thai and English.</span></li>
+          <li><b>Measured</b><span>Visits, shares and enquiries, reported every month.</span></li>
+        </ul>
+        <div class="actions"><a class="btn primary" href="https://www.klickode.com/contact">Book a brand demo ↗</a><button type="button" class="btn" id="demoKit">Open a share kit</button></div>
+      </div>
+      <div class="brand-stage glass">
+        <canvas id="brandLogo" role="img" aria-label="The Klickode logo as a 3D emblem"></canvas>
+        <span class="floor" aria-hidden="true"></span>
+        <span class="cap">Klickode Studio · No. 0001</span>
+        <div class="switch-row" role="radiogroup" aria-label="Finish" id="brandFinish"></div>
+      </div>
+    </div>
+  </section>
+
   <section class="stop" id="plans" aria-labelledby="t-plans">
     <div class="inner">
       <div class="head">
@@ -524,6 +621,8 @@ dialog.sheet::backdrop { background: rgba(3, 3, 6, 0.75); backdrop-filter: blur(
         <details class="glass"><summary>Does this replace my website?</summary><p>For many small businesses, yes: one link with your story, services and contacts. If you need a shop or booking system, Klickode Studio builds that and links it from your world.</p></details>
         <details class="glass"><summary>What happens to my planet if I stop paying?</summary><p>Your world goes dark but your number is held for 60 days. Pay again and it lights up exactly as you left it.</p></details>
         <details class="glass"><summary>Is this a real planet?</summary><p>No. It is a planet in the Klickode Orbit universe, a digital world made by Klickode Studio. Your company owns its registry entry and everything inside it.</p></details>
+        <details class="glass"><summary>Can I print the business card?</summary><p>Yes. The share kit saves the front and back at 3.5 × 2 inches and 300 dpi, the standard size printers expect. The back carries a QR code that opens your world.</p></details>
+        <details class="glass"><summary>Do you work with bigger brands?</summary><p>Yes. Brand systems give a company several planets (one per brand, branch or campaign), a product modelled in 3D, monthly reporting and a named contact at Klickode Studio. Book a demo for a quote.</p></details>
         <details class="glass"><summary>Can Klickode build it for me?</summary><p>Yes. Flagship includes design, copy in Thai and English, a 3D version of your logo or product, and a short fly-in video for social media.</p></details>
       </div>
     </div>
@@ -548,8 +647,7 @@ dialog.sheet::backdrop { background: rgba(3, 3, 6, 0.75); backdrop-filter: blur(
       <span class="where" id="wWhere"></span>
       <div class="group">
         <button type="button" class="wbtn" id="wEdit" hidden>Edit</button>
-        <button type="button" class="wbtn" id="wCert">Certificate</button>
-        <button type="button" class="wbtn" id="wShare">Share</button>
+        <button type="button" class="wbtn acc" id="wKit">Share kit</button>
       </div>
     </div>
     <div class="wpage" id="wpage"></div>
@@ -563,6 +661,25 @@ dialog.sheet::backdrop { background: rgba(3, 3, 6, 0.75); backdrop-filter: blur(
   <div class="sheet-body">
     <canvas class="certcanvas" id="certCanvas" width="1600" height="1130" role="img" aria-label="Certificate of registry"></canvas>
     <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap"><button type="button" class="btn primary small" id="dlCert" hidden>Download certificate</button></div>
+  </div>
+</dialog>
+<dialog class="sheet kit" id="kitSheet" aria-labelledby="kitTitle">
+  <div class="sheet-head"><span class="eyebrow" id="kitTitle">Share kit</span><button type="button" class="xbtn" id="kitClose" aria-label="Close">×</button></div>
+  <div class="sheet-body kit-body">
+    <div>
+      <div class="card-stage"><canvas id="cardCanvas" role="img" aria-label="Business card in 3D. Drag to turn it."></canvas><span class="hintline">Drag to turn the card</span></div>
+      <div class="kit-actions"><button type="button" class="btn small" id="cardFlip">Flip card</button><button type="button" class="btn small" id="cardFront">Save front</button><button type="button" class="btn small" id="cardBack">Save back</button></div>
+    </div>
+    <div class="kit-side">
+      <div class="kit-block"><span class="lbl">World link</span><div class="linkrow"><input type="text" id="kitLink" readonly aria-label="World link"><button type="button" class="btn small primary" id="kitCopy">Copy</button></div></div>
+      <div class="kit-block kit-qr"><canvas id="kitQr" width="480" height="480" role="img" aria-label="QR code that opens this world"></canvas><div><b>QR code</b><p>For menus, packaging, posters and your shop window. It opens your world.</p><button type="button" class="btn small" id="qrSave">Save QR</button></div></div>
+      <div class="kit-list">
+        <button type="button" id="kitVcf">Contact card<small>.vcf · saves to any phone</small></button>
+        <button type="button" id="kitPost">“Now in orbit” post<small>1080 × 1350 image</small></button>
+        <button type="button" id="kitCert">Certificate of registry<small>numbered, with fingerprint</small></button>
+      </div>
+      <p class="beta">Cards are 3.5 × 2 in at 300 dpi, ready for print.</p>
+    </div>
   </div>
 </dialog>
 <div class="toast" id="toast" hidden></div>
@@ -582,11 +699,12 @@ dialog.sheet::backdrop { background: rgba(3, 3, 6, 0.75); backdrop-filter: blur(
   const THEMES = [['night', 'Night', 'Deep space, light text', 'linear-gradient(135deg,#07080c,#1a1b24)'], ['dawn', 'Dawn', 'Warm dark, glowing', 'linear-gradient(135deg,#12090f,#4a1d24)'], ['paper', 'Daylight', 'Light and clean', 'linear-gradient(135deg,#f5f2ec,#dcd6cc)']];
   const FONTS = [['modern', 'Modern', 'Bold sans'], ['classic', 'Classic', 'Elegant serif'], ['tech', 'Tech', 'Mono capitals']];
   const SKIES = [['stars', 'Starfield', 'Calm, free'], ['drift', 'Drift', 'Floating light · Orbit'], ['aurora', 'Aurora', 'Flowing bands · Orbit']];
-  const SHAPES = [['orb', 'Orb'], ['square', 'Tile'], ['diamond', 'Diamond']];
+  const SHAPES = [['orb', 'Coin'], ['square', 'Tile'], ['diamond', 'Diamond']];
+  const FINISHES = [['enamel', 'Enamel', 'Glossy colour'], ['metal', 'Brushed metal', 'Steel · Orbit'], ['gold', 'Gold', 'Warm gold · Orbit'], ['matte', 'Matte', 'Soft, quiet']];
   const PLANS = {
-    outpost: { name: 'Outpost', m: 390, desc: 'Your world, listed in the galaxy', feats: ['World with about, 2 services, numbers and contacts', 'Starfield sky and preset colours', 'Listed and searchable in the galaxy', 'Certificate and share link'] },
-    orbit: { name: 'Orbit', m: 990, desc: 'Every section and style', feats: ['Everything in Outpost', 'Up to 4 services and a quote', 'Any brand colour, Drift and Aurora skies', 'Brighter light on the galaxy map', 'Monthly visitor report'] },
-    flagship: { name: 'Flagship', m: 990, setup: 24900, desc: 'Klickode builds it for you', feats: ['Everything in Orbit', 'Design and copy by Klickode, Thai and English', '3D model of your logo or product', 'Fly-in video for social media', 'Founders number 1–99 included'] },
+    outpost: { name: 'Outpost', m: 390, desc: 'Your world, listed in the galaxy', feats: ['World with about, 2 services, numbers and contacts', '3D logo in enamel or matte', 'Share kit: link, QR, business card, contact file', 'Listed and searchable in the galaxy', 'Numbered certificate'] },
+    orbit: { name: 'Orbit', m: 990, desc: 'Every section, finish and style', feats: ['Everything in Outpost', 'Brushed metal and gold logo finishes', 'Up to 4 services and a quote', 'Any brand colour, Drift and Aurora skies', 'Monthly visitor report'] },
+    flagship: { name: 'Flagship', m: 990, setup: 24900, desc: 'Klickode builds it for you', feats: ['Everything in Orbit', 'Design and copy by Klickode, Thai and English', 'Your product modelled in 3D', 'Fly-in video for social media', 'Founders number 1–99 included'] },
   };
 
   // ---------- colour helpers ----------
@@ -618,12 +736,12 @@ dialog.sheet::backdrop { background: rgba(3, 3, 6, 0.75); backdrop-filter: blur(
 
   // ---------- house worlds: Klickode itself plus clearly marked examples (not registry records) ----------
   const HOUSE = [
-    { n: 1, house: 'klickode', name: 'Klickode Studio', tagline: 'Websites, online shops and business systems, built in Bangkok.', industry: 'Creative & media', city: 'Bangkok', since: '', accent: '#e03131', ring: true, moon: true, crystals: true, shape: 'square', theme: 'night', font: 'modern', sky: 'aurora',
+    { n: 1, house: 'klickode', name: 'Klickode Studio', tagline: 'Websites, online shops and business systems, built in Bangkok.', industry: 'Creative & media', city: 'Bangkok', since: '', accent: '#e03131', ring: true, moon: true, crystals: true, shape: 'square', finish: 'metal', theme: 'night', font: 'modern', sky: 'aurora',
       about: 'Klickode Studio turns loose ideas into websites, tools and shop pages people remember. We design and build in Thai and English, and most sites go live in about two weeks.\nKlickode Orbit, the universe you are flying through, is one of our own projects.',
       services: [{ t: 'Websites', d: 'Company and portfolio sites, designed and built to load fast.' }, { t: 'Online shops', d: 'Catalogue, checkout and payments your customers trust.' }, { t: 'Business systems', d: 'Bookings, stock and customer tools made for how you work.' }, { t: 'Orbit worlds', d: 'Cinematic 3D worlds like this one, for your brand.' }],
       stats: [{ v: '≈2 wks', l: 'from brief to a live site' }, { v: 'TH / EN', l: 'every project, both languages' }, { v: '3D', l: 'worlds built in-house' }],
       quote: { q: 'Make something out of nothing.', by: 'Klickode Studio' }, contact: { email: 'klickode@gmail.com', phone: '', line: '', web: 'www.klickode.com', addr: 'Bangkok, Thailand' }, cta: 'Talk to Klickode', plan: 'flagship', at: 0 },
-    { n: 88, house: 'example', name: 'Chao Roast', tagline: 'Small-batch coffee, roasted every morning in Ari.', industry: 'Food & drink', city: 'Bangkok', since: '2023', accent: '#e8a020', ring: true, moon: false, crystals: false, shape: 'orb', theme: 'dawn', font: 'classic', sky: 'drift',
+    { n: 88, house: 'example', name: 'Chao Roast', tagline: 'Small-batch coffee, roasted every morning in Ari.', industry: 'Food & drink', city: 'Bangkok', since: '2023', accent: '#e8a020', ring: true, moon: false, crystals: false, shape: 'orb', finish: 'gold', theme: 'dawn', font: 'classic', sky: 'drift',
       about: 'A tiny roastery and café. We buy green beans from farms in Chiang Rai and Nan, roast in small batches before sunrise, and pour them by noon.',
       services: [{ t: 'Café', d: 'Filter, espresso and seasonal drinks, seven days a week.' }, { t: 'Beans by post', d: 'Fresh-roasted bags shipped across Thailand.' }, { t: 'Wholesale', d: 'Beans and training for cafés and offices.' }],
       stats: [{ v: '6 am', l: 'roasting starts' }, { v: '12', l: 'partner farms' }, { v: '48 h', l: 'roast to cup' }], quote: { q: 'The best flat white on our side of the city.', by: 'A regular' }, contact: {}, cta: 'Visit the café', plan: 'orbit', at: 0 },
@@ -631,7 +749,7 @@ dialog.sheet::backdrop { background: rgba(3, 3, 6, 0.75); backdrop-filter: blur(
       about: 'Three products, one plant. Our serum, cream and mist are built around pandan extract, made in small batches in Chiang Mai and tested on sensitive skin.',
       services: [{ t: 'Pandan serum', d: 'Light, daily, for calm and even skin.' }, { t: 'Night cream', d: 'Rich repair while you sleep.' }, { t: 'Face mist', d: 'A cool reset for hot afternoons.' }],
       stats: [{ v: '3', l: 'products, nothing extra' }, { v: '0', l: 'added fragrance' }, { v: '100%', l: 'made in Thailand' }], quote: null, contact: {}, cta: 'Shop the range', plan: 'orbit', at: 0 },
-    { n: 2048, house: 'example', name: 'Ratri Sound', tagline: 'Two nights of electronic music by the river.', industry: 'Events', city: 'Bangkok', since: '2025', accent: '#7b5cff', ring: true, moon: true, crystals: true, shape: 'orb', theme: 'night', font: 'tech', sky: 'stars',
+    { n: 2048, house: 'example', name: 'Ratri Sound', tagline: 'Two nights of electronic music by the river.', industry: 'Events', city: 'Bangkok', since: '2025', accent: '#7b5cff', ring: true, moon: true, crystals: true, shape: 'orb', finish: 'metal', theme: 'night', font: 'tech', sky: 'stars',
       about: 'A riverside festival for electronic music. Three stages, forty artists, and a sunrise set to close each night.',
       services: [{ t: 'Line-up', d: 'Forty artists across three stages.' }, { t: 'Tickets', d: 'Early-bird, two-night and VIP passes.' }],
       stats: [{ v: '2', l: 'nights' }, { v: '3', l: 'stages' }, { v: '40', l: 'artists' }], quote: null, contact: {}, cta: 'Get tickets', plan: 'outpost', at: 0 },
@@ -653,7 +771,8 @@ dialog.sheet::backdrop { background: rgba(3, 3, 6, 0.75); backdrop-filter: blur(
       stats: (Array.isArray(p.stats) ? p.stats : []).slice(0, 3).map((s) => ({ v: str(s && s.v, 10), l: str(s && s.l, 40) })).filter((s) => s.v),
       quote: p.quote && p.quote.q ? { q: str(p.quote.q, 140), by: str(p.quote.by, 40) } : null,
       contact: { email: str(p.contact && p.contact.email, 60), phone: str(p.contact && p.contact.phone, 24), line: str(p.contact && p.contact.line, 30), web: str(p.contact && p.contact.web, 60), addr: str(p.contact && p.contact.addr, 90) },
-      cta: str(p.cta, 24), plan: PLANS[p.plan] ? p.plan : 'outpost', at: +p.at || 0, fp: str(p.fp, 64) };
+      cta: str(p.cta, 24), plan: PLANS[p.plan] ? p.plan : 'outpost', at: +p.at || 0, fp: str(p.fp, 64),
+      finish: pick(p.finish, FINISHES, 'enamel'), logo: typeof p.logo === 'string' && p.logo.length <= 160000 && /^data:image\/(png|webp|jpeg);base64,[A-Za-z0-9+\/=]+$/.test(p.logo) ? p.logo : '' };
   }
   function resetToHouse() { companies.clear(); HOUSE.forEach((h) => companies.set(h.n, h)); }
   function loadLocal() { try { const o = JSON.parse(localStorage.getItem(LOCAL_KEY) || '{}'); for (const p of Object.values(o)) { const c = clean(p); c.owner = 'me'; if (!companies.has(c.n)) companies.set(c.n, c); } } catch (e) {} }
@@ -711,7 +830,7 @@ dialog.sheet::backdrop { background: rgba(3, 3, 6, 0.75); backdrop-filter: blur(
   const listeners = [];
   const changed = () => listeners.forEach((f) => f());
   const PAL = () => paletteOf(look.accent);
-  const draft = { shape: 'orb', theme: 'night', font: 'modern', sky: 'stars', quote: false, plan: 'orbit', billing: 'm', editing: 0 };
+  const draft = { shape: 'orb', finish: 'enamel', logo: '', theme: 'night', font: 'modern', sky: 'stars', quote: false, plan: 'orbit', billing: 'm', editing: 0 };
   const F = (id) => $(id);
   const indSel = F('fInd'); INDUSTRIES.forEach((i) => indSel.appendChild(el('option', '', i))); indSel.value = 'Services';
 
@@ -722,7 +841,8 @@ dialog.sheet::backdrop { background: rgba(3, 3, 6, 0.75); backdrop-filter: blur(
     });
     listeners.push(() => [...box.children].forEach((b) => b.setAttribute('aria-checked', String(b.dataset.v === draft[key]))));
   }
-  radioGroup(F('optShape'), SHAPES, 'shape', (b, [, name]) => { b.style.cssText = 'display:inline-flex;align-items:center;gap:10px'; const m = el('span'); m.style.cssText = 'width:22px;height:22px;background:var(--red);' + ({ Orb: 'border-radius:50%', Tile: 'border-radius:6px', Diamond: 'border-radius:4px;transform:rotate(45deg) scale(.8)' })[name]; b.append(m, el('b', '', name)); });
+  radioGroup(F('optShape'), SHAPES, 'shape', (b, [, name]) => { b.style.cssText = 'display:inline-flex;align-items:center;gap:10px'; const m = el('span'); m.style.cssText = 'width:22px;height:22px;background:var(--red);' + ({ Coin: 'border-radius:50%', Tile: 'border-radius:6px', Diamond: 'border-radius:4px;transform:rotate(45deg) scale(.8)' })[name]; b.append(m, el('b', '', name)); });
+  radioGroup(F('optFinish'), FINISHES, 'finish', (b, [v, name]) => { b.classList.add('inline'); const s = el('span'); s.style.cssText = 'width:22px;height:22px;border-radius:50%;background:' + ({ enamel: 'radial-gradient(circle at 35% 30%,#ff8a8a,#e03131 60%,#7a1010)', metal: 'linear-gradient(135deg,#e8eaee,#8b9097 55%,#d5d8dd)', gold: 'linear-gradient(135deg,#f4dd9b,#c99b45 50%,#9b7128)', matte: '#b5302f' })[v]; b.append(s, el('b', '', name)); });
   radioGroup(F('optTheme'), THEMES, 'theme', (b, [, name, sub, bg]) => { const s = el('span', 'sw'); s.style.background = bg; b.append(s, el('b', '', name), el('small', '', sub)); });
   radioGroup(F('optFont'), FONTS, 'font', (b, [v, name, sub]) => { const s = el('b', '', 'Aa'); s.style.cssText = 'font-size:26px;line-height:1;' + ({ modern: 'font-family:var(--display);font-weight:800;letter-spacing:-.04em', classic: 'font-family:var(--accent-face);font-weight:400', tech: 'font-family:var(--mono);font-weight:700' })[v]; b.append(s, el('b', '', name), el('small', '', sub)); });
   radioGroup(F('optSky'), SKIES, 'sky', (b, [, name, sub]) => { b.append(el('b', '', name), el('small', '', sub)); });
@@ -753,7 +873,7 @@ dialog.sheet::backdrop { background: rgba(3, 3, 6, 0.75); backdrop-filter: blur(
       about: F('fAbout').value.trim(), services: svcIn.map(([t, d]) => ({ t: t.value.trim(), d: d.value.trim() })), stats: statIn.map(([v, l]) => ({ v: v.value.trim(), l: l.value.trim() })),
       quote: draft.quote ? { q: F('fQuote').value.trim(), by: F('fQuoteBy').value.trim() } : null,
       contact: { email: F('fEmail').value.trim(), phone: F('fPhone').value.trim(), line: F('fLine').value.trim(), web: F('fWeb').value.trim(), addr: F('fAddr').value.trim() },
-      cta: F('fCta').value.trim(), plan: draft.plan, at: Date.now() });
+      cta: F('fCta').value.trim(), plan: draft.plan, at: Date.now(), finish: draft.finish, logo: draft.logo });
   }
   function loadIntoBuilder(c) {
     F('fName').value = c.name; F('fTag').value = c.tagline; indSel.value = c.industry; F('fCity').value = c.city; F('fSince').value = c.since; F('fAbout').value = c.about;
@@ -761,13 +881,13 @@ dialog.sheet::backdrop { background: rgba(3, 3, 6, 0.75); backdrop-filter: blur(
     statIn.forEach(([v, l], i) => { v.value = (c.stats[i] || {}).v || ''; l.value = (c.stats[i] || {}).l || ''; });
     draft.quote = !!c.quote; F('fQuote').value = c.quote ? c.quote.q : ''; F('fQuoteBy').value = c.quote ? c.quote.by : '';
     F('fEmail').value = c.contact.email || ''; F('fPhone').value = c.contact.phone || ''; F('fLine').value = c.contact.line || ''; F('fWeb').value = c.contact.web || ''; F('fAddr').value = c.contact.addr || ''; F('fCta').value = c.cta || '';
-    Object.assign(draft, { shape: c.shape, theme: c.theme, font: c.font, sky: c.sky, plan: c.plan });
+    Object.assign(draft, { shape: c.shape, theme: c.theme, font: c.font, sky: c.sky, plan: c.plan, finish: c.finish || 'enamel', logo: c.logo || '' });
     Object.assign(look, { name: c.name, industry: c.industry, accent: c.accent, ring: c.ring, moon: c.moon, crystals: c.crystals });
     if (!isPreset(c.accent)) ci.value = c.accent;
   }
 
   // plan logic: features in use decide the lowest plan that fits
-  function needsOrbit(c) { const r = []; if (!isPreset(c.accent)) r.push('custom colour'); if (c.quote) r.push('quote'); if (c.services.length > 2) r.push('more than 2 services'); if (c.sky !== 'stars') r.push(c.sky === 'drift' ? 'Drift sky' : 'Aurora sky'); return r; }
+  function needsOrbit(c) { const r = []; if (!isPreset(c.accent)) r.push('custom colour'); if (c.quote) r.push('quote'); if (c.services.length > 2) r.push('more than 2 services'); if (c.sky !== 'stars') r.push(c.sky === 'drift' ? 'Drift sky' : 'Aurora sky'); if (c.finish === 'metal' || c.finish === 'gold') r.push(c.finish === 'gold' ? 'gold finish' : 'metal finish'); return r; }
   const planRank = { outpost: 0, orbit: 1, flagship: 2 };
   const pp = F('planPick');
   Object.entries(PLANS).forEach(([k, p]) => {
@@ -870,31 +990,32 @@ dialog.sheet::backdrop { background: rgba(3, 3, 6, 0.75); backdrop-filter: blur(
 
   // ---------- the world inside a planet ----------
   const WV = F('world'), wpage = F('wpage'), wscroll = F('wscroll'), wbg = F('wbg'), wctx = wbg.getContext('2d');
-  let cur = null, curOpts = {}, skyRAF = 0, lastFocus = null;
+  let cur = null, curOpts = {}, skyRAF = 0, lastFocus = null, worldLogoCanvas = null, worldStage = null;
   function section(label, i) { const s = el('section', 'wsec rv'); s.style.setProperty('--i', i); s.appendChild(el('div', 'lab', label)); const body = el('div'); s.appendChild(body); return [s, body]; }
   function buildWorld(c, opts) {
     WV.dataset.theme = c.theme; WV.dataset.font = c.font;
     WV.style.setProperty('--acc', c.accent); WV.style.setProperty('--on-acc', onAccent(c.accent));
     F('wWhere').textContent = (opts.preview ? 'Preview · ' : '') + 'Planet No. ' + pad(c.n) + ' · ' + coords(c.n);
     F('wEdit').hidden = !(c.owner && c.owner === myId() && !opts.preview);
-    F('wCert').hidden = !!opts.preview; F('wShare').hidden = !!opts.preview;
+    F('wKit').hidden = !!opts.preview;
     wpage.textContent = '';
     let i = 0;
     const hero = el('header', 'whero');
-    const mark = el('div', 'mark rv'); mark.dataset.shape = c.shape; mark.style.setProperty('--i', i++);
-    const initials = c.name.split(/\s+/).filter(Boolean).slice(0, 2).map((w) => w[0]).join('').toUpperCase() || 'O';
-    mark.append(el('div', 'base'), el('div', 'orbit-line'), el('span', '', initials)); hero.appendChild(mark);
+    const logoBox = el('div', 'logo3d rv'); logoBox.style.setProperty('--i', 3);
+    if (!worldLogoCanvas) { worldLogoCanvas = document.createElement('canvas'); worldLogoCanvas.setAttribute('role', 'img'); }
+    worldLogoCanvas.setAttribute('aria-label', c.name + ' logo in 3D'); logoBox.appendChild(worldLogoCanvas);
+    const wtext = el('div', 'wtext'); hero.append(wtext, logoBox);
     const kick = el('div', 'wkick rv'); kick.style.setProperty('--i', i++);
     [c.industry, c.city, c.since && 'Since ' + c.since].filter(Boolean).forEach((t, k) => kick.appendChild(k === 0 ? el('b', '', t) : el('span', '', t)));
-    hero.appendChild(kick);
-    const nm = el('h2', 'wname rv', c.name); nm.id = 'wName'; nm.style.setProperty('--i', i++); hero.appendChild(nm);
-    if (c.tagline) { const t = el('p', 'wtag rv', c.tagline); t.style.setProperty('--i', i++); hero.appendChild(t); }
+    wtext.appendChild(kick);
+    const nm = el('h2', 'wname rv', c.name); nm.id = 'wName'; nm.style.setProperty('--i', i++); wtext.appendChild(nm);
+    if (c.tagline) { const t = el('p', 'wtag rv', c.tagline); t.style.setProperty('--i', i++); wtext.appendChild(t); }
     const cta = el('div', 'wcta rv'); cta.style.setProperty('--i', i++);
     const go = el('button', 'wbtn acc', c.cta || 'Get in touch'); go.type = 'button'; go.addEventListener('click', () => F('wContact') && F('wContact').scrollIntoView({ behavior: reduce ? 'auto' : 'smooth' })); cta.appendChild(go);
     if (c.contact.web) { const a = el('a', 'wbtn', 'Website ↗'); a.href = /^https?:\/\//.test(c.contact.web) ? c.contact.web : 'https://' + c.contact.web; a.target = '_blank'; a.rel = 'noopener noreferrer'; cta.appendChild(a); }
-    hero.appendChild(cta);
-    if (c.owner === 'house' && c.house === 'example') { const n = el('div', 'example-note rv', 'Example world · a fictional company made by Klickode to show what Orbit can do'); n.style.setProperty('--i', i++); hero.appendChild(n); }
-    if (opts.preview) { const n = el('div', 'example-note rv', 'Preview · this world is not launched yet'); n.style.setProperty('--i', i++); hero.appendChild(n); }
+    wtext.appendChild(cta);
+    if (c.owner === 'house' && c.house === 'example') { const n = el('div', 'example-note rv', 'Example world · a fictional company made by Klickode to show what Orbit can do'); n.style.setProperty('--i', i++); wtext.appendChild(n); }
+    if (opts.preview) { const n = el('div', 'example-note rv', 'Preview · this world is not launched yet'); n.style.setProperty('--i', i++); wtext.appendChild(n); }
     wpage.appendChild(hero);
     if (c.stats.length) { const [s, b] = section('In numbers', i++); const g = el('div', 'wstats'); c.stats.forEach((x) => { const d = el('div'); d.append(el('b', '', x.v), el('span', '', x.l)); g.appendChild(d); }); g.style.gridTemplateColumns = 'repeat(' + c.stats.length + ', minmax(0, 1fr))'; b.appendChild(g); wpage.appendChild(s); }
     if (c.about) { const [s, b] = section('About', i++); b.append(el('h3', '', 'Who we are'), el('p', 'body', c.about)); wpage.appendChild(s); }
@@ -916,19 +1037,20 @@ dialog.sheet::backdrop { background: rgba(3, 3, 6, 0.75); backdrop-filter: blur(
     warpIn(c, () => {
       WV.hidden = false; WV.classList.remove('landing'); void WV.offsetWidth; WV.classList.add('landing');
       document.body.classList.add('in-world'); wscroll.scrollTop = 0; startSky(c); F('wLeave').focus();
-      if (opts.launched) setTimeout(() => openCert(c), 2800);
+      if (!worldStage) worldStage = makeLogoStage(worldLogoCanvas, { size: 380 });
+      worldStage.set(c); worldStage.start();
+      if (opts.launched) setTimeout(() => { showToast('Your world is live. Here is your share kit.'); openKit(c); }, 2600);
     });
   }
   function closeWorld() {
-    WV.hidden = true; document.body.classList.remove('in-world'); cancelAnimationFrame(skyRAF);
+    WV.hidden = true; document.body.classList.remove('in-world'); cancelAnimationFrame(skyRAF); if (worldStage) worldStage.stop();
     try { history.replaceState(null, '', location.pathname + location.search); } catch (e) {}
     if (lastFocus && lastFocus.focus) lastFocus.focus();
   }
   F('wLeave').addEventListener('click', closeWorld);
-  addEventListener('keydown', (e) => { if (e.key === 'Escape' && !WV.hidden && !F('certSheet').open) closeWorld(); });
+  addEventListener('keydown', (e) => { if (e.key === 'Escape' && !WV.hidden && !F('certSheet').open && !F('kitSheet').open) closeWorld(); });
   F('wEdit').addEventListener('click', () => { const c = cur; closeWorld(); draft.editing = c.n; look.n = c.n; numIn.value = c.n; loadIntoBuilder(c); changed(); showTab('identity'); F('build').scrollIntoView({ behavior: reduce ? 'auto' : 'smooth' }); showToast('Editing ' + c.name); });
-  F('wShare').addEventListener('click', () => { const url = location.href.split('#')[0] + '#w' + pad(cur.n); try { navigator.clipboard.writeText(url).then(() => showToast('Link to this world copied'), () => showToast(url)); } catch (e) { showToast(url); } });
-  F('wCert').addEventListener('click', () => openCert(cur));
+  F('wKit').addEventListener('click', () => openKit(cur));
 
   // warp: the camera dives into the planet before the world appears
   const warp = F('warp'), wl = F('warpLabel');
@@ -1037,12 +1159,320 @@ dialog.sheet::backdrop { background: rgba(3, 3, 6, 0.75); backdrop-filter: blur(
     x.restore();
   }
   let downloads = null;
-  (async () => { if (window.claude && window.claude.use) { downloads = await window.claude.use('downloads'); F('dlCert').hidden = !downloads; } })();
-  function openCert(c) { drawCertificate(F('certCanvas'), c); const d = F('certSheet'); if (!d.open) { try { d.showModal(); } catch (e) { d.setAttribute('open', ''); } } }
+  let certC = null; F('dlCert').hidden = false;
+  (async () => { if (window.claude && window.claude.use) { downloads = await window.claude.use('downloads'); } })();
+  function openCert(c) { certC = c; drawCertificate(F('certCanvas'), c); const d = F('certSheet'); if (!d.open) { try { d.showModal(); } catch (e) { d.setAttribute('open', ''); } } }
   F('certClose').addEventListener('click', () => F('certSheet').close());
   F('certSheet').addEventListener('click', (e) => { if (e.target === F('certSheet')) F('certSheet').close(); });
-  F('dlCert').addEventListener('click', () => { if (!downloads || !cur) return; F('certCanvas').toBlob(async (blob) => { try { await downloads.save({ filename: 'orbit-' + pad(cur.n) + '-certificate.png', data: blob }); } catch (e) {} }, 'image/png'); });
-  if (markImg) markImg.onload = () => { if (F('certSheet').open && cur) drawCertificate(F('certCanvas'), cur); };
+  F('dlCert').addEventListener('click', async () => { if (certC) saveFile(slug(certC) + '-certificate.png', await canvasBlob(F('certCanvas'))); });
+  if (markImg) markImg.onload = () => { if (F('certSheet').open && certC) drawCertificate(F('certCanvas'), certC); };
+
+  // ---------- studio: 3D logo, business card, QR and the share kit ----------
+  const KLICKODE_LOGO = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(document.querySelector('.brand svg').outerHTML.replace('<svg ', '<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" '));
+  const SHARE_BASE = /claude|anthropic|usercontent/i.test(location.hostname) || !/^https?:$/.test(location.protocol) ? 'https://claude.ai/artifact/PCuTjb5VzPuf3t1TtCGzQ6' : location.href.split('#')[0];
+  const worldLink = (c) => SHARE_BASE + '#w' + pad(c.n);
+  const logoOf = (c) => (c.house === 'klickode' ? KLICKODE_LOGO : c.logo || '');
+  const imgCache = new Map();
+  function loadImg(src) {
+    if (!src) return Promise.resolve(null);
+    if (imgCache.has(src)) return imgCache.get(src);
+    const p = new Promise((res) => { const im = new Image(); im.onload = () => res(im); im.onerror = () => res(null); im.src = src; });
+    imgCache.set(src, p); return p;
+  }
+  const initialsOf = (name) => (name || '').split(/\s+/).filter(Boolean).slice(0, 2).map((w) => w[0]).join('').toUpperCase() || 'O';
+
+  function shapePath(x, kind, cx, cy, r) {
+    x.beginPath();
+    if (kind === 'orb') { x.arc(cx, cy, r, 0, 6.283); return; }
+    const k = r * 0.28, s = kind === 'diamond' ? r * 0.92 : r;
+    x.save(); x.translate(cx, cy); if (kind === 'diamond') x.rotate(Math.PI / 4);
+    x.moveTo(-s + k, -s); x.lineTo(s - k, -s); x.quadraticCurveTo(s, -s, s, -s + k); x.lineTo(s, s - k); x.quadraticCurveTo(s, s, s - k, s); x.lineTo(-s + k, s); x.quadraticCurveTo(-s, s, -s, s - k); x.lineTo(-s, -s + k); x.quadraticCurveTo(-s, -s, -s + k, -s);
+    x.restore(); x.closePath();
+  }
+  // the face of the emblem: finish, engraved rim, then the logo or initials
+  function paintFace(cv, c, img) {
+    const x = cv.getContext('2d'), S = cv.width, m = S / 2, fin = c.finish || 'enamel', acc = hexRgb(c.accent);
+    const rgb = (a, k = 1) => 'rgb(' + a.map((v) => Math.round(Math.max(0, Math.min(1, v * k)) * 255)).join(',') + ')';
+    x.clearRect(0, 0, S, S);
+    let g;
+    if (fin === 'gold') { g = x.createLinearGradient(0, 0, S, S); g.addColorStop(0, '#f4dd9b'); g.addColorStop(0.45, '#c99b45'); g.addColorStop(0.7, '#f0d07f'); g.addColorStop(1, '#9b7128'); }
+    else if (fin === 'metal') { g = x.createLinearGradient(0, 0, S, S); g.addColorStop(0, rgb(mixc([0.86, 0.87, 0.9], acc, 0.12))); g.addColorStop(0.5, rgb(mixc([0.55, 0.57, 0.6], acc, 0.15))); g.addColorStop(1, rgb(mixc([0.8, 0.82, 0.85], acc, 0.12))); }
+    else if (fin === 'matte') { g = rgb(acc, 0.82); }
+    else { g = x.createRadialGradient(m * 0.7, m * 0.6, S * 0.05, m, m, S * 0.72); g.addColorStop(0, rgb(mixc(acc, [1, 1, 1], 0.25))); g.addColorStop(0.6, rgb(acc)); g.addColorStop(1, rgb(acc, 0.62)); }
+    x.fillStyle = g; x.fillRect(0, 0, S, S);
+    if (fin === 'metal' || fin === 'gold') { const r = rng(7); for (let i = 0; i < S; i += 2) { x.fillStyle = 'rgba(' + (r() < 0.5 ? '255,255,255' : '0,0,0') + ',' + (0.02 + r() * 0.05) + ')'; x.fillRect(0, i, S, 1); } }
+    x.save(); x.strokeStyle = fin === 'gold' ? 'rgba(90,60,10,0.45)' : 'rgba(0,0,0,0.25)'; x.lineWidth = S * 0.012; shapePath(x, c.shape, m, m, S * 0.43); x.stroke();
+    x.strokeStyle = 'rgba(255,255,255,0.22)'; x.lineWidth = S * 0.006; shapePath(x, c.shape, m, m, S * 0.415); x.stroke(); x.restore();
+    if (img) {
+      const box = S * (c.shape === 'diamond' ? 0.5 : 0.58), sc = Math.min(box / img.width, box / img.height);
+      const w = img.width * sc, h = img.height * sc;
+      x.save(); x.shadowColor = 'rgba(0,0,0,0.35)'; x.shadowBlur = S * 0.02; x.shadowOffsetY = S * 0.008; x.drawImage(img, m - w / 2, m - h / 2, w, h); x.restore();
+    } else {
+      const t = initialsOf(c.name), ink = fin === 'gold' ? '#5a3c0c' : fin === 'metal' ? '#1d1f24' : onAccent(c.accent);
+      x.fillStyle = ink; x.textAlign = 'center'; x.textBaseline = 'middle';
+      x.font = (c.font === 'classic' ? '400 ' + S * 0.34 + 'px "Instrument Serif", Georgia, serif' : c.font === 'tech' ? '700 ' + S * 0.24 + 'px "JetBrains Mono", monospace' : '800 ' + S * 0.3 + 'px Inter, sans-serif');
+      x.save(); x.shadowColor = 'rgba(255,255,255,0.25)'; x.shadowOffsetY = -S * 0.004; x.fillText(t, m, m + S * 0.012); x.restore();
+    }
+    return cv;
+  }
+
+  // one small studio environment for reflections, shared by every 3D stage on a renderer
+  function studioEnv(renderer) {
+    const pm = new THREE.PMREMGenerator(renderer), s = new THREE.Scene();
+    s.add(new THREE.Mesh(new THREE.BoxGeometry(12, 12, 12), new THREE.MeshBasicMaterial({ color: 0x08080a, side: THREE.BackSide })));
+    const panel = (w, h, c, pos) => { const m = new THREE.Mesh(new THREE.PlaneGeometry(w, h), new THREE.MeshBasicMaterial({ color: c, side: THREE.DoubleSide })); m.position.set(...pos); m.lookAt(0, 0, 0); s.add(m); };
+    panel(5, 2.4, new THREE.Color(6, 5.8, 5.4), [-3.5, 2.6, 3]);
+    panel(2.2, 4, new THREE.Color(2.2, 2.4, 3), [4, 0.5, 1.5]);
+    panel(8, 1.2, new THREE.Color(1.4, 1.4, 1.5), [0, 5, -1]);
+    panel(6, 6, new THREE.Color(0.18, 0.18, 0.2), [0, -5, 0]);
+    const env = pm.fromScene(s, 0.035).texture; pm.dispose(); return env;
+  }
+  function emblemGeometry(kind) {
+    let shape;
+    if (kind === 'orb') { shape = new THREE.Shape(); shape.absarc(0, 0, 1, 0, Math.PI * 2, false); }
+    else {
+      const k = 0.28, s = 1, rs = new THREE.Shape();
+      rs.moveTo(-s + k, -s); rs.lineTo(s - k, -s); rs.quadraticCurveTo(s, -s, s, -s + k); rs.lineTo(s, s - k); rs.quadraticCurveTo(s, s, s - k, s); rs.lineTo(-s + k, s); rs.quadraticCurveTo(-s, s, -s, s - k); rs.lineTo(-s, -s + k); rs.quadraticCurveTo(-s, -s, -s + k, -s);
+      shape = kind === 'diamond' ? new THREE.Shape(rs.getPoints(28).map((p) => p.rotateAround(new THREE.Vector2(), Math.PI / 4).multiplyScalar(0.92))) : rs;
+    }
+    const g = new THREE.ExtrudeGeometry(shape, { depth: 0.16, bevelEnabled: true, bevelThickness: 0.07, bevelSize: 0.06, bevelSegments: 10, curveSegments: 120 });
+    g.translate(0, 0, -0.08);
+    return g;
+  }
+  const EDGE = { enamel: [0xd8d9de, 0.95, 0.22], metal: [0xc4c8ce, 1, 0.32], gold: [0xd6a548, 1, 0.24], matte: [null, 0.1, 0.62] };
+  // a lit, slowly turning emblem on any canvas; falls back to a flat face without WebGL
+  function makeLogoStage(canvas, { size } = {}) {
+    let c = null, running = false, raf = 0, visible = true, t0 = performance.now(), px = 0, py = 0, sx = 0, sy = 0;
+    const face = document.createElement('canvas'); face.width = face.height = 1024;
+    if (!window.THREE) {
+      const x = canvas.getContext('2d');
+      return { set(nc) { c = nc; loadImg(logoOf(c)).then((img) => { paintFace(face, c, img); canvas.width = canvas.height = 512; x.save(); shapePath(x, c.shape, 256, 256, 220); x.clip(); x.drawImage(face, 0, 0, 512, 512); x.restore(); }); }, start() {}, stop() {} };
+    }
+    let renderer;
+    try { renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true, powerPreference: 'high-performance' }); } catch (e) { return { set() {}, start() {}, stop() {} }; }
+    renderer.setPixelRatio(Math.min(devicePixelRatio || 1, 2));
+    renderer.outputEncoding = THREE.sRGBEncoding; renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.05;
+    const scene = new THREE.Scene(); scene.environment = studioEnv(renderer);
+    const camera = new THREE.PerspectiveCamera(30, 1, 0.1, 50); camera.position.set(0, 0, 5.4);
+    const key = new THREE.DirectionalLight(0xfff1e0, 1.4); key.position.set(-3, 3, 4); scene.add(key);
+    const rim = new THREE.DirectionalLight(0xbfd2ff, 1.1); rim.position.set(3, 1.5, -3); scene.add(rim);
+    const tex = new THREE.CanvasTexture(face); tex.encoding = THREE.sRGBEncoding; tex.anisotropy = 8; tex.repeat.set(0.5, 0.5); tex.offset.set(0.5, 0.5);
+    const faceMat = new THREE.MeshPhysicalMaterial({ map: tex });
+    const edgeMat = new THREE.MeshPhysicalMaterial({});
+    const group = new THREE.Group(); scene.add(group);
+    let mesh = null, kind = '';
+    function resize() { const w = canvas.clientWidth || size || 200, h = canvas.clientHeight || size || 200; renderer.setSize(w, h, false); camera.aspect = w / h; camera.updateProjectionMatrix(); }
+    new ResizeObserver(resize).observe(canvas); resize();
+    new IntersectionObserver((es) => { visible = es[0].isIntersecting; if (visible && running) loop(); }).observe(canvas);
+    canvas.addEventListener('pointermove', (e) => { const r = canvas.getBoundingClientRect(); px = ((e.clientX - r.left) / r.width) * 2 - 1; py = ((e.clientY - r.top) / r.height) * 2 - 1; });
+    canvas.addEventListener('pointerleave', () => { px = py = 0; });
+    function set(nc) {
+      c = nc;
+      if (c.shape !== kind) { if (mesh) { group.remove(mesh); mesh.geometry.dispose(); } kind = c.shape; mesh = new THREE.Mesh(emblemGeometry(kind), [faceMat, edgeMat]); group.add(mesh); }
+      const fin = c.finish || 'enamel';
+      Object.assign(faceMat, { metalness: fin === 'gold' ? 0.9 : fin === 'metal' ? 0.8 : 0.0, roughness: fin === 'matte' ? 0.72 : fin === 'metal' ? 0.34 : fin === 'gold' ? 0.26 : 0.32, clearcoat: fin === 'enamel' ? 1 : fin === 'matte' ? 0 : 0.35, clearcoatRoughness: 0.06, envMapIntensity: 1.25 });
+      const [col, met, rough] = EDGE[fin];
+      edgeMat.color.set(col == null ? c.accent : col); if (col == null) edgeMat.color.multiplyScalar(0.7);
+      Object.assign(edgeMat, { metalness: met, roughness: rough, clearcoat: fin === 'matte' ? 0 : 0.5, envMapIntensity: 1.3 });
+      faceMat.needsUpdate = edgeMat.needsUpdate = true;
+      const src = logoOf(c);
+      paintFace(face, c, null); tex.needsUpdate = true;
+      loadImg(src).then((img) => { if (c !== nc) return; paintFace(face, c, img); tex.needsUpdate = true; renderer.render(scene, camera); });
+      renderer.render(scene, camera);
+    }
+    function loop() {
+      cancelAnimationFrame(raf);
+      if (!running || !visible || document.hidden) return;
+      const t = (performance.now() - t0) / 1000;
+      sx += (px - sx) * 0.06; sy += (py - sy) * 0.06;
+      group.rotation.y = (reduce ? 0 : Math.sin(t * 0.55) * 0.55) + sx * 0.45;
+      group.rotation.x = (reduce ? 0 : Math.sin(t * 0.4) * 0.07) + sy * 0.25;
+      group.position.y = reduce ? 0 : Math.sin(t * 0.8) * 0.05;
+      renderer.render(scene, camera);
+      raf = requestAnimationFrame(loop);
+    }
+    return { set, start() { running = true; loop(); }, stop() { running = false; cancelAnimationFrame(raf); } };
+  }
+
+  // ---------- QR code ----------
+  function qrMatrix(text) {
+    if (typeof qrcode !== 'function') return null;
+    try { const q = qrcode(0, 'M'); q.addData(text); q.make(); const n = q.getModuleCount(); return { n, dark: (r, cc) => q.isDark(r, cc) }; } catch (e) { return null; }
+  }
+  function drawQR(x, text, ox, oy, size, ink, paper) {
+    const m = qrMatrix(text); x.fillStyle = paper; x.fillRect(ox, oy, size, size);
+    if (!m) { x.fillStyle = ink; x.font = '500 ' + size * 0.07 + 'px Inter, sans-serif'; x.textAlign = 'center'; x.fillText('QR unavailable', ox + size / 2, oy + size / 2); x.textAlign = 'left'; return; }
+    const quiet = 2, cell = size / (m.n + quiet * 2); x.fillStyle = ink;
+    for (let r = 0; r < m.n; r++) for (let cc = 0; cc < m.n; cc++) if (m.dark(r, cc)) x.fillRect(Math.floor(ox + (cc + quiet) * cell), Math.floor(oy + (r + quiet) * cell), Math.ceil(cell), Math.ceil(cell));
+  }
+
+  // ---------- business card: 3.5 × 2 in at 300 dpi ----------
+  const CARD_W = 1050, CARD_H = 600;
+  function cardPalette(c) {
+    if (c.theme === 'paper') return { bg: '#f6f3ee', bg2: '#ebe5dc', ink: '#17161c', dim: '#5e5b66', line: 'rgba(20,18,30,0.14)' };
+    if (c.theme === 'dawn') return { bg: '#170b11', bg2: '#2a121b', ink: '#fff4ee', dim: '#d6b9b0', line: 'rgba(255,220,200,0.16)' };
+    return { bg: '#0c0d11', bg2: '#16171d', ink: '#f4f4f6', dim: '#a9a9b8', line: 'rgba(255,255,255,0.13)' };
+  }
+  const headFont = (c, px) => (c.font === 'classic' ? '400 ' + px * 1.12 + 'px "Instrument Serif", Georgia, serif' : c.font === 'tech' ? '700 ' + px * 0.82 + 'px "JetBrains Mono", monospace' : '800 ' + px + 'px Inter, sans-serif');
+  function fitFont(x, text, maxW, make, px) { let s = px; do { x.font = make(s); s -= 2; } while (x.measureText(text).width > maxW && s > 18); }
+  function wrap(x, text, cx, cy, maxW, lh, lines) { const ws = text.split(/\s+/); let line = '', n = 0; for (const w of ws) { const t = line ? line + ' ' + w : w; if (x.measureText(t).width > maxW && line) { if (++n >= lines) { x.fillText(line + '…', cx, cy); return; } x.fillText(line, cx, cy); cy += lh; line = w; } else line = t; } if (line) x.fillText(line, cx, cy); }
+  async function drawCard(cv, c, side) {
+    cv.width = CARD_W; cv.height = CARD_H;
+    const x = cv.getContext('2d'), p = cardPalette(c), name = c.font === 'tech' ? c.name.toUpperCase() : c.name;
+    const g = x.createLinearGradient(0, 0, CARD_W, CARD_H); g.addColorStop(0, p.bg); g.addColorStop(1, p.bg2); x.fillStyle = g; x.fillRect(0, 0, CARD_W, CARD_H);
+    const glow = x.createRadialGradient(CARD_W * 0.92, CARD_H * 0.1, 10, CARD_W * 0.92, CARD_H * 0.1, CARD_W * 0.6); glow.addColorStop(0, c.accent + '40'); glow.addColorStop(1, c.accent + '00'); x.fillStyle = glow; x.fillRect(0, 0, CARD_W, CARD_H);
+    x.textBaseline = 'alphabetic'; x.textAlign = 'left';
+    if (side === 'front') {
+      const img = await loadImg(logoOf(c));
+      const fcv = document.createElement('canvas'); fcv.width = fcv.height = 512; paintFace(fcv, c, img);
+      x.save(); x.shadowColor = 'rgba(0,0,0,0.35)'; x.shadowBlur = 18; x.shadowOffsetY = 6; shapePath(x, c.shape, 150, 240, 82); x.fillStyle = '#000'; x.fill(); x.restore();
+      x.save(); shapePath(x, c.shape, 150, 240, 82); x.clip(); x.drawImage(fcv, 150 - 94, 240 - 94, 188, 188); x.restore();
+      x.fillStyle = p.ink; fitFont(x, name, 700, (s) => headFont(c, s), 64); x.fillText(name, 280, 232);
+      if (c.tagline) { x.fillStyle = p.dim; x.font = '400 25px Inter, sans-serif'; wrap(x, c.tagline, 280, 282, 680, 34, 2); }
+      x.fillStyle = c.accent; x.fillRect(70, CARD_H - 92, 56, 5);
+      x.fillStyle = p.dim; x.font = '500 17px "JetBrains Mono", monospace'; x.fillText(([c.industry, c.city].filter(Boolean).join('  ·  ')).toUpperCase(), 70, CARD_H - 54);
+      x.textAlign = 'right'; x.fillText('ORBIT NO. ' + pad(c.n), CARD_W - 70, CARD_H - 54);
+    } else {
+      const rows = [['EMAIL', c.contact.email], ['PHONE', c.contact.phone], ['LINE', c.contact.line], ['WEB', c.contact.web], ['ADDRESS', c.contact.addr]].filter(([, v]) => v).slice(0, 4);
+      x.fillStyle = p.ink; fitFont(x, name, 560, (s) => headFont(c, s), 44); x.fillText(name, 70, 118);
+      if (!rows.length) rows.push(['WORLD', 'Scan the code to visit']);
+      rows.forEach(([k, v], i) => { const y = 200 + i * 82; x.fillStyle = c.accent; x.font = '500 15px "JetBrains Mono", monospace'; x.fillText(k, 70, y); x.fillStyle = p.ink; fitFont(x, v, 560, (s) => '500 ' + s + 'px Inter, sans-serif', 26); x.fillText(v, 70, y + 34); });
+      const qs = 300, qx = CARD_W - 70 - qs, qy = 110;
+      x.save(); x.shadowColor = 'rgba(0,0,0,0.25)'; x.shadowBlur = 14; x.fillStyle = '#fff'; x.beginPath(); x.roundRect ? x.roundRect(qx - 14, qy - 14, qs + 28, qs + 28, 18) : x.rect(qx - 14, qy - 14, qs + 28, qs + 28); x.fill(); x.restore();
+      drawQR(x, worldLink(c), qx, qy, qs, '#111216', '#ffffff');
+      x.fillStyle = p.dim; x.font = '500 17px Inter, sans-serif'; x.textAlign = 'center'; x.fillText('Scan to enter our world', qx + qs / 2, qy + qs + 52);
+      x.textAlign = 'left'; x.fillStyle = p.dim; x.font = '500 15px "JetBrains Mono", monospace'; x.fillText('KLICKODE ORBIT  ·  NO. ' + pad(c.n), 70, CARD_H - 50);
+    }
+    return cv;
+  }
+
+  // a physical card you can turn in 3D
+  function makeCardStage(canvas) {
+    if (!window.THREE) return null;
+    let renderer;
+    try { renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true }); } catch (e) { return null; }
+    renderer.setPixelRatio(Math.min(devicePixelRatio || 1, 2)); renderer.outputEncoding = THREE.sRGBEncoding; renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    const scene = new THREE.Scene(); scene.environment = studioEnv(renderer);
+    const camera = new THREE.PerspectiveCamera(28, 1, 0.1, 50); camera.position.set(0, 0, 8.6);
+    const key = new THREE.DirectionalLight(0xfff3e6, 1.5); key.position.set(-3, 4, 5); scene.add(key); scene.add(new THREE.HemisphereLight(0xffffff, 0x222228, 0.55));
+    const fc = document.createElement('canvas'), bc = document.createElement('canvas');
+    const ft = new THREE.CanvasTexture(fc), bt = new THREE.CanvasTexture(bc); [ft, bt].forEach((t) => { t.encoding = THREE.sRGBEncoding; t.anisotropy = 8; });
+    const paper = { roughness: 0.55, clearcoat: 0.35, clearcoatRoughness: 0.35, envMapIntensity: 0.6 };
+    const edge = new THREE.MeshPhysicalMaterial({ color: 0xe9e6df, roughness: 0.8 });
+    const mats = [edge, edge, edge, edge, new THREE.MeshPhysicalMaterial({ map: ft, ...paper }), new THREE.MeshPhysicalMaterial({ map: bt, ...paper })];
+    const card = new THREE.Mesh(new THREE.BoxGeometry(3.5, 2, 0.028), mats); scene.add(card);
+    let ty = -0.35, tx = 0.12, ry = -0.35, rx = 0.12, drag = null, running = false, raf = 0, t0 = performance.now();
+    function resize() { const w = canvas.clientWidth || 600, h = canvas.clientHeight || 360; renderer.setSize(w, h, false); camera.aspect = w / h; camera.position.z = w / h < 1.2 ? 9.2 : 6.7; camera.updateProjectionMatrix(); }
+    new ResizeObserver(resize).observe(canvas); resize();
+    canvas.addEventListener('pointerdown', (e) => { drag = { x: e.clientX, y: e.clientY, ty, tx }; canvas.setPointerCapture(e.pointerId); });
+    canvas.addEventListener('pointermove', (e) => { if (!drag) return; ty = drag.ty + (e.clientX - drag.x) * 0.01; tx = Math.max(-0.7, Math.min(0.7, drag.tx + (e.clientY - drag.y) * 0.006)); });
+    canvas.addEventListener('pointerup', () => { drag = null; });
+    function loop() {
+      if (!running) return;
+      const t = (performance.now() - t0) / 1000;
+      ry += (ty - ry) * 0.08; rx += (tx - rx) * 0.08;
+      card.rotation.y = ry + (drag || reduce ? 0 : Math.sin(t * 0.6) * 0.06); card.rotation.x = rx + (reduce ? 0 : Math.sin(t * 0.5) * 0.03);
+      card.position.y = reduce ? 0 : Math.sin(t * 0.9) * 0.04;
+      renderer.render(scene, camera); raf = requestAnimationFrame(loop);
+    }
+    return {
+      async set(c) { await drawCard(fc, c, 'front'); await drawCard(bc, c, 'back'); ft.needsUpdate = bt.needsUpdate = true; edge.color.set(c.theme === 'paper' ? 0xf1ede6 : 0x2a2a30); ty = -0.35; tx = 0.12; },
+      flip() { ty += Math.PI; },
+      start() { running = true; cancelAnimationFrame(raf); loop(); }, stop() { running = false; cancelAnimationFrame(raf); },
+    };
+  }
+
+  // ---------- files ----------
+  async function saveFile(filename, data, type) {
+    const blob = data instanceof Blob ? data : new Blob([data], { type: type || 'application/octet-stream' });
+    if (downloads) { try { await downloads.save({ filename, data: blob }); return; } catch (e) { return; } }
+    const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = filename; document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 1000);
+  }
+  const canvasBlob = (cv) => new Promise((res) => cv.toBlob(res, 'image/png'));
+  const slug = (c) => (c.name || 'world').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'world';
+  function vcard(c) {
+    const e = (s) => String(s || '').replace(/([,;\\])/g, '\\$1').replace(/\n/g, ' ');
+    return ['BEGIN:VCARD', 'VERSION:3.0', 'FN:' + e(c.name), 'ORG:' + e(c.name), c.industry && 'TITLE:' + e(c.industry), c.contact.email && 'EMAIL;TYPE=WORK:' + e(c.contact.email), c.contact.phone && 'TEL;TYPE=WORK:' + e(c.contact.phone),
+      c.contact.web && 'URL:' + e(/^https?:/.test(c.contact.web) ? c.contact.web : 'https://' + c.contact.web), c.contact.addr && 'ADR;TYPE=WORK:;;' + e(c.contact.addr) + ';;;;', c.contact.line && 'X-SOCIALPROFILE;TYPE=line:' + e(c.contact.line),
+      'NOTE:' + e((c.tagline ? c.tagline + ' · ' : '') + 'Our world in Klickode Orbit: ' + worldLink(c)), 'END:VCARD'].filter(Boolean).join('\r\n');
+  }
+  async function socialPost(c) {
+    const cv = document.createElement('canvas'); cv.width = 1080; cv.height = 1350; const x = cv.getContext('2d'), p = cardPalette(c);
+    x.fillStyle = '#030305'; x.fillRect(0, 0, 1080, 1350);
+    const r = rng(c.n + 41); for (let i = 0; i < 500; i++) { const a = Math.pow(r(), 3); x.fillStyle = 'rgba(255,255,255,' + (0.15 + a * 0.8) + ')'; x.fillRect(r() * 1080, r() * 1350, 1 + a * 1.5, 1 + a * 1.5); }
+    const pl = planetThumb(c, 860); x.drawImage(pl, 540 - 430 + 160, 150, 860, 860);
+    const fcv = document.createElement('canvas'); fcv.width = fcv.height = 512; paintFace(fcv, c, await loadImg(logoOf(c)));
+    x.save(); x.shadowColor = 'rgba(0,0,0,0.5)'; x.shadowBlur = 30; shapePath(x, c.shape, 170, 230, 90); x.fillStyle = '#000'; x.fill(); x.restore();
+    x.save(); shapePath(x, c.shape, 170, 230, 90); x.clip(); x.drawImage(fcv, 70, 130, 200, 200); x.restore();
+    const shade = x.createLinearGradient(0, 760, 0, 1350); shade.addColorStop(0, 'rgba(3,3,5,0)'); shade.addColorStop(0.45, 'rgba(3,3,5,0.92)'); x.fillStyle = shade; x.fillRect(0, 760, 1080, 590);
+    x.fillStyle = 'rgba(243,243,245,0.6)'; x.font = '600 30px Inter, sans-serif'; x.fillText('NOW IN ORBIT', 80, 1010);
+    x.fillStyle = '#f4f4f6'; fitFont(x, c.name, 920, (s) => headFont(c, s), 104); x.fillText(c.font === 'tech' ? c.name.toUpperCase() : c.name, 80, 1120);
+    if (c.tagline) { x.fillStyle = 'rgba(243,243,245,0.7)'; x.font = '400 34px Inter, sans-serif'; wrap(x, c.tagline, 80, 1180, 700, 44, 2); }
+    x.fillStyle = 'rgba(243,243,245,0.5)'; x.font = '500 24px "JetBrains Mono", monospace'; x.fillText('KLICKODE ORBIT · NO. ' + pad(c.n), 80, 1290);
+    x.save(); x.fillStyle = '#fff'; x.fillRect(830, 1100, 180, 180); x.restore(); drawQR(x, worldLink(c), 838, 1108, 164, '#111216', '#ffffff');
+    return cv;
+  }
+
+  // ---------- share kit dialog ----------
+  const kit = F('kitSheet');
+  let kitStage = null, kitC = null;
+  async function openKit(c) {
+    kitC = c;
+    F('kitTitle').textContent = 'Share kit · ' + c.name;
+    F('kitLink').value = worldLink(c);
+    const q = F('kitQr'), qx = q.getContext('2d'); drawQR(qx, worldLink(c), 0, 0, q.width, '#111216', '#ffffff');
+    if (!kit.open) { try { kit.showModal(); } catch (e) { kit.setAttribute('open', ''); } }
+    if (!kitStage) kitStage = makeCardStage(F('cardCanvas'));
+    if (kitStage) { await kitStage.set(c); kitStage.start(); }
+    else { const fc = await drawCard(document.createElement('canvas'), c, 'front'); const cv = F('cardCanvas'); cv.width = CARD_W; cv.height = CARD_H; cv.getContext('2d').drawImage(fc, 0, 0); }
+  }
+  kit.addEventListener('close', () => { if (kitStage) kitStage.stop(); });
+  F('kitClose').addEventListener('click', () => kit.close());
+  kit.addEventListener('click', (e) => { if (e.target === kit) kit.close(); });
+  F('cardFlip').addEventListener('click', () => { if (kitStage) kitStage.flip(); });
+  F('kitCopy').addEventListener('click', () => { const v = F('kitLink').value; try { navigator.clipboard.writeText(v).then(() => showToast('World link copied'), () => { F('kitLink').select(); showToast('Link selected. Press copy.'); }); } catch (e) { F('kitLink').select(); } });
+  F('cardFront').addEventListener('click', async () => saveFile(slug(kitC) + '-card-front.png', await canvasBlob(await drawCard(document.createElement('canvas'), kitC, 'front'))));
+  F('cardBack').addEventListener('click', async () => saveFile(slug(kitC) + '-card-back.png', await canvasBlob(await drawCard(document.createElement('canvas'), kitC, 'back'))));
+  F('qrSave').addEventListener('click', async () => { const cv = document.createElement('canvas'); cv.width = cv.height = 1200; drawQR(cv.getContext('2d'), worldLink(kitC), 0, 0, 1200, '#111216', '#ffffff'); saveFile(slug(kitC) + '-qr.png', await canvasBlob(cv)); });
+  F('kitVcf').addEventListener('click', () => saveFile(slug(kitC) + '.vcf', vcard(kitC), 'text/vcard'));
+  F('kitPost').addEventListener('click', async () => saveFile(slug(kitC) + '-in-orbit.png', await canvasBlob(await socialPost(kitC))));
+  F('kitCert').addEventListener('click', () => { kit.close(); openCert(kitC); });
+
+  // ---------- builder: logo upload and live 3D preview ----------
+  const logoStage = makeLogoStage(F('logoPrev'), { size: 168 });
+  let logoKey = '';
+  listeners.push(() => {
+    const c = draftCompany(), k = [c.name, c.accent, c.shape, c.finish, c.font, (c.logo || '').length].join('|');
+    F('logoNote').textContent = draft.logo ? 'Logo added. It appears in 3D, on your card and in your share kit.' : 'No logo yet, so we use your initials.';
+    F('logoClear').hidden = !draft.logo;
+    if (k !== logoKey) { logoKey = k; logoStage.set(c); }
+  });
+  logoStage.start();
+  F('fLogo').addEventListener('change', async (e) => {
+    const f = e.target.files && e.target.files[0]; e.target.value = '';
+    if (!f) return;
+    if (f.size > 5e6) { showToast('That file is over 5 MB. Try a smaller logo.'); return; }
+    const url = await new Promise((res) => { const r = new FileReader(); r.onload = () => res(r.result); r.onerror = () => res(''); r.readAsDataURL(f); });
+    const img = await loadImg(url);
+    if (!img) { showToast('That file could not be read as an image.'); return; }
+    const S = 320, cv = document.createElement('canvas'); cv.width = cv.height = S; const x = cv.getContext('2d');
+    const sc = Math.min(S / (img.width || S), S / (img.height || S)), w = (img.width || S) * sc, h = (img.height || S) * sc;
+    x.drawImage(img, (S - w) / 2, (S - h) / 2, w, h);
+    let out = cv.toDataURL('image/webp', 0.9); if (!out.startsWith('data:image/webp')) out = cv.toDataURL('image/png');
+    if (out.length > 150000) out = cv.toDataURL('image/jpeg', 0.85);
+    draft.logo = out; changed(); showToast('Logo added');
+  });
+  F('logoClear').addEventListener('click', () => { draft.logo = ''; changed(); });
+
+  // ---------- brands section: the real Klickode emblem in four finishes ----------
+  const brandStage = makeLogoStage(F('brandLogo'), { size: 420 });
+  let brandFinish = 'metal';
+  const brandSwitch = F('brandFinish');
+  FINISHES.forEach(([v, name]) => { const b = el('button', 'chip'); b.type = 'button'; b.setAttribute('role', 'radio'); b.dataset.v = v; b.append(el('i'), document.createTextNode(name)); b.addEventListener('click', () => { brandFinish = v; showBrand(); }); brandSwitch.appendChild(b); });
+  function showBrand() { [...brandSwitch.children].forEach((b) => b.setAttribute('aria-checked', String(b.dataset.v === brandFinish))); brandStage.set({ ...HOUSE[0], finish: brandFinish }); }
+  showBrand(); brandStage.start();
+  F('demoKit').addEventListener('click', () => openKit(HOUSE[0]));
+
 
   // ---------- explore: galaxy map, filters and cards ----------
   const gcv = F('galaxy'), gx = gcv.getContext('2d'), tip = F('mapTip');
@@ -1101,7 +1531,7 @@ dialog.sheet::backdrop { background: rgba(3, 3, 6, 0.75); backdrop-filter: blur(
     const ringPath = (from, to, alpha) => { x.save(); x.translate(cx, cy); x.rotate(-0.36); x.scale(1, 0.24); x.strokeStyle = 'rgba(222,208,188,' + alpha + ')'; x.lineWidth = size * 0.2; x.beginPath(); x.arc(0, 0, r * 1.72, from, to); x.stroke(); x.strokeStyle = 'rgba(6,6,8,0.9)'; x.lineWidth = size * 0.02; x.beginPath(); x.arc(0, 0, r * 1.66, from, to); x.stroke(); x.restore(); };
     if (c.ring) ringPath(Math.PI, 2 * Math.PI, 0.55);
     x.save(); x.beginPath(); x.arc(cx, cy, r, 0, 6.283); x.clip();
-    const n = 14; for (let i = 0; i < n; i++) { const t = i / n, mix = 0.5 + 0.5 * Math.sin(t * 9 + rand() * 1.5); x.fillStyle = css(mixc(belt, zone, mix), 0.9 + rand() * 0.2); x.fillRect(cx - r, cy - r + t * 2 * r - 1, 2 * r, (2 * r) / n + 2); }
+    const n = Math.max(14, Math.round(size / 6)); for (let i = 0; i < n; i++) { const t = i / n, mix = 0.5 + 0.5 * Math.sin(t * 9 + Math.sin(t * 37) * 0.6 + rand() * 0.25); x.fillStyle = css(mixc(belt, zone, mix), 0.94 + rand() * 0.1); x.fillRect(cx - r, cy - r + t * 2 * r - 1, 2 * r, (2 * r) / n + 2); }
     const sh = x.createRadialGradient(cx - r * 0.55, cy - r * 0.5, r * 0.1, cx - r * 0.2, cy - r * 0.15, r * 1.9);
     sh.addColorStop(0, 'rgba(0,0,0,0)'); sh.addColorStop(0.42, 'rgba(0,0,0,0.12)'); sh.addColorStop(0.62, 'rgba(0,0,0,0.82)'); sh.addColorStop(1, 'rgba(0,0,0,0.97)');
     x.fillStyle = sh; x.fillRect(cx - r, cy - r, 2 * r, 2 * r); x.restore();
@@ -1446,7 +1876,7 @@ dialog.sheet::backdrop { background: rgba(3, 3, 6, 0.75); backdrop-filter: blur(
     if (!running) return;
     const dt = Math.min(0.05, (now - last) / 1000); last = now;
     if (!reduce) uTime.value += dt;
-    const k = reduce ? 1 : 1 - Math.pow(0.0012, dt);
+    const k = reduce ? 1 : 1 - Math.pow(0.012, dt);
     state.p += (state.target - state.p) * k;
     const touch = !fine.matches;
     const mx = reduce ? 0 : touch ? 0 : state.mx;
